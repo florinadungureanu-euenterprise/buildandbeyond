@@ -125,6 +125,8 @@ export interface OnboardingProfile {
   key_metrics: string;
   twelve_week_goal: string;
   risks: string;
+  fundraising_type: string;
+  fundraising_amount: string;
   later_stage_priorities: string;
   later_stage_bottlenecks: string;
   later_stage_goals: string;

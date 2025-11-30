@@ -3,6 +3,12 @@ import { OnboardingMessage, OnboardingQuestion, UploadedDocument, OnboardingProf
 import { useStore } from '@/store';
 
 const N8N_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/4ce2573e-4415-4cba-aa4e-65a97223ce43';
+const N8N_DOCUMENT_UPLOAD_URL = 'https://springervc.app.n8n.cloud/webhook/document-upload';
+
+// Generate a unique session ID
+const generateSessionId = () => {
+  return `session-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+};
 
 // Early-stage flow questions (idea → MVP → early customers)
 const earlyStageQuestions: OnboardingQuestion[] = [
@@ -161,6 +167,28 @@ const earlyStageQuestions: OnboardingQuestion[] = [
     ],
     key: 'risks',
     stage: 'early'
+  },
+  {
+    id: 16,
+    question: 'Are you looking for fundraising? If yes, what type? (Angel investment, VC, EU grants, private/public funding)',
+    templates: [
+      'Looking to raise $[amount] via [funding type] for [purpose]',
+      'Not fundraising currently / Bootstrapped',
+      'Interested in [angel/VC/grants]: $[target amount]'
+    ],
+    key: 'fundraising_type',
+    stage: 'early'
+  },
+  {
+    id: 17,
+    question: 'If fundraising: How much are you looking to raise and for what specific purpose?',
+    templates: [
+      'Raising $[amount] for [product development/hiring/marketing/expansion]',
+      'Target: $[amount] to achieve [milestone]',
+      'N/A - bootstrapping'
+    ],
+    key: 'fundraising_amount',
+    stage: 'early'
   }
 ];
 
@@ -245,6 +273,28 @@ const laterStageQuestions: OnboardingQuestion[] = [
     ],
     key: 'later_stage_vision',
     stage: 'later'
+  },
+  {
+    id: 9,
+    question: 'Are you currently fundraising or planning to raise funds? What type? (Angel, VC, EU grants, private/public funding)',
+    templates: [
+      'Currently raising Series [A/B/C]: $[amount]',
+      'Planning to raise $[amount] via [funding type]',
+      'Not fundraising / Already funded / Bootstrapped'
+    ],
+    key: 'fundraising_type',
+    stage: 'later'
+  },
+  {
+    id: 10,
+    question: 'If fundraising: What is your target amount and what will the funds be used for?',
+    templates: [
+      'Target: $[amount] for [scaling/hiring/expansion/R&D]',
+      'Raising $[amount] to [specific goals and milestones]',
+      'N/A'
+    ],
+    key: 'fundraising_amount',
+    stage: 'later'
   }
 ];
 
@@ -316,6 +366,7 @@ export function useOnboardingChat() {
     document_insights: []
   });
   const [isInFoundationalPhase, setIsInFoundationalPhase] = useState(false);
+  const [sessionId] = useState(() => generateSessionId());
   
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);
@@ -536,44 +587,103 @@ export function useOnboardingChat() {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       
-      reader.onload = (e) => {
-        const doc: UploadedDocument = {
-          id: Date.now().toString(),
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          uploadedAt: new Date(),
-          content: e.target?.result as string
-        };
-        
-        setUploadedDocuments((prev) => [...prev, doc]);
-        
-        // Store document insights
-        setOnboardingProfile(prev => ({
-          ...prev,
-          document_insights: [
-            ...(prev.document_insights || []),
-            `Uploaded ${file.name} (${file.type}, ${(file.size / 1024).toFixed(1)} KB) - will be parsed by n8n for auto-extraction`
-          ]
-        }));
-        
-        // Add system message about upload
-        const uploadMessage: OnboardingMessage = {
-          id: (Date.now() + 1).toString(),
-          role: 'system',
-          content: `✓ Document uploaded: ${file.name}. Your n8n workflow will parse this to auto-fill foundational information like customer definition, problem, solution, and value proposition.`,
-          timestamp: new Date()
-        };
-        setMessages((prev) => [...prev, uploadMessage]);
-        
-        resolve(doc);
+      reader.onload = async (e) => {
+        try {
+          // Get base64 content (remove data:mime;base64, prefix)
+          const result = e.target?.result as string;
+          const base64Content = result.includes(',') ? result.split(',')[1] : result;
+          
+          const doc: UploadedDocument = {
+            id: Date.now().toString(),
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            uploadedAt: new Date(),
+            content: base64Content
+          };
+          
+          setUploadedDocuments((prev) => [...prev, doc]);
+          
+          // Send immediately to n8n document upload webhook
+          try {
+            const uploadPayload = {
+              session_id: sessionId,
+              startup_profile: {
+                stage_detected: onboardingProfile.stage_detected || startupStage
+              },
+              uploaded_documents: [{
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                uploaded_at: new Date().toISOString(),
+                content: base64Content
+              }]
+            };
+            
+            console.log('Sending document to n8n for parsing:', file.name);
+            
+            const response = await fetch(N8N_DOCUMENT_UPLOAD_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(uploadPayload)
+            });
+            
+            if (response.ok) {
+              const result = await response.json();
+              console.log('Document processed by n8n:', result);
+              
+              // Store document insights
+              setOnboardingProfile(prev => ({
+                ...prev,
+                document_insights: [
+                  ...(prev.document_insights || []),
+                  `Uploaded ${file.name} - Extracted ${result.fields_extracted || 0} fields via n8n`
+                ]
+              }));
+              
+              // Add system message about successful parsing
+              const uploadMessage: OnboardingMessage = {
+                id: (Date.now() + 1).toString(),
+                role: 'system',
+                content: `✓ Document processed: ${file.name}. Extracted ${result.fields_extracted || 0} fields automatically. This will help pre-fill your foundational information.`,
+                timestamp: new Date()
+              };
+              setMessages((prev) => [...prev, uploadMessage]);
+            } else {
+              console.error('Document upload failed:', response.status);
+              // Still add basic message
+              const uploadMessage: OnboardingMessage = {
+                id: (Date.now() + 1).toString(),
+                role: 'system',
+                content: `✓ Document uploaded: ${file.name}. Processing in background...`,
+                timestamp: new Date()
+              };
+              setMessages((prev) => [...prev, uploadMessage]);
+            }
+          } catch (uploadError) {
+            console.error('Error sending document to n8n:', uploadError);
+            // Still show upload success to user
+            const uploadMessage: OnboardingMessage = {
+              id: (Date.now() + 1).toString(),
+              role: 'system',
+              content: `✓ Document uploaded: ${file.name}. Processing in background...`,
+              timestamp: new Date()
+            };
+            setMessages((prev) => [...prev, uploadMessage]);
+          }
+          
+          resolve(doc);
+        } catch (error) {
+          console.error('Error processing file:', error);
+          reject(error);
+        }
       };
       
       reader.onerror = () => {
         reject(new Error('Failed to read file'));
       };
       
-      reader.readAsText(file);
+      reader.readAsDataURL(file); // Changed to readAsDataURL for base64
     });
   };
 
@@ -598,6 +708,7 @@ export function useOnboardingChat() {
           const payload = {
             status: 'onboarding_complete',
             timestamp: new Date().toISOString(),
+            session_id: sessionId,
             startup_profile: {
               // All fields - will be populated based on stage and documents
               stage_detected: onboardingProfile.stage_detected,
@@ -626,6 +737,8 @@ export function useOnboardingChat() {
               key_metrics: onboardingProfile.key_metrics || '',
               twelve_week_goal: onboardingProfile.twelve_week_goal || '',
               risks: onboardingProfile.risks || '',
+              fundraising_type: onboardingProfile.fundraising_type || '',
+              fundraising_amount: onboardingProfile.fundraising_amount || '',
               
               // Later-stage operational fields (populated only for later stage)
               later_stage_priorities: onboardingProfile.later_stage_priorities || '',
