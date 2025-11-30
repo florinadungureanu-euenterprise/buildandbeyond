@@ -4,8 +4,9 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { CheckCircle2, ExternalLink } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { ExternalLink } from 'lucide-react';
 
 const metricColors: Record<string, string> = {
   cost_savings: 'bg-green-500 hover:bg-green-600',
@@ -15,9 +16,10 @@ const metricColors: Record<string, string> = {
 
 export function ToolsList() {
   const tools = useStore((state) => state.tools);
-  const incrementToolActivation = useStore((state) => state.incrementToolActivation);
+  const markToolSubscribed = useStore((state) => state.markToolSubscribed);
   const [selectedTool, setSelectedTool] = useState<typeof tools[0] | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const { toast } = useToast();
 
   const categories = ['all', ...Array.from(new Set(tools.map((t) => t.category)))];
 
@@ -26,9 +28,20 @@ export function ToolsList() {
       ? tools
       : tools.filter((t) => t.category === selectedCategory);
 
-  const handleActivate = () => {
-    incrementToolActivation();
-    setSelectedTool(null);
+  const handleVisitWebsite = (url: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleMarkSubscribed = () => {
+    if (selectedTool) {
+      markToolSubscribed(selectedTool.id);
+      toast({
+        title: 'Tool marked as subscribed',
+        description: `${selectedTool.name} has been added to your active tools`
+      });
+      setSelectedTool(null);
+    }
   };
 
   return (
@@ -36,7 +49,7 @@ export function ToolsList() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Matches</h1>
         <p className="text-sm text-gray-600">
-          Curated tools matched to your startup's needs with affiliate commissions
+          Curated tools matched to your startup's needs
         </p>
       </div>
 
@@ -61,9 +74,18 @@ export function ToolsList() {
           return (
             <Card
               key={tool.id}
-              className="p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              className="p-6 hover:shadow-lg transition-shadow cursor-pointer relative"
               onClick={() => setSelectedTool(tool)}
             >
+              {tool.subscribed && (
+                <div className="absolute top-3 right-3">
+                  <Badge className="bg-green-100 text-green-700 border-green-200">
+                    <CheckCircle2 className="w-3 h-3 mr-1" />
+                    Subscribed
+                  </Badge>
+                </div>
+              )}
+              
               <div className="mb-3">
                 <h3 className="font-semibold text-gray-900 mb-1">{tool.name}</h3>
                 <p className="text-xs text-gray-500">{tool.category}</p>
@@ -81,7 +103,17 @@ export function ToolsList() {
               
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-gray-700">{tool.pricing}</span>
-                <ExternalLink className="w-4 h-4 text-gray-400" />
+                {tool.url && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => handleVisitWebsite(tool.url!, e)}
+                    className="h-7 px-2 text-xs"
+                  >
+                    <ExternalLink className="w-3 h-3 mr-1" />
+                    Visit
+                  </Button>
+                )}
               </div>
             </Card>
           );
@@ -94,7 +126,15 @@ export function ToolsList() {
           {selectedTool && (
             <>
               <DialogHeader>
-                <DialogTitle>{selectedTool.name}</DialogTitle>
+                <DialogTitle className="flex items-center justify-between">
+                  <span>{selectedTool.name}</span>
+                  {selectedTool.subscribed && (
+                    <Badge className="bg-green-100 text-green-700 border-green-200">
+                      <CheckCircle2 className="w-3 h-3 mr-1" />
+                      Subscribed
+                    </Badge>
+                  )}
+                </DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
@@ -132,9 +172,22 @@ export function ToolsList() {
                   <p className="text-sm text-gray-700">{selectedTool.pricing}</p>
                 </div>
                 <div className="flex gap-2 pt-4">
-                  <Button onClick={handleActivate} className="flex-1">
-                    Activate Tool
-                  </Button>
+                  {selectedTool.url && (
+                    <Button
+                      variant="outline"
+                      onClick={() => handleVisitWebsite(selectedTool.url!, new MouseEvent('click') as any)}
+                      className="flex-1"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Visit Website
+                    </Button>
+                  )}
+                  {!selectedTool.subscribed && (
+                    <Button onClick={handleMarkSubscribed} className="flex-1">
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Mark as Subscribed
+                    </Button>
+                  )}
                   <Button variant="outline" onClick={() => setSelectedTool(null)}>
                     Close
                   </Button>

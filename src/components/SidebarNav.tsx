@@ -19,8 +19,8 @@ export function SidebarNav() {
   return (
     <nav className="w-64 bg-white border-r border-gray-200 p-6 flex flex-col">
       <div className="mb-8">
-        <div className="text-2xl font-bold text-blue-600">Founder</div>
-        <div className="text-xs text-gray-500 mt-1">Platform</div>
+        <div className="text-2xl font-bold text-blue-600">Build &</div>
+        <div className="text-xl font-bold text-blue-600">Beyond</div>
       </div>
 
       <div className="space-y-2 flex-1">

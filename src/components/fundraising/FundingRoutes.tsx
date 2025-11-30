@@ -5,8 +5,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { FundingRoute } from '@/types';
-import { TrendingUp, Clock, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { TrendingUp, Clock, CheckCircle2, XCircle, ArrowRight, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const typeColors: Record<string, string> = {
   angel: 'bg-purple-100 text-purple-700',
@@ -19,8 +20,10 @@ const typeColors: Record<string, string> = {
 
 export function FundingRoutes() {
   const fundingData = useStore((state) => state.fundingData);
+  const markFundingRouteApplied = useStore((state) => state.markFundingRouteApplied);
   const [selectedRoute, setSelectedRoute] = useState<FundingRoute | null>(null);
   const [selectedType, setSelectedType] = useState<string>('all');
+  const { toast } = useToast();
 
   const types = ['all', ...Array.from(new Set(fundingData.funding_routes.map(r => r.type)))];
   
@@ -63,9 +66,17 @@ export function FundingRoutes() {
             {sortedRoutes.map((route) => (
               <div
                 key={route.id}
-                className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all cursor-pointer"
+                className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all cursor-pointer relative"
                 onClick={() => setSelectedRoute(route)}
               >
+                {route.applied && (
+                  <div className="absolute top-3 right-3">
+                    <Badge className="bg-green-100 text-green-700 border-green-200">
+                      <CheckCircle2 className="w-3 h-3 mr-1" />
+                      Applied
+                    </Badge>
+                  </div>
+                )}
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <h4 className="font-semibold text-gray-900">{route.name}</h4>
@@ -110,9 +121,17 @@ export function FundingRoutes() {
               <DialogHeader>
                 <DialogTitle className="flex items-center justify-between">
                   <span>{selectedRoute.name}</span>
-                  <Badge className={cn('text-xs capitalize', typeColors[selectedRoute.type])}>
-                    {selectedRoute.type}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    {selectedRoute.applied && (
+                      <Badge className="bg-green-100 text-green-700 border-green-200">
+                        <CheckCircle2 className="w-3 h-3 mr-1" />
+                        Applied
+                      </Badge>
+                    )}
+                    <Badge className={cn('text-xs capitalize', typeColors[selectedRoute.type])}>
+                      {selectedRoute.type}
+                    </Badge>
+                  </div>
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
@@ -186,8 +205,33 @@ export function FundingRoutes() {
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                  <Button className="flex-1">Start Application</Button>
-                  <Button variant="outline" onClick={() => setSelectedRoute(null)}>
+                  {selectedRoute.url && (
+                    <Button
+                      onClick={() => window.open(selectedRoute.url, '_blank', 'noopener,noreferrer')}
+                      className="flex-1"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Visit Website
+                    </Button>
+                  )}
+                  {!selectedRoute.applied && (
+                    <Button
+                      onClick={() => {
+                        markFundingRouteApplied(selectedRoute.id);
+                        toast({
+                          title: 'Application marked',
+                          description: `${selectedRoute.name} has been marked as applied`
+                        });
+                        setSelectedRoute(null);
+                      }}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Mark as Applied
+                    </Button>
+                  )}
+                  <Button variant="ghost" onClick={() => setSelectedRoute(null)}>
                     Close
                   </Button>
                 </div>

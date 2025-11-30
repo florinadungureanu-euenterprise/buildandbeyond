@@ -21,6 +21,9 @@ interface AppState {
   updateUserInput: (key: string, value: string) => void;
   incrementToolActivation: () => void;
   updatePassport: (data: Partial<PassportData>) => void;
+  markToolSubscribed: (toolId: string) => void;
+  markApplicationApplied: (applicationId: string) => void;
+  markFundingRouteApplied: (routeId: string) => void;
 }
 
 const createDemoData = () => {
@@ -40,7 +43,8 @@ const createDemoData = () => {
         efficiency_gain: '10x faster development'
       },
       relevant_stages: ['idea', 'prototype', 'mvp'],
-      use_cases: ['rapid prototyping', 'MVP development', 'UI/UX design']
+      use_cases: ['rapid prototyping', 'MVP development', 'UI/UX design'],
+      url: 'https://lovable.dev'
     },
     {
       id: '2',
@@ -55,7 +59,8 @@ const createDemoData = () => {
         efficiency_gain: '5x productivity boost'
       },
       relevant_stages: ['mvp', 'early_customers', 'growing_startup', 'scale_up'],
-      use_cases: ['workflow automation', 'integration', 'process optimization']
+      use_cases: ['workflow automation', 'integration', 'process optimization'],
+      url: 'https://n8n.io'
     },
     {
       id: '3',
@@ -70,7 +75,8 @@ const createDemoData = () => {
         efficiency_gain: 'Manual research eliminated'
       },
       relevant_stages: ['idea', 'prototype', 'mvp', 'early_customers'],
-      use_cases: ['market research', 'competitor analysis', 'data extraction']
+      use_cases: ['market research', 'competitor analysis', 'data extraction'],
+      url: 'https://apify.com'
     },
     {
       id: '4',
@@ -85,7 +91,8 @@ const createDemoData = () => {
         efficiency_gain: 'Payment setup in hours vs weeks'
       },
       relevant_stages: ['mvp', 'early_customers', 'growing_startup', 'scale_up'],
-      use_cases: ['payment processing', 'subscription billing', 'revenue collection']
+      use_cases: ['payment processing', 'subscription billing', 'revenue collection'],
+      url: 'https://www.mollie.com'
     },
     {
       id: '5',
@@ -100,7 +107,8 @@ const createDemoData = () => {
         efficiency_gain: 'Voice content at scale'
       },
       relevant_stages: ['mvp', 'early_customers', 'growing_startup'],
-      use_cases: ['voice synthesis', 'content creation', 'accessibility']
+      use_cases: ['voice synthesis', 'content creation', 'accessibility'],
+      url: 'https://elevenlabs.io'
     },
     {
       id: '6',
@@ -115,7 +123,8 @@ const createDemoData = () => {
         efficiency_gain: 'Free alternative to Typeform'
       },
       relevant_stages: ['idea', 'prototype', 'mvp', 'early_customers'],
-      use_cases: ['user research', 'feedback collection', 'lead generation']
+      use_cases: ['user research', 'feedback collection', 'lead generation'],
+      url: 'https://tally.so'
     },
     {
       id: '7',
@@ -695,6 +704,30 @@ export const useStore = create<AppState>((set) => {
           ...state.passport,
           ...data,
           lastUpdated: new Date()
+        }
+      })),
+
+    markToolSubscribed: (toolId) =>
+      set((state) => ({
+        tools: state.tools.map((tool) =>
+          tool.id === toolId ? { ...tool, subscribed: true } : tool
+        )
+      })),
+
+    markApplicationApplied: (applicationId) =>
+      set((state) => ({
+        applications: state.applications.map((app) =>
+          app.id === applicationId ? { ...app, applied: true } : app
+        )
+      })),
+
+    markFundingRouteApplied: (routeId) =>
+      set((state) => ({
+        fundingData: {
+          ...state.fundingData,
+          funding_routes: state.fundingData.funding_routes.map((route) =>
+            route.id === routeId ? { ...route, applied: true } : route
+          )
         }
       }))
   };
