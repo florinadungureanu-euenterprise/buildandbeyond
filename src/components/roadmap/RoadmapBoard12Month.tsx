@@ -64,12 +64,14 @@ export function RoadmapBoard12Month() {
                 <div
                   key={milestone.id}
                   className={cn(
-                    'p-4 rounded-lg border border-border cursor-pointer transition-all hover:shadow-md bg-card',
+                    'p-4 rounded-lg border border-border transition-all bg-card',
                     milestone.completed && 'opacity-75'
                   )}
-                  onClick={() => toggleMilestone(milestone.id)}
                 >
-                  <div className="flex items-start gap-3">
+                  <div
+                    className="flex items-start gap-3 cursor-pointer hover:opacity-80"
+                    onClick={() => toggleMilestone(milestone.id)}
+                  >
                     {milestone.completed ? (
                       <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                     ) : (
@@ -96,6 +98,25 @@ export function RoadmapBoard12Month() {
                       </div>
                     </div>
                   </div>
+                  
+                  {milestone.recommended_tools && milestone.recommended_tools.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-border">
+                      <h5 className="text-xs font-semibold text-foreground mb-2">Recommended Tools</h5>
+                      <div className="space-y-1.5">
+                        {milestone.recommended_tools.map((tool, idx) => (
+                          <div key={idx} className="flex items-center justify-between text-xs bg-muted px-3 py-2 rounded-md">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-foreground">{tool.tool}</span>
+                              <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
+                                {tool.metric}
+                              </Badge>
+                            </div>
+                            <span className="text-muted-foreground text-xs">{tool.purpose}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

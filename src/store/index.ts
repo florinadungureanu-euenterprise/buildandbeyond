@@ -29,82 +29,151 @@ const createDemoData = () => {
       id: '1',
       name: 'Lovable',
       category: 'Development',
-      commission: 0,
-      description: 'AI-powered full-stack development platform for building web applications',
+      description: 'AI-powered full-stack development platform for rapid prototyping',
       features: ['AI code generation', 'Full-stack support', 'Real-time preview', 'Database integration'],
-      pricing: 'Free tier available, Pro from $20/month'
+      pricing: 'Free tier available, Pro from $20/month',
+      metrics: {
+        cost_savings: '85%',
+        time_savings: '70%',
+        efficiency_gain: '10x faster development'
+      },
+      relevant_stages: ['idea', 'prototype', 'mvp'],
+      use_cases: ['rapid prototyping', 'MVP development', 'UI/UX design']
     },
     {
       id: '2',
-      name: 'Apify',
-      category: 'Data & Automation',
-      commission: 10,
-      description: 'Web scraping and automation platform for data extraction',
-      features: ['Web scraping', 'Data extraction', 'API integration', 'Scheduled runs'],
-      pricing: 'Free tier available, from $49/month'
+      name: 'n8n',
+      category: 'Automation',
+      description: 'Workflow automation platform for connecting apps and services',
+      features: ['Visual workflow builder', '400+ integrations', 'Self-hosted option', 'Custom nodes'],
+      pricing: 'Free self-hosted, Cloud from $20/month',
+      metrics: {
+        cost_savings: '60%',
+        time_savings: '80%',
+        efficiency_gain: '5x productivity boost'
+      },
+      relevant_stages: ['mvp', 'early_customers', 'growing_startup', 'scale_up'],
+      use_cases: ['workflow automation', 'integration', 'process optimization']
     },
     {
       id: '3',
-      name: 'n8n',
-      category: 'Automation',
-      commission: 0,
-      description: 'Workflow automation platform connecting apps and services',
-      features: ['Visual workflow builder', '400+ integrations', 'Self-hosted option', 'Custom nodes'],
-      pricing: 'Free self-hosted, Cloud from $20/month'
+      name: 'Apify',
+      category: 'Data & Research',
+      description: 'Web scraping and automation platform for market intelligence',
+      features: ['Web scraping', 'Data extraction', 'API integration', 'Scheduled runs'],
+      pricing: 'Free tier available, from $49/month',
+      metrics: {
+        cost_savings: '75%',
+        time_savings: '90%',
+        efficiency_gain: 'Manual research eliminated'
+      },
+      relevant_stages: ['idea', 'prototype', 'mvp', 'early_customers'],
+      use_cases: ['market research', 'competitor analysis', 'data extraction']
     },
     {
       id: '4',
       name: 'Mollie',
-      category: 'Payment Processing',
-      commission: 12,
-      description: 'European payment service provider with local payment methods',
+      category: 'Payments',
+      description: 'Payment service provider for European markets',
       features: ['Multiple payment methods', 'SEPA support', 'Recurring billing', 'PSD2 compliant'],
-      pricing: 'Transaction fees from 0.29€ + 1.8%'
+      pricing: 'Transaction fees from 0.29€ + 1.8%',
+      metrics: {
+        cost_savings: '40%',
+        time_savings: '95%',
+        efficiency_gain: 'Payment setup in hours vs weeks'
+      },
+      relevant_stages: ['mvp', 'early_customers', 'growing_startup', 'scale_up'],
+      use_cases: ['payment processing', 'subscription billing', 'revenue collection']
     },
     {
       id: '5',
       name: 'ElevenLabs',
-      category: 'AI & Voice',
-      commission: 15,
-      description: 'AI voice generation and text-to-speech platform',
+      category: 'AI Voice',
+      description: 'AI voice generation for realistic text-to-speech',
       features: ['Natural voice synthesis', 'Voice cloning', 'Multiple languages', 'API access'],
-      pricing: 'Free tier available, from $5/month'
+      pricing: 'Free tier available, from $5/month',
+      metrics: {
+        cost_savings: '90%',
+        time_savings: '95%',
+        efficiency_gain: 'Voice content at scale'
+      },
+      relevant_stages: ['mvp', 'early_customers', 'growing_startup'],
+      use_cases: ['voice synthesis', 'content creation', 'accessibility']
     },
     {
       id: '6',
       name: 'Tally',
-      category: 'Forms & Surveys',
-      commission: 8,
-      description: 'Simple form builder for collecting responses',
+      category: 'Forms & Data Collection',
+      description: 'Free form builder for collecting user feedback and data',
       features: ['Unlimited forms', 'File uploads', 'Conditional logic', 'Integrations'],
-      pricing: 'Free tier available, Pro from $29/month'
+      pricing: 'Free tier available, Pro from $29/month',
+      metrics: {
+        cost_savings: '100%',
+        time_savings: '85%',
+        efficiency_gain: 'Free alternative to Typeform'
+      },
+      relevant_stages: ['idea', 'prototype', 'mvp', 'early_customers'],
+      use_cases: ['user research', 'feedback collection', 'lead generation']
     },
     {
       id: '7',
-      name: 'Analytics Pro',
-      category: 'Data & Insights',
-      commission: 15,
-      description: 'Advanced analytics and reporting platform',
-      features: ['Real-time dashboards', 'Custom reports', 'Data visualization', 'Export to CSV/PDF'],
-      pricing: '$49/month'
+      name: 'Supabase',
+      category: 'Backend & Database',
+      description: 'Open-source Firebase alternative with PostgreSQL',
+      features: ['Database', 'Authentication', 'Real-time features', 'Storage'],
+      pricing: 'Free tier available, Pro from $25/month',
+      metrics: {
+        cost_savings: '70%',
+        time_savings: '80%',
+        efficiency_gain: 'Backend setup in minutes'
+      },
+      relevant_stages: ['prototype', 'mvp', 'early_customers', 'growing_startup'],
+      use_cases: ['database', 'authentication', 'real-time features']
     },
     {
       id: '8',
-      name: 'Growth Engine',
-      category: 'Marketing Automation',
-      commission: 8,
-      description: 'Comprehensive marketing automation suite',
-      features: ['Email campaigns', 'A/B testing', 'Lead scoring', 'Social media integration'],
-      pricing: '$99/month'
+      name: 'Stripe',
+      category: 'Payments',
+      description: 'Payment infrastructure for internet businesses',
+      features: ['Payment processing', 'Subscription management', 'Invoicing', 'Global reach'],
+      pricing: '2.9% + 30¢ per transaction',
+      metrics: {
+        cost_savings: '35%',
+        time_savings: '85%',
+        efficiency_gain: 'Global payment infrastructure'
+      },
+      relevant_stages: ['mvp', 'early_customers', 'growing_startup', 'scale_up', 'established'],
+      use_cases: ['payment processing', 'subscription management', 'invoicing']
     },
     {
       id: '9',
-      name: 'CRM Suite',
-      category: 'Customer Management',
-      commission: 12,
-      description: 'Customer relationship management platform',
-      features: ['Contact management', 'Sales pipeline', 'Task automation', 'Mobile app'],
-      pricing: '$79/month'
+      name: 'Notion',
+      category: 'Productivity',
+      description: 'All-in-one workspace for notes, docs, and collaboration',
+      features: ['Documentation', 'Project management', 'Knowledge base', 'Team collaboration'],
+      pricing: 'Free tier available, Plus from $10/user/month',
+      metrics: {
+        cost_savings: '80%',
+        time_savings: '60%',
+        efficiency_gain: 'All-in-one workspace'
+      },
+      relevant_stages: ['idea', 'prototype', 'mvp', 'early_customers', 'growing_startup'],
+      use_cases: ['documentation', 'project management', 'knowledge base']
+    },
+    {
+      id: '10',
+      name: 'Vercel',
+      category: 'Hosting & Deployment',
+      description: 'Frontend cloud platform for instant deployments',
+      features: ['Instant deployments', 'Edge functions', 'Analytics', 'Preview deployments'],
+      pricing: 'Free tier available, Pro from $20/month',
+      metrics: {
+        cost_savings: '50%',
+        time_savings: '90%',
+        efficiency_gain: 'Zero-config deployments'
+      },
+      relevant_stages: ['prototype', 'mvp', 'early_customers', 'growing_startup', 'scale_up'],
+      use_cases: ['hosting', 'deployment', 'edge functions']
     }
   ];
 
@@ -163,7 +232,11 @@ const createDemoData = () => {
       description: 'Finish core product features and initial testing',
       targetDate: '2025-01-31',
       completed: true,
-      category: 'product'
+      category: 'product',
+      recommended_tools: [
+        { tool: 'Lovable', metric: '85% cost savings', purpose: 'Rapid MVP development' },
+        { tool: 'Supabase', metric: '70% cost savings', purpose: 'Backend infrastructure' }
+      ]
     },
     {
       id: '2',
@@ -171,7 +244,11 @@ const createDemoData = () => {
       description: 'Launch private beta with 50 users',
       targetDate: '2025-02-28',
       completed: true,
-      category: 'product'
+      category: 'product',
+      recommended_tools: [
+        { tool: 'Vercel', metric: '50% cost savings', purpose: 'Instant deployment' },
+        { tool: 'Tally', metric: '100% cost savings', purpose: 'User feedback collection' }
+      ]
     },
     {
       id: '3',
@@ -179,7 +256,11 @@ const createDemoData = () => {
       description: 'Sign partnership agreement with industry leader',
       targetDate: '2025-03-31',
       completed: false,
-      category: 'market'
+      category: 'market',
+      recommended_tools: [
+        { tool: 'Apify', metric: '75% cost savings', purpose: 'Market intelligence' },
+        { tool: 'Notion', metric: '80% cost savings', purpose: 'Partnership documentation' }
+      ]
     },
     {
       id: '4',
@@ -187,7 +268,11 @@ const createDemoData = () => {
       description: 'Hire 2 engineers and 1 marketing lead',
       targetDate: '2025-04-30',
       completed: false,
-      category: 'team'
+      category: 'team',
+      recommended_tools: [
+        { tool: 'Notion', metric: '80% cost savings', purpose: 'Team collaboration' },
+        { tool: 'n8n', metric: '60% cost savings', purpose: 'Onboarding automation' }
+      ]
     },
     {
       id: '5',
@@ -195,7 +280,11 @@ const createDemoData = () => {
       description: 'Launch product publicly with full marketing campaign',
       targetDate: '2025-05-31',
       completed: false,
-      category: 'product'
+      category: 'product',
+      recommended_tools: [
+        { tool: 'Vercel', metric: '50% cost savings', purpose: 'Production hosting' },
+        { tool: 'Stripe', metric: '35% cost savings', purpose: 'Payment processing' }
+      ]
     },
     {
       id: '6',
@@ -203,7 +292,11 @@ const createDemoData = () => {
       description: 'Reach 40% weekly active user retention',
       targetDate: '2025-06-30',
       completed: false,
-      category: 'product'
+      category: 'product',
+      recommended_tools: [
+        { tool: 'Tally', metric: '100% cost savings', purpose: 'User surveys' },
+        { tool: 'n8n', metric: '60% cost savings', purpose: 'Analytics automation' }
+      ]
     },
     {
       id: '7',
@@ -211,7 +304,10 @@ const createDemoData = () => {
       description: 'Close $1M seed round',
       targetDate: '2025-07-31',
       completed: false,
-      category: 'funding'
+      category: 'funding',
+      recommended_tools: [
+        { tool: 'Notion', metric: '80% cost savings', purpose: 'Pitch deck & data room' }
+      ]
     },
     {
       id: '8',
@@ -219,7 +315,11 @@ const createDemoData = () => {
       description: 'Reach 1000 active paying customers',
       targetDate: '2025-08-31',
       completed: false,
-      category: 'market'
+      category: 'market',
+      recommended_tools: [
+        { tool: 'Stripe', metric: '35% cost savings', purpose: 'Subscription management' },
+        { tool: 'n8n', metric: '60% cost savings', purpose: 'Customer onboarding automation' }
+      ]
     },
     {
       id: '9',
@@ -227,7 +327,11 @@ const createDemoData = () => {
       description: 'Launch in 3 European markets',
       targetDate: '2025-09-30',
       completed: false,
-      category: 'market'
+      category: 'market',
+      recommended_tools: [
+        { tool: 'Mollie', metric: '40% cost savings', purpose: 'European payment processing' },
+        { tool: 'Apify', metric: '75% cost savings', purpose: 'Market research' }
+      ]
     },
     {
       id: '10',
@@ -235,7 +339,11 @@ const createDemoData = () => {
       description: 'Release AI-powered analytics suite',
       targetDate: '2025-10-31',
       completed: false,
-      category: 'product'
+      category: 'product',
+      recommended_tools: [
+        { tool: 'ElevenLabs', metric: '90% cost savings', purpose: 'Voice features' },
+        { tool: 'Lovable', metric: '85% cost savings', purpose: 'Rapid feature development' }
+      ]
     },
     {
       id: '11',
@@ -243,7 +351,11 @@ const createDemoData = () => {
       description: 'Prepare materials and metrics for Series A',
       targetDate: '2025-11-30',
       completed: false,
-      category: 'funding'
+      category: 'funding',
+      recommended_tools: [
+        { tool: 'Notion', metric: '80% cost savings', purpose: 'Due diligence preparation' },
+        { tool: 'n8n', metric: '60% cost savings', purpose: 'Metrics automation' }
+      ]
     },
     {
       id: '12',
@@ -251,7 +363,10 @@ const createDemoData = () => {
       description: 'Complete annual review and plan for next year',
       targetDate: '2025-12-31',
       completed: false,
-      category: 'team'
+      category: 'team',
+      recommended_tools: [
+        { tool: 'Notion', metric: '80% cost savings', purpose: 'Planning & documentation' }
+      ]
     }
   ];
 
