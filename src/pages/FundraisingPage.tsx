@@ -10,7 +10,7 @@ export function FundraisingPage() {
       <ScreenTour
         screenKey="fundraising"
         title="Fundraising Hub 💰"
-        description="Your complete fundraising command center:\n\n• Current funding status\n• Funding goals & timeline\n• Public & private funding routes\n• Grant opportunities\n• Investor connections\n\nTrack your path to capital and choose the best route for your stage."
+        description="Your complete fundraising command center: current funding status, funding goals & timeline, public & private funding routes, grant opportunities, and investor connections. Track your path to capital and choose the best route for your stage."
         icon={<DollarSign className="w-12 h-12 text-primary" />}
       />
       <div>

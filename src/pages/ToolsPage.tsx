@@ -8,7 +8,7 @@ export function ToolsPage() {
       <ScreenTour
         screenKey="tools"
         title="Recommended Tools for Your Build 🛠️"
-        description="Here you'll find the best tools matched to your idea or organization — from data and automation to UI, payments, and AI.\n\nWe only recommend what fits your roadmap and stage."
+        description="Here you'll find the best tools matched to your idea or organization — from data and automation to UI, payments, and AI. We only recommend what fits your roadmap and stage."
         icon={<Wrench className="w-12 h-12 text-primary" />}
       />
       <div>

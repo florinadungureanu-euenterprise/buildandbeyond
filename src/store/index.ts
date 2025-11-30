@@ -36,7 +36,7 @@ const createDemoData = () => {
       category: 'Development',
       description: 'AI-powered full-stack development platform for rapid prototyping',
       features: ['AI code generation', 'Full-stack support', 'Real-time preview', 'Database integration'],
-      pricing: 'Free tier available, Pro from $20/month',
+      pricing: 'Free tier (limited credits), Pro US $25/month, Business US $50/month',
       metrics: {
         cost_savings: '85%',
         time_savings: '70%',
@@ -52,7 +52,7 @@ const createDemoData = () => {
       category: 'Automation',
       description: 'Workflow automation platform for connecting apps and services',
       features: ['Visual workflow builder', '400+ integrations', 'Self-hosted option', 'Custom nodes'],
-      pricing: 'Free self-hosted, Cloud from $20/month',
+      pricing: 'Free (self-hosted/community), Cloud Starter ~US $20/month',
       metrics: {
         cost_savings: '60%',
         time_savings: '80%',
@@ -68,7 +68,7 @@ const createDemoData = () => {
       category: 'Data & Research',
       description: 'Web scraping and automation platform for market intelligence',
       features: ['Web scraping', 'Data extraction', 'API integration', 'Scheduled runs'],
-      pricing: 'Free tier available, from $49/month',
+      pricing: 'Free tier ($100 platform usage), paid tiers based on usage',
       metrics: {
         cost_savings: '75%',
         time_savings: '90%',
@@ -84,7 +84,7 @@ const createDemoData = () => {
       category: 'Payments',
       description: 'Payment service provider for European markets',
       features: ['Multiple payment methods', 'SEPA support', 'Recurring billing', 'PSD2 compliant'],
-      pricing: 'Transaction fees from 0.29€ + 1.8%',
+      pricing: 'No monthly fee, transaction fees vary by payment method',
       metrics: {
         cost_savings: '40%',
         time_savings: '95%',
@@ -100,7 +100,7 @@ const createDemoData = () => {
       category: 'AI Voice',
       description: 'AI voice generation for realistic text-to-speech',
       features: ['Natural voice synthesis', 'Voice cloning', 'Multiple languages', 'API access'],
-      pricing: 'Free tier available, from $5/month',
+      pricing: 'Free tier (limited use), paid tiers based on usage',
       metrics: {
         cost_savings: '90%',
         time_savings: '95%',
@@ -116,7 +116,7 @@ const createDemoData = () => {
       category: 'Forms & Data Collection',
       description: 'Free form builder for collecting user feedback and data',
       features: ['Unlimited forms', 'File uploads', 'Conditional logic', 'Integrations'],
-      pricing: 'Free tier available, Pro from $29/month',
+      pricing: 'Free (basic), Pro from $29/month for advanced features',
       metrics: {
         cost_savings: '100%',
         time_savings: '85%',
@@ -132,7 +132,7 @@ const createDemoData = () => {
       category: 'Backend & Database',
       description: 'Open-source Firebase alternative with PostgreSQL',
       features: ['Database', 'Authentication', 'Real-time features', 'Storage'],
-      pricing: 'Free tier available, Pro from $25/month',
+      pricing: 'Free tier, Pro/Enterprise plans based on database usage',
       metrics: {
         cost_savings: '70%',
         time_savings: '80%',
@@ -147,7 +147,7 @@ const createDemoData = () => {
       category: 'Payments',
       description: 'Payment infrastructure for internet businesses',
       features: ['Payment processing', 'Subscription management', 'Invoicing', 'Global reach'],
-      pricing: '2.9% + 30¢ per transaction',
+      pricing: 'No subscription fee, ~2.9% + fixed fee per transaction',
       metrics: {
         cost_savings: '35%',
         time_savings: '85%',
@@ -162,7 +162,7 @@ const createDemoData = () => {
       category: 'Productivity',
       description: 'All-in-one workspace for notes, docs, and collaboration',
       features: ['Documentation', 'Project management', 'Knowledge base', 'Team collaboration'],
-      pricing: 'Free tier available, Plus from $10/user/month',
+      pricing: 'Free tier, Plus/Team/Enterprise from $10/user/month',
       metrics: {
         cost_savings: '80%',
         time_savings: '60%',
@@ -177,7 +177,7 @@ const createDemoData = () => {
       category: 'Hosting & Deployment',
       description: 'Frontend cloud platform for instant deployments',
       features: ['Instant deployments', 'Edge functions', 'Analytics', 'Preview deployments'],
-      pricing: 'Free tier available, Pro from $20/month',
+      pricing: 'Free tier (hobby), Pro/Enterprise plans for team features',
       metrics: {
         cost_savings: '50%',
         time_savings: '90%',

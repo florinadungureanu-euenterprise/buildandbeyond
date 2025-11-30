@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Sparkles } from 'lucide-react';
+import { useTourSequence } from '@/hooks/useTourSequence';
 
 const TOUR_SEEN_KEY = 'welcomeTourSeen';
 
 export function WelcomeTour() {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+  const { startTourSequence } = useTourSequence();
 
   useEffect(() => {
     // Check if user has seen the tour
@@ -19,9 +19,8 @@ export function WelcomeTour() {
   }, []);
 
   const handleNext = () => {
-    // Navigate to whisperer and close
-    navigate('/whisperer');
     handleClose();
+    startTourSequence();
   };
 
   const handleClose = () => {
@@ -35,9 +34,9 @@ export function WelcomeTour() {
 
   const tourContent = {
     title: "Welcome to Build & Beyond 🚀",
-    description: "Your workspace for turning ideas, projects, or organizations into momentum.\n\nHere, you'll get a tailored roadmap, live market insights, tool recommendations, and a Passport that grows with you.\n\nLet's show you around.",
+    description: "Your workspace for turning ideas, projects, or organizations into momentum.\n\nHere, you'll get a tailored roadmap, live market insights, tool recommendations, and a Passport that grows with you.\n\nLet's take a quick tour through each section.",
     icon: <Sparkles className="w-12 h-12 text-primary" />,
-    action: "Start Your Journey"
+    action: "Start Tour"
   };
 
   return (
