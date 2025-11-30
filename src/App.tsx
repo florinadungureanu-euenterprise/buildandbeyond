@@ -1,27 +1,51 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { SidebarNav } from '@/components/SidebarNav';
+import { TopTabs } from '@/components/TopTabs';
+import { DashboardPage } from '@/pages/DashboardPage';
+import { OnboardingPage } from '@/pages/OnboardingPage';
+import { PassportPage } from '@/pages/PassportPage';
+import { RoadmapPage } from '@/pages/RoadmapPage';
+import { SignalsPage } from '@/pages/SignalsPage';
+import { ToolsPage } from '@/pages/ToolsPage';
 
-const queryClient = new QueryClient();
+function Layout() {
+  return (
+    <div className="flex h-screen bg-gray-50">
+      <SidebarNav />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <TopTabs />
+        <div className="flex-1 overflow-auto">
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  );
+}
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+const router = createBrowserRouter(
+  [
+    {
+      element: <Layout />,
+      children: [
+        { path: '/', element: <DashboardPage /> },
+        { path: '/onboarding', element: <OnboardingPage /> },
+        { path: '/passport', element: <PassportPage /> },
+        { path: '/roadmap', element: <RoadmapPage /> },
+        { path: '/signals', element: <SignalsPage /> },
+        { path: '/tools', element: <ToolsPage /> },
+        { path: '*', element: <DashboardPage /> }
+      ]
+    }
+  ],
+  {
+    future: {
+      v7_relativeSplatPath: true
+    }
+  }
 );
+
+function App() {
+  return <RouterProvider router={router} />;
+}
 
 export default App;
