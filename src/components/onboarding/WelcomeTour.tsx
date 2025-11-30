@@ -35,7 +35,7 @@ export function WelcomeTour() {
 
   const tourContent = {
     title: "Welcome to Build & Beyond 🚀",
-    description: "Your workspace for turning ideas, projects, or organizations into momentum.\n\nHere, you'll get a tailored roadmap, live market insights, tool recommendations, and a Passport that grows with you.\n\nLet's get started by understanding your journey.",
+    description: "Your workspace for turning ideas, projects, or organizations into momentum.\n\nHere, you'll get a tailored roadmap, live market insights, tool recommendations, and a Passport that grows with you.\n\nLet's show you around.",
     icon: <Sparkles className="w-12 h-12 text-primary" />,
     action: "Start Your Journey"
   };
