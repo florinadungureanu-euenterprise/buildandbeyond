@@ -1,149 +1,286 @@
 import { useState, useEffect } from 'react';
-import { OnboardingMessage, OnboardingQuestion, UploadedDocument } from '@/types';
+import { OnboardingMessage, OnboardingQuestion, UploadedDocument, OnboardingProfile } from '@/types';
 import { useStore } from '@/store';
 
 const N8N_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/4ce2573e-4415-4cba-aa4e-65a97223ce43';
 
-const onboardingQuestions: OnboardingQuestion[] = [
-  {
-    id: 0,
-    question: 'What stage is your startup at?',
-    templates: [
-      'Pre-seed / Idea stage - just getting started',
-      'Early stage - have MVP or initial traction',
-      'Growth stage - have product-market fit and scaling'
-    ],
-    key: 'stage',
-    stage: 'all'
-  },
+// Early-stage flow questions (idea → MVP → early customers)
+const earlyStageQuestions: OnboardingQuestion[] = [
   {
     id: 1,
-    question: 'What problem are you solving?',
+    question: 'Who is your customer? Be as specific as possible.',
     templates: [
-      'Companies struggle with [problem] because [reason]. This causes [impact].',
-      'Current solutions fail at [gap] leading to [outcome].'
+      '[Job title] at [company type] who [characteristic/behavior]',
+      '[Demographic] who struggles with [specific problem]'
     ],
-    key: 'problem',
-    stage: 'early'
+    key: 'customer',
+    stage: 'early',
+    context: 'I can help you create a customer persona using an empathy map (Says / Thinks / Does / Feels) if that would be helpful.'
   },
   {
     id: 2,
-    question: 'Who is your target customer?',
+    question: 'What problem does your customer have? Can you describe the last time this happened to them?',
     templates: [
-      'Mid-sized [industry] companies with [characteristic].',
-      '[Role] at [company size] who need [capability].'
+      'Customers struggle with [problem] because [reason], which leads to [consequence]',
+      'The problem happens when [situation], causing [impact]'
     ],
-    key: 'customer',
-    stage: 'early'
+    key: 'problem',
+    stage: 'early',
+    probe_questions: [
+      'How painful is this problem for them?',
+      'What did they try instead?',
+      'How are they handling this today?'
+    ]
   },
   {
     id: 3,
-    question: 'What is your value proposition?',
+    question: 'What are the consequences if this problem goes unsolved?',
     templates: [
-      'We help [customer] achieve [outcome] through [approach].',
-      'Unlike alternatives, we provide [differentiator] to deliver [benefit].'
+      'If unsolved, this leads to [loss/cost/pain] for [customer]',
+      'The consequences include [impact 1], [impact 2], and [impact 3]'
     ],
-    key: 'value',
+    key: 'consequences_of_problem',
     stage: 'early'
   },
   {
     id: 4,
-    question: 'What is your business model?',
+    question: 'How do they currently solve this? What alternatives exist?',
     templates: [
-      'SaaS subscription at $[price]/month with [pricing model].',
-      '[Revenue model] with [payment structure] and [unit economics].'
+      'They currently use [solution A] and [solution B], but these fail because [reason]',
+      'Existing alternatives include [options], which don\'t work well because [gaps]'
     ],
-    key: 'business_model',
-    stage: 'all'
+    key: 'existing_alternatives',
+    stage: 'early'
   },
   {
     id: 5,
-    question: 'How large is your addressable market?',
+    question: 'What job is the customer trying to get done? (functional, emotional, and social)',
     templates: [
-      'TAM of $[amount]B with [growth rate]% annual growth.',
-      '[Number] potential customers spending $[amount] annually.'
+      'Functional: [task]. Emotional: [feeling]. Social: [perception]',
+      'They need to [accomplish] while feeling [emotion] and being seen as [social aspect]'
     ],
-    key: 'market_size',
-    stage: 'all'
+    key: 'jobs_to_be_done',
+    stage: 'early'
   },
   {
     id: 6,
-    question: 'Who are your main competitors?',
+    question: 'What is your proposed solution?',
     templates: [
-      '[Competitor A] focuses on [approach], [Competitor B] targets [segment].',
-      'Direct competitors: [names]. Indirect: [alternatives].'
+      'Our solution helps [customer] achieve [outcome] by [approach]',
+      'We [action] so that [customer] can [benefit]'
     ],
-    key: 'competitors',
-    stage: 'all'
+    key: 'solution',
+    stage: 'early'
   },
   {
     id: 7,
-    question: 'What is your competitive advantage?',
+    question: 'What makes your solution uniquely valuable?',
     templates: [
-      'We differentiate through [technology/approach] providing [specific benefit].',
-      'Our unique insight is [knowledge] enabling [capability].'
+      'Unlike alternatives, we [differentiator] to deliver [benefit]',
+      'Our unique approach is [what] which enables [outcome]'
     ],
-    key: 'advantage',
-    stage: 'all'
+    key: 'unique_value_proposition',
+    stage: 'early'
   },
   {
     id: 8,
-    question: 'What traction have you achieved?',
+    question: 'What is your unfair advantage that others cannot easily copy?',
     templates: [
-      '[Number] users/customers, $[revenue] MRR, [growth]% month-over-month.',
-      '[Metric]: [number]. Key achievement: [milestone].'
+      'Our unfair advantage is [data/network/technology/insight] because [reason]',
+      'We have [unique asset] that creates [barrier to competition]'
     ],
-    key: 'traction',
-    stage: 'all'
+    key: 'unfair_advantage',
+    stage: 'early'
   },
   {
     id: 9,
-    question: 'What are your key metrics?',
+    question: 'What is your riskiest assumption? (The assumption with the least data that is core to your hypothesis)',
     templates: [
-      'CAC: $[amount], LTV: $[amount], Churn: [%], NPS: [score].',
-      'Monthly active: [number], Conversion: [%], Retention: [%].'
+      'My idea only works if [assumption] is true',
+      'The biggest unknown is whether [assumption]'
     ],
-    key: 'metrics',
-    stage: 'later'
+    key: 'riskiest_assumption',
+    stage: 'early'
   },
   {
     id: 10,
-    question: 'What is your go-to-market strategy?',
+    question: 'What is the cheapest/fastest way to test your riskiest assumption? What result would give you confidence?',
     templates: [
-      'Start with [channel] targeting [segment], then expand to [next].',
-      '[Primary channel] with [tactics], supported by [secondary approach].'
+      'Test by [method] with success defined as [metric/outcome]',
+      'Run [experiment] and measure [indicator]. Success means [threshold]'
     ],
-    key: 'gtm',
-    stage: 'all'
+    key: 'method_and_success_criterion',
+    stage: 'early'
   },
   {
     id: 11,
-    question: 'What are your funding needs?',
+    question: 'What is your business model? (How will you make money?)',
     templates: [
-      'Raising $[amount] for [use case] to achieve [milestone].',
-      '$[amount] seed/Series [A/B] to [specific goal] over [timeframe].'
+      'SaaS subscription at $[price]/[period] with [pricing structure]',
+      '[Revenue model] with [unit economics]: CAC $[amount], LTV $[amount]'
     ],
-    key: 'funding',
-    stage: 'all'
+    key: 'business_model',
+    stage: 'early'
   },
   {
     id: 12,
-    question: 'What is your 12-month vision?',
+    question: 'What are your distribution channels and how will you reach customers?',
     templates: [
-      'Reach [metric] by [date], launch [feature], expand to [market].',
-      'Achieve [milestone], grow team to [size], reach [revenue target].'
+      'Primary: [channel A]. Secondary: [channel B]. Growth loop: [mechanism]',
+      'Acquire through [method], activate via [touchpoint], retain with [strategy]'
     ],
-    key: 'vision',
+    key: 'channels',
+    stage: 'early'
+  },
+  {
+    id: 13,
+    question: 'What are your key metrics to track?',
+    templates: [
+      'North star: [metric]. Supporting: [metric 1], [metric 2], [metric 3]',
+      'Track [leading indicator] and [lagging indicator] weekly/monthly'
+    ],
+    key: 'key_metrics',
+    stage: 'early'
+  },
+  {
+    id: 14,
+    question: 'What is your 12-week goal?',
+    templates: [
+      'Validate [assumption] by achieving [metric] through [method]',
+      'Reach [milestone] by [approach], proving [hypothesis]'
+    ],
+    key: 'twelve_week_goal',
+    stage: 'early'
+  },
+  {
+    id: 15,
+    question: 'What are your biggest risks? (technical, market, adoption, cost)',
+    templates: [
+      'Technical: [risk]. Market: [risk]. Adoption: [risk]',
+      'Main risks: [list], with [specific risk] being most critical'
+    ],
+    key: 'risks',
+    stage: 'early'
+  }
+];
+
+// Later-stage flow questions (growing startup → scale-up → established)
+const laterStageQuestions: OnboardingQuestion[] = [
+  {
+    id: 1,
+    question: 'What is your organization\'s main focus right now?',
+    templates: [
+      'Scaling [area] to [target] while improving [metric]',
+      'Focus on [initiative] to achieve [outcome] by [timeline]'
+    ],
+    key: 'later_stage_priorities',
+    stage: 'later'
+  },
+  {
+    id: 2,
+    question: 'What are your biggest bottlenecks or challenges?',
+    templates: [
+      'Limited by [constraint] causing [impact] on [outcome]',
+      'Bottlenecks in [area 1] and [area 2] preventing [goal]'
+    ],
+    key: 'later_stage_bottlenecks',
+    stage: 'later'
+  },
+  {
+    id: 3,
+    question: 'What goals are you aiming to achieve next quarter or next year?',
+    templates: [
+      'Q[X]: [goal]. Year: [annual goal]. Long-term: [vision]',
+      'Near-term: [quarterly target]. Annual: [yearly objective]'
+    ],
+    key: 'later_stage_goals',
+    stage: 'later'
+  },
+  {
+    id: 4,
+    question: 'What systems, tools, or infrastructure do you currently use?',
+    templates: [
+      'Tech stack: [tools]. Processes: [systems]. Gaps: [missing]',
+      'Using [tool A] for [function], [tool B] for [function], need [missing capability]'
+    ],
+    key: 'later_stage_tools',
+    stage: 'later'
+  },
+  {
+    id: 5,
+    question: 'Which processes need improvement or automation?',
+    templates: [
+      '[Process A] is manual and slow. [Process B] has [issue]',
+      'Need to automate [workflow] and improve [inefficient process]'
+    ],
+    key: 'later_stage_process_gaps',
+    stage: 'later'
+  },
+  {
+    id: 6,
+    question: 'What metrics do you track today and what are your current numbers?',
+    templates: [
+      'Revenue: $[amount]. Growth: [%]. Churn: [%]. CAC/LTV: [ratio]',
+      'Key metrics: [metric 1]: [value], [metric 2]: [value], target: [goal]'
+    ],
+    key: 'later_stage_metrics',
+    stage: 'later'
+  },
+  {
+    id: 7,
+    question: 'Do you have any known risks, blockers, or compliance requirements?',
+    templates: [
+      'Risks: [operational/market/technical]. Compliance: [requirements]',
+      'Current blockers: [issue 1], [issue 2]. Regulatory: [needs]'
+    ],
+    key: 'later_stage_risks',
+    stage: 'later'
+  },
+  {
+    id: 8,
+    question: 'What is your longer-term vision for the organization or product?',
+    templates: [
+      'Vision: [outcome] serving [market] with [capability]',
+      '3-year goal: [target]. 5-year vision: [transformation]'
+    ],
+    key: 'later_stage_vision',
+    stage: 'later'
+  }
+];
+
+// Basic questions asked for both flows
+const universalQuestions: OnboardingQuestion[] = [
+  {
+    id: 0,
+    question: 'What industry are you in?',
+    templates: [
+      'SaaS / Healthcare / Fintech / E-commerce / Education',
+      'B2B Software / Consumer Tech / Enterprise'
+    ],
+    key: 'industry',
+    stage: 'all'
+  },
+  {
+    id: 1,
+    question: 'What region do you primarily operate in?',
+    templates: [
+      'North America / Europe / Asia / Global',
+      'Specific country or multi-region'
+    ],
+    key: 'region',
     stage: 'all'
   }
 ];
 
 export function useOnboardingChat() {
   const [messages, setMessages] = useState<OnboardingMessage[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1); // Start at -1 for stage detection
   const [hasSentToN8n, setHasSentToN8n] = useState(false);
   const [startupStage, setStartupStage] = useState<'early' | 'later' | null>(null);
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
+  const [onboardingProfile, setOnboardingProfile] = useState<Partial<OnboardingProfile>>({
+    document_insights: []
+  });
   
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);
@@ -153,33 +290,37 @@ export function useOnboardingChat() {
   const userInputs = useStore((state) => state.userInputs);
   const toolActivationCount = useStore((state) => state.toolActivationCount);
 
-  // Filter questions based on stage
-  const filteredQuestions = onboardingQuestions.filter((q) => {
-    if (!startupStage) return q.id === 0; // Only show stage question first
-    if (q.stage === 'all') return true;
-    return q.stage === startupStage;
-  });
+  // Determine which questions to show
+  const getQuestionFlow = () => {
+    if (!startupStage) return [];
+    
+    const flow = startupStage === 'early' ? earlyStageQuestions : laterStageQuestions;
+    return [...flow, ...universalQuestions];
+  };
+
+  const filteredQuestions = getQuestionFlow();
 
   const currentQuestion =
-    currentQuestionIndex < filteredQuestions.length
+    currentQuestionIndex >= 0 && currentQuestionIndex < filteredQuestions.length
       ? filteredQuestions[currentQuestionIndex]
       : null;
 
   const progress =
-    filteredQuestions.length > 0 ? (currentQuestionIndex / filteredQuestions.length) * 100 : 0;
-  const isComplete = currentQuestionIndex >= filteredQuestions.length;
+    filteredQuestions.length > 0 ? ((currentQuestionIndex + 1) / (filteredQuestions.length + 1)) * 100 : 0;
+  const isComplete = startupStage !== null && currentQuestionIndex >= filteredQuestions.length;
 
+  // Initial stage detection message
   useEffect(() => {
-    if (messages.length === 0 && filteredQuestions.length > 0) {
-      const firstMessage: OnboardingMessage = {
+    if (messages.length === 0) {
+      const welcomeMessage: OnboardingMessage = {
         id: Date.now().toString(),
         role: 'system',
-        content: filteredQuestions[0].question,
+        content: "Welcome! I'll guide you step by step to clarify your needs so we can later generate your personalized roadmap.\n\nFirst, at what stage are you currently?\n\n**Idea / Prototype / MVP / Early customers / Growing startup / Scale-up / Established organization**",
         timestamp: new Date()
       };
-      setMessages([firstMessage]);
+      setMessages([welcomeMessage]);
     }
-  }, [filteredQuestions]);
+  }, []);
 
   const sendMessage = (content: string) => {
     // Add user message
@@ -191,16 +332,48 @@ export function useOnboardingChat() {
     };
     setMessages((prev) => [...prev, userMessage]);
 
-    // Handle stage selection
-    if (currentQuestion?.id === 0) {
+    // Handle stage detection (first response)
+    if (currentQuestionIndex === -1) {
       const stageLower = content.toLowerCase();
-      if (stageLower.includes('early') || stageLower.includes('pre-seed') || stageLower.includes('idea')) {
-        setStartupStage('early');
-      } else if (stageLower.includes('growth') || stageLower.includes('scaling')) {
-        setStartupStage('later');
+      let detectedStage: 'early' | 'later';
+      let stageLabel: string;
+
+      if (stageLower.includes('idea') || stageLower.includes('prototype') || 
+          stageLower.includes('mvp') || stageLower.includes('early customer')) {
+        detectedStage = 'early';
+        stageLabel = stageLower.includes('idea') ? 'Idea' : 
+                     stageLower.includes('prototype') ? 'Prototype' :
+                     stageLower.includes('mvp') ? 'MVP' : 'Early Customers';
       } else {
-        setStartupStage('early'); // Default to early
+        detectedStage = 'later';
+        stageLabel = stageLower.includes('growing') ? 'Growing Startup' :
+                     stageLower.includes('scale') ? 'Scale-up' : 'Established Organization';
       }
+
+      setStartupStage(detectedStage);
+      setOnboardingProfile(prev => ({ ...prev, stage_detected: stageLabel }));
+
+      // Move to first question
+      setCurrentQuestionIndex(0);
+      setTimeout(() => {
+        const flow = detectedStage === 'early' ? earlyStageQuestions : laterStageQuestions;
+        const firstQuestion: OnboardingMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'system',
+          content: flow[0].question + (flow[0].context ? `\n\n${flow[0].context}` : ''),
+          timestamp: new Date()
+        };
+        setMessages((prev) => [...prev, firstQuestion]);
+      }, 300);
+      return;
+    }
+
+    // Store answer in profile
+    if (currentQuestion) {
+      setOnboardingProfile(prev => ({
+        ...prev,
+        [currentQuestion.key]: content
+      }));
     }
 
     // Move to next question
@@ -210,10 +383,11 @@ export function useOnboardingChat() {
     // Add next question if not complete
     if (nextIndex < filteredQuestions.length) {
       setTimeout(() => {
+        const nextQ = filteredQuestions[nextIndex];
         const systemMessage: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
-          content: filteredQuestions[nextIndex].question,
+          content: nextQ.question + (nextQ.context ? `\n\n${nextQ.context}` : ''),
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, systemMessage]);
@@ -241,11 +415,20 @@ export function useOnboardingChat() {
         
         setUploadedDocuments((prev) => [...prev, doc]);
         
+        // Store document insights
+        setOnboardingProfile(prev => ({
+          ...prev,
+          document_insights: [
+            ...(prev.document_insights || []),
+            `Uploaded ${file.name} (${file.type}, ${(file.size / 1024).toFixed(1)} KB)`
+          ]
+        }));
+        
         // Add system message about upload
         const uploadMessage: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
-          content: `✓ Document uploaded: ${file.name}. I'll use this information to help fill in your profile.`,
+          content: `✓ Document uploaded: ${file.name}. I'll use this information to help complete your profile.`,
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, uploadMessage]);
@@ -262,7 +445,16 @@ export function useOnboardingChat() {
   };
 
   const removeDocument = (docId: string) => {
-    setUploadedDocuments((prev) => prev.filter((d) => d.id !== docId));
+    const doc = uploadedDocuments.find(d => d.id === docId);
+    if (doc) {
+      setUploadedDocuments((prev) => prev.filter((d) => d.id !== docId));
+      setOnboardingProfile(prev => ({
+        ...prev,
+        document_insights: (prev.document_insights || []).filter(
+          insight => !insight.includes(doc.name)
+        )
+      }));
+    }
   };
 
   // Send data to n8n when onboarding is complete
@@ -271,45 +463,36 @@ export function useOnboardingChat() {
       const sendToN8n = async () => {
         try {
           const payload = {
+            status: 'onboarding_complete',
             timestamp: new Date().toISOString(),
-            onboarding_completed: true,
-            startup_stage: startupStage,
-            validation_scores: validation,
             startup_profile: {
+              ...onboardingProfile,
+              // Fill in empathy map if we can infer from answers
+              empathy_map: {
+                says: onboardingProfile.problem || '',
+                thinks: onboardingProfile.consequences_of_problem || '',
+                does: onboardingProfile.existing_alternatives || '',
+                feels: onboardingProfile.jobs_to_be_done || ''
+              }
+            },
+            // Legacy fields for backward compatibility
+            validation_scores: validation,
+            legacy_passport: {
               founder_name: passport.founderName,
               startup_name: passport.startupName,
               tagline: passport.tagline,
-              summary: passport.summary,
-              validation_summary: passport.validationSummary,
-              competitor_snapshot: passport.competitorSnapshot,
-              market_data: passport.marketData,
-              roadmap_snapshot: passport.roadmapSnapshot,
-              compliance_flags: passport.complianceFlags,
-              funding_readiness: passport.fundingReadiness,
-              eu_compliant: passport.euCompliant,
-              last_updated: passport.lastUpdated
+              summary: passport.summary
             },
-            onboarding_responses: userInputs,
             user_activity: {
               completed_milestones: milestones.filter(m => m.completed).length,
               total_milestones: milestones.length,
-              tools_activated: toolActivationCount,
-              milestones: milestones
+              tools_activated: toolActivationCount
             },
             market_signals: signals.map(signal => ({
               type: signal.type,
               title: signal.title,
               message: signal.message,
-              suggested_action: signal.suggestedAction,
-              priority: signal.priority,
-              timestamp: signal.timestamp
-            })),
-            tools: tools.map(tool => ({
-              name: tool.name,
-              category: tool.category,
-              commission: tool.commission,
-              description: tool.description,
-              pricing: tool.pricing
+              priority: signal.priority
             })),
             uploaded_documents: uploadedDocuments.map(doc => ({
               name: doc.name,
@@ -319,7 +502,7 @@ export function useOnboardingChat() {
             }))
           };
 
-          console.log('Sending data to n8n webhook:', payload);
+          console.log('Sending structured onboarding data to n8n:', payload);
           
           await fetch(N8N_WEBHOOK_URL, {
             method: 'POST',
@@ -339,7 +522,7 @@ export function useOnboardingChat() {
 
       sendToN8n();
     }
-  }, [isComplete, hasSentToN8n, startupStage, validation, passport, userInputs, milestones, signals, tools, toolActivationCount, uploadedDocuments]);
+  }, [isComplete, hasSentToN8n, onboardingProfile, validation, passport, milestones, signals, toolActivationCount, uploadedDocuments]);
 
   return {
     messages,
@@ -351,6 +534,7 @@ export function useOnboardingChat() {
     uploadDocument,
     removeDocument,
     uploadedDocuments,
-    startupStage
+    startupStage,
+    totalQuestions: filteredQuestions.length + 1 // +1 for stage question
   };
 }
