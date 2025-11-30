@@ -12,7 +12,7 @@ export function DashboardPage() {
       <ScreenTour
         screenKey="dashboard"
         title="Your Startup Command Center 🧭"
-        description="This is where you track your progress:\n\n• Validation results\n• Recommended tools\n• Key market signals\n• Your next roadmap steps\n\nEverything here updates automatically as you build."
+        description="This is where you track your progress: validation results, recommended tools, key market signals, and your next roadmap steps. Everything here updates automatically as you build."
         icon={<LayoutDashboard className="w-12 h-12 text-primary" />}
       />
       <AlertBanner />

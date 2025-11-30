@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
+import { X, ChevronRight } from 'lucide-react';
+import { useTourSequence } from '@/hooks/useTourSequence';
 
 interface ScreenTourProps {
   screenKey: string;
@@ -21,25 +22,24 @@ export function ScreenTour({
   onComplete 
 }: ScreenTourProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const storageKey = `tour-${screenKey}-seen`;
+  const { isSequenceActive, moveToNextTour, isCurrentScreen } = useTourSequence();
 
   useEffect(() => {
-    const tourSeen = localStorage.getItem(storageKey);
-    const universalTourSeen = localStorage.getItem('welcomeTourSeen');
-    
-    // Only show if universal tour is complete and this screen tour hasn't been seen
-    if (universalTourSeen && !tourSeen) {
-      // Small delay for better UX
+    if (isSequenceActive && isCurrentScreen(screenKey)) {
       const timer = setTimeout(() => {
         setIsOpen(true);
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [screenKey, storageKey]);
+  }, [screenKey, isSequenceActive, isCurrentScreen]);
 
   const handleComplete = () => {
     setIsOpen(false);
-    localStorage.setItem(storageKey, 'true');
+    
+    if (isSequenceActive) {
+      moveToNextTour();
+    }
+    
     onComplete?.();
   };
 
@@ -76,8 +76,9 @@ export function ScreenTour({
         </DialogHeader>
         
         <DialogFooter className="sm:justify-center">
-          <Button onClick={handleComplete} className="px-8">
-            {buttonText}
+          <Button onClick={handleComplete} className="px-8 gap-2">
+            {isSequenceActive ? 'Next' : buttonText}
+            {isSequenceActive && <ChevronRight className="w-4 h-4" />}
           </Button>
         </DialogFooter>
       </DialogContent>
