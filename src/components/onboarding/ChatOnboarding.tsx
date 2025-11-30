@@ -177,16 +177,16 @@ export function ChatOnboarding() {
             />
           </div>
           
-          {startupStage && (
-            <div className="mt-2 flex gap-2">
+            {startupStage && (
               <Badge variant="outline" className="text-xs">
                 {startupStage === 'early' ? '🌱 Early Stage Path' : '🚀 Growth Stage Path'}
               </Badge>
+            )}
+            {uploadedDocuments.length > 0 && (
               <Badge variant="secondary" className="text-xs">
-                {startupStage === 'early' ? '15 questions' : '8 questions'} + 2 universal
+                📄 {uploadedDocuments.length} doc{uploadedDocuments.length > 1 ? 's' : ''} uploaded
               </Badge>
-            </div>
-          )}
+            )}
         </div>
 
         {/* Messages */}
@@ -355,6 +355,7 @@ export function ChatOnboarding() {
                     <p>✓ Key metrics</p>
                     <p>✓ 12-week goal</p>
                     <p>✓ Risks</p>
+                    <p>✓ Fundraising plans</p>
                   </div>
                 </div>
               </>
@@ -371,6 +372,7 @@ export function ChatOnboarding() {
                     <p>✓ Metrics tracked</p>
                     <p>✓ Risks & compliance</p>
                     <p>✓ Long-term vision</p>
+                    <p>✓ Fundraising plans</p>
                   </div>
                 </div>
               </>
