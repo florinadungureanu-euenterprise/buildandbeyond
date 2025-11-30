@@ -426,7 +426,7 @@ export function useOnboardingChat() {
       const welcomeMessage: OnboardingMessage = {
         id: Date.now().toString(),
         role: 'system',
-        content: "Welcome! I'll guide you step by step to clarify your needs so we can later generate your personalized roadmap.\n\nFirst, at what stage are you currently?\n\n**Idea / Prototype / MVP / Early customers / Growing startup / Scale-up / Established organization**",
+        content: "Hey there! 👋 Welcome to Build & Beyond, where we take you from idea to unicorn and beyond.\n\nI'm going to help you build a clear, actionable roadmap – no matter where you're starting from. But first, let me understand where you are right now.\n\n**Which stage sounds most like you?**\n\n- **Idea stage** – \"I have a concept, but nothing built yet\"\n- **Prototype** – \"I've made a rough version to test the concept\"\n- **MVP** – \"I have a working product, ready for real users\"\n- **Early Customers** – \"I have my first customers using my product\"\n- **Growing Startup** – \"We're scaling and things are working\"\n- **Scale-up** – \"We're in fast growth mode\"\n- **Established** – \"We're a mature company launching something new\"\n\n**🤔 Not quite sure?** That's totally normal! Just describe what you've done so far (even if it's just an idea in your head), and I'll help you figure out exactly where you are – and what your next steps should be.",
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
