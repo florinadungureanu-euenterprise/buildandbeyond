@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { OnboardingMessage, OnboardingQuestion } from '@/types';
+import { useStore } from '@/store';
+
+const N8N_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/4ce2573e-4415-4cba-aa4e-65a97223ce43';
 
 const onboardingQuestions: OnboardingQuestion[] = [
   {
@@ -115,6 +118,16 @@ const onboardingQuestions: OnboardingQuestion[] = [
 export function useOnboardingChat() {
   const [messages, setMessages] = useState<OnboardingMessage[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [hasSentToN8n, setHasSentToN8n] = useState(false);
+  
+  const validation = useStore((state) => state.validation);
+  const tools = useStore((state) => state.tools);
+  const signals = useStore((state) => state.signals);
+  const twoWeekTasks = useStore((state) => state.twoWeekTasks);
+  const threeMonthMilestones = useStore((state) => state.threeMonthMilestones);
+  const passport = useStore((state) => state.passport);
+  const userInputs = useStore((state) => state.userInputs);
+  const toolActivationCount = useStore((state) => state.toolActivationCount);
 
   const currentQuestion =
     currentQuestionIndex < onboardingQuestions.length
@@ -165,6 +178,78 @@ export function useOnboardingChat() {
   const useTemplate = (template: string) => {
     sendMessage(template);
   };
+
+  // Send data to n8n when onboarding is complete
+  useEffect(() => {
+    if (isComplete && !hasSentToN8n) {
+      const sendToN8n = async () => {
+        try {
+          const payload = {
+            timestamp: new Date().toISOString(),
+            onboarding_completed: true,
+            validation_scores: validation,
+            startup_profile: {
+              founder_name: passport.founderName,
+              startup_name: passport.startupName,
+              tagline: passport.tagline,
+              summary: passport.summary,
+              validation_summary: passport.validationSummary,
+              competitor_snapshot: passport.competitorSnapshot,
+              market_data: passport.marketData,
+              roadmap_snapshot: passport.roadmapSnapshot,
+              compliance_flags: passport.complianceFlags,
+              funding_readiness: passport.fundingReadiness,
+              eu_compliant: passport.euCompliant,
+              last_updated: passport.lastUpdated
+            },
+            onboarding_responses: userInputs,
+            user_activity: {
+              completed_tasks: twoWeekTasks.filter(t => t.completed).length,
+              total_tasks: twoWeekTasks.length,
+              completed_milestones: threeMonthMilestones.filter(m => m.completed).length,
+              total_milestones: threeMonthMilestones.length,
+              tools_activated: toolActivationCount,
+              tasks: twoWeekTasks,
+              milestones: threeMonthMilestones
+            },
+            market_signals: signals.map(signal => ({
+              type: signal.type,
+              title: signal.title,
+              message: signal.message,
+              suggested_action: signal.suggestedAction,
+              priority: signal.priority,
+              timestamp: signal.timestamp
+            })),
+            tools: tools.map(tool => ({
+              name: tool.name,
+              category: tool.category,
+              commission: tool.commission,
+              description: tool.description,
+              pricing: tool.pricing
+            }))
+          };
+
+          console.log('Sending data to n8n webhook:', payload);
+          
+          await fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'no-cors',
+            body: JSON.stringify(payload),
+          });
+          
+          console.log('Successfully sent data to n8n');
+          setHasSentToN8n(true);
+        } catch (error) {
+          console.error('Error sending data to n8n:', error);
+        }
+      };
+
+      sendToN8n();
+    }
+  }, [isComplete, hasSentToN8n, validation, passport, userInputs, twoWeekTasks, threeMonthMilestones, signals, tools, toolActivationCount]);
 
   return {
     messages,
