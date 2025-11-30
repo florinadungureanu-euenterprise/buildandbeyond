@@ -65,8 +65,13 @@ export function ScreenTour({
             </div>
           )}
           <DialogTitle className="text-center text-2xl">{title}</DialogTitle>
-          <DialogDescription className="text-center text-base pt-2 whitespace-pre-line">
-            {description}
+          <DialogDescription className="text-center text-base pt-2">
+            {description.split('\n').map((line, i) => (
+              <span key={i}>
+                {line}
+                {i < description.split('\n').length - 1 && <br />}
+              </span>
+            ))}
           </DialogDescription>
         </DialogHeader>
         

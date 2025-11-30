@@ -48,8 +48,13 @@ export function WelcomeTour() {
             {tourContent.icon}
           </div>
           <DialogTitle className="text-center text-2xl">{tourContent.title}</DialogTitle>
-          <DialogDescription className="text-center text-base pt-2 whitespace-pre-line">
-            {tourContent.description}
+          <DialogDescription className="text-center text-base pt-2">
+            {tourContent.description.split('\n').map((line, i) => (
+              <span key={i}>
+                {line}
+                {i < tourContent.description.split('\n').length - 1 && <br />}
+              </span>
+            ))}
           </DialogDescription>
         </DialogHeader>
         

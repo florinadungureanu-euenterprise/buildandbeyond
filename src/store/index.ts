@@ -20,6 +20,7 @@ interface AppState {
   dismissComplianceAlert: () => void;
   updateUserInput: (key: string, value: string) => void;
   incrementToolActivation: () => void;
+  updatePassport: (data: Partial<PassportData>) => void;
 }
 
 const createDemoData = () => {
@@ -686,6 +687,15 @@ export const useStore = create<AppState>((set) => {
     incrementToolActivation: () =>
       set((state) => ({
         toolActivationCount: state.toolActivationCount + 1
+      })),
+
+    updatePassport: (data) =>
+      set((state) => ({
+        passport: {
+          ...state.passport,
+          ...data,
+          lastUpdated: new Date()
+        }
       }))
   };
 });

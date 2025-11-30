@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,6 +15,11 @@ export function TemplatePopover({ template, onUse }: TemplatePopoverProps) {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
+
+  // Update editedTemplate when template prop changes
+  useEffect(() => {
+    setEditedTemplate(template);
+  }, [template]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(editedTemplate);

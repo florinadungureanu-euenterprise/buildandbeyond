@@ -1,15 +1,26 @@
+import { FounderProfileModal } from '@/components/onboarding/FounderProfileModal';
 import { useStore } from '@/store';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { timeAgo, formatDate } from '@/lib/utils';
 import { CheckCircle2, FileText, Save, TrendingUp, UserPlus } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export function PassportView() {
   const passport = useStore((state) => state.passport);
+  const [showFounderModal, setShowFounderModal] = useState(false);
+
+  // Check if founder information is missing
+  useEffect(() => {
+    if (!passport.founderName || passport.founderName === 'Alex Morgan') {
+      setShowFounderModal(true);
+    }
+  }, [passport.founderName]);
 
   return (
     <div className="h-full flex">
+      <FounderProfileModal open={showFounderModal} onOpenChange={setShowFounderModal} />
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto p-8">
