@@ -433,14 +433,28 @@ const createDemoData = () => {
     {
       id: '5',
       name: 'EIT Digital Challenge',
-      type: 'competition',
+      type: 'competition & hackathons',
       description: 'European competition for digital technology startups',
       benefits: ['€50k prize', 'EIT network access', 'Media exposure', 'Investor connections'],
       eligibility: ['Digital innovation', 'EU presence', 'Scalable solution'],
       deadline: '2025-05-15',
       matchScore: 82,
       industry: ['Technology', 'SaaS'],
-      trlRange: '4-6'
+      trlRange: '4-6',
+      url: 'https://eit.europa.eu'
+    },
+    {
+      id: '6',
+      name: 'Build Weekend by Young Creators & n8n',
+      type: 'competition & hackathons',
+      description: 'Intensive weekend hackathon bringing together builders, creators, and innovators to create projects using n8n',
+      benefits: ['Networking opportunity', 'Hands-on building experience', 'n8n expertise', 'Community access'],
+      eligibility: ['Open to all builders', 'Interest in workflow automation', 'Weekend availability'],
+      deadline: '2025-11-30',
+      matchScore: 75,
+      industry: ['Technology', 'SaaS', 'Automation'],
+      trlRange: '1-5',
+      url: 'https://bash.social/e/lULezdQZcfRC?s=1KhBKTCECvR'
     }
   ];
 

@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 const typeColors: Record<string, string> = {
   accelerator: 'bg-blue-100 text-blue-700 border-blue-200',
   grant: 'bg-green-100 text-green-700 border-green-200',
-  competition: 'bg-purple-100 text-purple-700 border-purple-200',
+  'competition & hackathons': 'bg-purple-100 text-purple-700 border-purple-200',
   incubator: 'bg-orange-100 text-orange-700 border-orange-200'
 };
 

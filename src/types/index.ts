@@ -62,7 +62,7 @@ export interface ValidationScores {
 export interface Application {
   id: string;
   name: string;
-  type: 'accelerator' | 'grant' | 'competition' | 'incubator';
+  type: 'accelerator' | 'grant' | 'competition & hackathons' | 'incubator';
   description: string;
   benefits: string[];
   eligibility: string[];

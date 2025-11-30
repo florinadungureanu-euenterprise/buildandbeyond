@@ -21,12 +21,13 @@ export function PassportView() {
   // Check if data is demo/placeholder data
   const isDemoData = (field: string) => {
     if (!field || field.trim() === '') return true;
-    // Check for common demo content
-    if (field.includes('TechVenture') || field.includes('Alex Morgan')) return true;
+    // Check for common demo content - only TechVenture summary is hardcoded demo
+    if (field === 'TechVenture is a SaaS platform that reimagines team collaboration by combining AI-powered insights with intuitive project management. We serve mid-sized companies looking to improve productivity and reduce operational overhead.') return true;
     return false;
   };
 
   const hasRealData = !isDemoData(passport.summary);
+  const showSummaryPending = !hasRealData || passport.summary.includes('TechVenture is a SaaS platform');
 
   return (
     <div className="h-full flex">
@@ -74,7 +75,14 @@ export function PassportView() {
                 <span className="text-sm font-medium text-gray-700">Founder: </span>
                 <span className="text-sm text-gray-600">{passport.founderName}</span>
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed">{passport.summary}</p>
+              {showSummaryPending ? (
+                <div className="text-center py-4">
+                  <Badge variant="outline" className="text-sm">Pending</Badge>
+                  <p className="text-xs text-gray-500 mt-2">Complete the Entrepreneur Whisperer chat to generate your startup description</p>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-700 leading-relaxed">{passport.summary}</p>
+              )}
             </div>
           </Card>
 
