@@ -4,8 +4,9 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Calendar, Award, TrendingUp } from 'lucide-react';
+import { Calendar, Award, TrendingUp, CheckCircle2, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const typeColors: Record<string, string> = {
   accelerator: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -17,8 +18,10 @@ const typeColors: Record<string, string> = {
 export function ApplicationsList() {
   const applications = useStore((state) => state.applications);
   const passport = useStore((state) => state.passport);
+  const markApplicationApplied = useStore((state) => state.markApplicationApplied);
   const [selectedApp, setSelectedApp] = useState<typeof applications[0] | null>(null);
   const [filterType, setFilterType] = useState<string>('all');
+  const { toast } = useToast();
 
   const types = ['all', ...Array.from(new Set(applications.map((a) => a.type)))];
 
@@ -59,9 +62,17 @@ export function ApplicationsList() {
         {sortedApps.map((app) => (
           <Card
             key={app.id}
-            className="p-6 hover:shadow-lg transition-shadow cursor-pointer border-border"
+            className="p-6 hover:shadow-lg transition-shadow cursor-pointer border-border relative"
             onClick={() => setSelectedApp(app)}
           >
+            {app.applied && (
+              <div className="absolute top-3 right-3">
+                <Badge className="bg-green-100 text-green-700 border-green-200">
+                  <CheckCircle2 className="w-3 h-3 mr-1" />
+                  Applied
+                </Badge>
+              </div>
+            )}
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <h3 className="font-semibold text-foreground mb-2">{app.name}</h3>
@@ -100,6 +111,12 @@ export function ApplicationsList() {
                 <DialogTitle className="flex items-center justify-between">
                   <span>{selectedApp.name}</span>
                   <div className="flex items-center gap-2">
+                    {selectedApp.applied && (
+                      <Badge className="bg-green-100 text-green-700 border-green-200">
+                        <CheckCircle2 className="w-3 h-3 mr-1" />
+                        Applied
+                      </Badge>
+                    )}
                     <Badge className={cn('text-xs font-medium capitalize', typeColors[selectedApp.type])}>
                       {selectedApp.type}
                     </Badge>
@@ -167,8 +184,33 @@ export function ApplicationsList() {
                 )}
 
                 <div className="flex gap-2 pt-4">
-                  <Button className="flex-1">Start Application</Button>
-                  <Button variant="outline" onClick={() => setSelectedApp(null)}>
+                  {selectedApp.url && (
+                    <Button
+                      onClick={() => window.open(selectedApp.url, '_blank', 'noopener,noreferrer')}
+                      className="flex-1"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Visit Website
+                    </Button>
+                  )}
+                  {!selectedApp.applied && (
+                    <Button
+                      onClick={() => {
+                        markApplicationApplied(selectedApp.id);
+                        toast({
+                          title: 'Application marked',
+                          description: `${selectedApp.name} has been marked as applied`
+                        });
+                        setSelectedApp(null);
+                      }}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Mark as Applied
+                    </Button>
+                  )}
+                  <Button variant="ghost" onClick={() => setSelectedApp(null)}>
                     Close
                   </Button>
                 </div>

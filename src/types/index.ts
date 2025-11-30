@@ -39,6 +39,8 @@ export interface Tool {
   relevant_stages?: string[];
   use_cases?: string[];
   why_recommended?: string;
+  url?: string;
+  subscribed?: boolean;
 }
 
 export interface Signal {
@@ -68,6 +70,8 @@ export interface Application {
   matchScore: number;
   industry?: string[];
   trlRange?: string;
+  url?: string;
+  applied?: boolean;
 }
 
 export interface TeamMember {
@@ -177,6 +181,8 @@ export interface FundingRoute {
   pros: string[];
   cons: string[];
   next_steps: string[];
+  url?: string;
+  applied?: boolean;
 }
 
 export interface FundingMilestone {
