@@ -80,6 +80,8 @@ export interface TeamMember {
 
 export interface PassportData {
   founderName: string;
+  founderEmail?: string;
+  founderLinkedIn?: string;
   startupName: string;
   tagline: string;
   summary: string;
