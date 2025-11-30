@@ -24,11 +24,11 @@ export function ScreenTour({
   const storageKey = `tour-${screenKey}-seen`;
 
   useEffect(() => {
+    // Check if user has seen the tour
     const tourSeen = localStorage.getItem(storageKey);
-    const universalTourSeen = localStorage.getItem('welcomeTourSeen');
     
-    // Only show if universal tour is complete and this screen tour hasn't been seen
-    if (universalTourSeen && !tourSeen) {
+    // Show screen tour without requiring universal tour to be seen first
+    if (!tourSeen) {
       // Small delay for better UX
       const timer = setTimeout(() => {
         setIsOpen(true);
