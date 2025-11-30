@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const navItems = [
+  { path: '/whisperer', label: 'Your Entrepreneur Whisperer' },
   { path: '/', label: 'Dashboard' },
   { path: '/roadmap', label: 'Roadmap' },
   { path: '/signals', label: 'Market Signals' },
@@ -23,7 +24,8 @@ export function SidebarNav() {
 
       <div className="space-y-2 flex-1">
         {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname === item.path ||
+                          (item.path === '/whisperer' && location.pathname === '/onboarding');
           return (
             <Link
               key={item.path}

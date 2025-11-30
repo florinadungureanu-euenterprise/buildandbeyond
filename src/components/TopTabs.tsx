@@ -2,9 +2,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const tabs = [
-  { path: '/', label: 'Dashboard' },
-  { path: '/onboarding', label: 'Onboarding' },
-  { path: '/passport', label: 'Passport' }
+  { path: '/whisperer', label: 'Your Entrepreneur Whisperer' },
+  { path: '/', label: 'Dashboard' }
 ];
 
 export function TopTabs() {
@@ -15,7 +14,8 @@ export function TopTabs() {
       <div className="flex items-center px-8 py-4">
         <div className="flex gap-8">
           {tabs.map((tab) => {
-            const isActive = location.pathname === tab.path;
+            const isActive = location.pathname === tab.path || 
+                            (tab.path === '/whisperer' && location.pathname === '/onboarding');
             return (
               <Link
                 key={tab.path}
