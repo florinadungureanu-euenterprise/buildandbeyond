@@ -248,6 +248,40 @@ const laterStageQuestions: OnboardingQuestion[] = [
   }
 ];
 
+// Condensed questions for later-stage to fill foundational gaps
+const laterStageFoundationalQuestions: OnboardingQuestion[] = [
+  {
+    id: 1,
+    question: 'Briefly, who is your target customer and what core problem do you solve for them?',
+    templates: [
+      'We serve [customer segment] who struggle with [problem]',
+      'Target: [customer]. Problem: [pain point]. Solution: [what we do]'
+    ],
+    key: 'customer_and_problem',
+    stage: 'later'
+  },
+  {
+    id: 2,
+    question: 'What is your unique value proposition and unfair advantage?',
+    templates: [
+      'UVP: [what makes us different]. Advantage: [why we win]',
+      'We uniquely [capability] because [unfair advantage]'
+    ],
+    key: 'uvp_and_advantage',
+    stage: 'later'
+  },
+  {
+    id: 3,
+    question: 'What are your revenue streams and current business model?',
+    templates: [
+      'Revenue: [model] at [price point]. Channels: [distribution]',
+      'Monetize via [approach]. Currently: $[revenue] with [growth]'
+    ],
+    key: 'revenue_and_model',
+    stage: 'later'
+  }
+];
+
 // Basic questions asked for both flows
 const universalQuestions: OnboardingQuestion[] = [
   {
@@ -281,6 +315,7 @@ export function useOnboardingChat() {
   const [onboardingProfile, setOnboardingProfile] = useState<Partial<OnboardingProfile>>({
     document_insights: []
   });
+  const [isInFoundationalPhase, setIsInFoundationalPhase] = useState(false);
   
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);
@@ -294,8 +329,16 @@ export function useOnboardingChat() {
   const getQuestionFlow = () => {
     if (!startupStage) return [];
     
-    const flow = startupStage === 'early' ? earlyStageQuestions : laterStageQuestions;
-    return [...flow, ...universalQuestions];
+    if (startupStage === 'early') {
+      return [...earlyStageQuestions, ...universalQuestions];
+    } else {
+      // Later stage: operational questions + condensed foundational + universal
+      if (!isInFoundationalPhase) {
+        return laterStageQuestions;
+      } else {
+        return [...laterStageFoundationalQuestions, ...universalQuestions];
+      }
+    }
   };
 
   const filteredQuestions = getQuestionFlow();
@@ -305,9 +348,26 @@ export function useOnboardingChat() {
       ? filteredQuestions[currentQuestionIndex]
       : null;
 
-  const progress =
-    filteredQuestions.length > 0 ? ((currentQuestionIndex + 1) / (filteredQuestions.length + 1)) * 100 : 0;
-  const isComplete = startupStage !== null && currentQuestionIndex >= filteredQuestions.length;
+  const getTotalQuestions = () => {
+    if (!startupStage) return 1;
+    if (startupStage === 'early') {
+      return earlyStageQuestions.length + universalQuestions.length + 1; // +1 for stage
+    } else {
+      return laterStageQuestions.length + laterStageFoundationalQuestions.length + universalQuestions.length + 1;
+    }
+  };
+
+  const getCurrentProgress = () => {
+    if (!startupStage) return 0;
+    
+    const userAnswers = messages.filter(m => m.role === 'user').length;
+    const total = getTotalQuestions();
+    return (userAnswers / total) * 100;
+  };
+
+  const progress = getCurrentProgress();
+  const isComplete = startupStage !== null && currentQuestionIndex >= filteredQuestions.length && 
+                     (startupStage === 'early' || isInFoundationalPhase);
 
   // Initial stage detection message
   useEffect(() => {
@@ -353,14 +413,37 @@ export function useOnboardingChat() {
       setStartupStage(detectedStage);
       setOnboardingProfile(prev => ({ ...prev, stage_detected: stageLabel }));
 
-      // Move to first question
+      // For later stage, encourage document upload first
+      if (detectedStage === 'later') {
+        const laterStageIntro: OnboardingMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'system',
+          content: "Great! Since you're at a growth stage, I'll focus on your current operations and strategic challenges.\n\n**Before we start:** If you have a pitch deck, business plan, or company overview document, please upload it now. This will help me automatically extract your foundational information (customer, problem, solution, etc.) so we can focus the questions on what matters most.\n\n(You can upload documents using the upload button below, or we can proceed directly to the questions.)",
+          timestamp: new Date()
+        };
+        setMessages((prev) => [...prev, laterStageIntro]);
+        
+        // Wait a moment then start with first operational question
+        setTimeout(() => {
+          setCurrentQuestionIndex(0);
+          const firstQuestion: OnboardingMessage = {
+            id: (Date.now() + 2).toString(),
+            role: 'system',
+            content: laterStageQuestions[0].question + (laterStageQuestions[0].context ? `\n\n${laterStageQuestions[0].context}` : ''),
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, firstQuestion]);
+        }, 1000);
+        return;
+      }
+
+      // For early stage, proceed normally
       setCurrentQuestionIndex(0);
       setTimeout(() => {
-        const flow = detectedStage === 'early' ? earlyStageQuestions : laterStageQuestions;
         const firstQuestion: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
-          content: flow[0].question + (flow[0].context ? `\n\n${flow[0].context}` : ''),
+          content: earlyStageQuestions[0].question + (earlyStageQuestions[0].context ? `\n\n${earlyStageQuestions[0].context}` : ''),
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, firstQuestion]);
@@ -370,15 +453,65 @@ export function useOnboardingChat() {
 
     // Store answer in profile
     if (currentQuestion) {
-      setOnboardingProfile(prev => ({
-        ...prev,
-        [currentQuestion.key]: content
-      }));
+      // Handle consolidated later-stage questions
+      if (currentQuestion.key === 'customer_and_problem') {
+        // Parse and split the combined answer
+        setOnboardingProfile(prev => ({
+          ...prev,
+          customer: content,
+          problem: content
+        }));
+      } else if (currentQuestion.key === 'uvp_and_advantage') {
+        setOnboardingProfile(prev => ({
+          ...prev,
+          unique_value_proposition: content,
+          unfair_advantage: content
+        }));
+      } else if (currentQuestion.key === 'revenue_and_model') {
+        setOnboardingProfile(prev => ({
+          ...prev,
+          business_model: content,
+          revenue_streams: content
+        }));
+      } else {
+        setOnboardingProfile(prev => ({
+          ...prev,
+          [currentQuestion.key]: content
+        }));
+      }
     }
 
     // Move to next question
     const nextIndex = currentQuestionIndex + 1;
     setCurrentQuestionIndex(nextIndex);
+
+    // Check if we need to transition to foundational questions (later stage only)
+    if (startupStage === 'later' && !isInFoundationalPhase && nextIndex >= laterStageQuestions.length) {
+      setIsInFoundationalPhase(true);
+      setCurrentQuestionIndex(0);
+      
+      setTimeout(() => {
+        const transitionMessage: OnboardingMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'system',
+          content: "Perfect! Now I need to collect some foundational information about your business. If you've uploaded documents, some of this may be auto-filled later. Otherwise, please provide brief answers to these final questions:",
+          timestamp: new Date()
+        };
+        setMessages((prev) => [...prev, transitionMessage]);
+        
+        setTimeout(() => {
+          const nextQ = laterStageFoundationalQuestions[0];
+          const systemMessage: OnboardingMessage = {
+            id: (Date.now() + 2).toString(),
+            role: 'system',
+            content: nextQ.question + (nextQ.context ? `\n\n${nextQ.context}` : ''),
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, systemMessage]);
+        }, 500);
+      }, 300);
+      return;
+    }
 
     // Add next question if not complete
     if (nextIndex < filteredQuestions.length) {
@@ -420,7 +553,7 @@ export function useOnboardingChat() {
           ...prev,
           document_insights: [
             ...(prev.document_insights || []),
-            `Uploaded ${file.name} (${file.type}, ${(file.size / 1024).toFixed(1)} KB)`
+            `Uploaded ${file.name} (${file.type}, ${(file.size / 1024).toFixed(1)} KB) - will be parsed by n8n for auto-extraction`
           ]
         }));
         
@@ -428,7 +561,7 @@ export function useOnboardingChat() {
         const uploadMessage: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
-          content: `✓ Document uploaded: ${file.name}. I'll use this information to help complete your profile.`,
+          content: `✓ Document uploaded: ${file.name}. Your n8n workflow will parse this to auto-fill foundational information like customer definition, problem, solution, and value proposition.`,
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, uploadMessage]);
@@ -466,23 +599,64 @@ export function useOnboardingChat() {
             status: 'onboarding_complete',
             timestamp: new Date().toISOString(),
             startup_profile: {
-              ...onboardingProfile,
-              // Fill in empathy map if we can infer from answers
+              // All fields - will be populated based on stage and documents
+              stage_detected: onboardingProfile.stage_detected,
+              
+              // Early-stage foundational fields (REQUIRED for both stages)
+              customer: onboardingProfile.customer || '',
               empathy_map: {
                 says: onboardingProfile.problem || '',
                 thinks: onboardingProfile.consequences_of_problem || '',
                 does: onboardingProfile.existing_alternatives || '',
                 feels: onboardingProfile.jobs_to_be_done || ''
-              }
+              },
+              problem: onboardingProfile.problem || '',
+              consequences_of_problem: onboardingProfile.consequences_of_problem || '',
+              existing_alternatives: onboardingProfile.existing_alternatives || '',
+              jobs_to_be_done: onboardingProfile.jobs_to_be_done || '',
+              solution: onboardingProfile.solution || '',
+              unique_value_proposition: onboardingProfile.unique_value_proposition || '',
+              unfair_advantage: onboardingProfile.unfair_advantage || '',
+              riskiest_assumption: onboardingProfile.riskiest_assumption || '',
+              method_and_success_criterion: onboardingProfile.method_and_success_criterion || '',
+              business_model: onboardingProfile.business_model || '',
+              channels: onboardingProfile.channels || '',
+              revenue_streams: onboardingProfile.revenue_streams || '',
+              cost_structure: onboardingProfile.cost_structure || '',
+              key_metrics: onboardingProfile.key_metrics || '',
+              twelve_week_goal: onboardingProfile.twelve_week_goal || '',
+              risks: onboardingProfile.risks || '',
+              
+              // Later-stage operational fields (populated only for later stage)
+              later_stage_priorities: onboardingProfile.later_stage_priorities || '',
+              later_stage_bottlenecks: onboardingProfile.later_stage_bottlenecks || '',
+              later_stage_goals: onboardingProfile.later_stage_goals || '',
+              later_stage_tools: onboardingProfile.later_stage_tools || '',
+              later_stage_process_gaps: onboardingProfile.later_stage_process_gaps || '',
+              later_stage_metrics: onboardingProfile.later_stage_metrics || '',
+              later_stage_risks: onboardingProfile.later_stage_risks || '',
+              later_stage_vision: onboardingProfile.later_stage_vision || '',
+              
+              // Universal fields
+              industry: onboardingProfile.industry || '',
+              region: onboardingProfile.region || '',
+              
+              // Document tracking
+              document_insights: onboardingProfile.document_insights || []
             },
+            // Raw uploaded documents for n8n to parse
+            uploaded_documents: uploadedDocuments.map(doc => ({
+              name: doc.name,
+              type: doc.type,
+              size: doc.size,
+              uploaded_at: doc.uploadedAt,
+              content: doc.content // Full content for parsing
+            })),
+            // Metadata
+            requires_document_parsing: startupStage === 'later' && uploadedDocuments.length > 0,
+            manual_answers_provided: startupStage === 'early',
             // Legacy fields for backward compatibility
             validation_scores: validation,
-            legacy_passport: {
-              founder_name: passport.founderName,
-              startup_name: passport.startupName,
-              tagline: passport.tagline,
-              summary: passport.summary
-            },
             user_activity: {
               completed_milestones: milestones.filter(m => m.completed).length,
               total_milestones: milestones.length,
@@ -493,12 +667,6 @@ export function useOnboardingChat() {
               title: signal.title,
               message: signal.message,
               priority: signal.priority
-            })),
-            uploaded_documents: uploadedDocuments.map(doc => ({
-              name: doc.name,
-              type: doc.type,
-              size: doc.size,
-              uploaded_at: doc.uploadedAt
             }))
           };
 
@@ -522,7 +690,7 @@ export function useOnboardingChat() {
 
       sendToN8n();
     }
-  }, [isComplete, hasSentToN8n, onboardingProfile, validation, passport, milestones, signals, toolActivationCount, uploadedDocuments]);
+  }, [isComplete, hasSentToN8n, onboardingProfile, startupStage, uploadedDocuments, validation, milestones, signals, toolActivationCount]);
 
   return {
     messages,
@@ -535,6 +703,6 @@ export function useOnboardingChat() {
     removeDocument,
     uploadedDocuments,
     startupStage,
-    totalQuestions: filteredQuestions.length + 1 // +1 for stage question
+    totalQuestions: getTotalQuestions()
   };
 }
