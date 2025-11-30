@@ -466,10 +466,22 @@ export function useOnboardingChat() {
 
       // For later stage, encourage document upload first
       if (detectedStage === 'later') {
+        // Check if documents are already uploaded
+        let laterStageContent = "Great! Since you're at a growth stage, I'll focus on your current operations and strategic challenges.\n\n";
+        
+        if (uploadedDocuments.length > 0) {
+          // Documents already uploaded - acknowledge and summarize
+          const docNames = uploadedDocuments.map(d => d.name).join(', ');
+          laterStageContent += `I see you've already uploaded: **${docNames}**\n\nI'll analyze these documents to extract your foundational information (customer, problem, solution, value proposition, etc.) so we can focus on what matters most for your growth stage.\n\nLet's start with the operational questions:`;
+        } else {
+          // No documents yet - encourage upload
+          laterStageContent += "**Before we start:** If you have a pitch deck, business plan, or company overview document, please upload it now using the upload button below. This will help me automatically extract your foundational information (customer, problem, solution, etc.) so we can focus the questions on what matters most.\n\n(Or we can proceed directly to the questions if you prefer.)";
+        }
+        
         const laterStageIntro: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
-          content: "Great! Since you're at a growth stage, I'll focus on your current operations and strategic challenges.\n\n**Before we start:** If you have a pitch deck, business plan, or company overview document, please upload it now. This will help me automatically extract your foundational information (customer, problem, solution, etc.) so we can focus the questions on what matters most.\n\n(You can upload documents using the upload button below, or we can proceed directly to the questions.)",
+          content: laterStageContent,
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, laterStageIntro]);

@@ -6,9 +6,10 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Send, ChevronRight, Upload, X, FileText } from 'lucide-react';
+import { Send, Upload, X, FileText, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { TemplatePopover } from './TemplatePopover';
 
 // Simple markdown parser for chat messages
 const parseMarkdown = (text: string) => {
@@ -65,11 +66,9 @@ export function ChatOnboarding() {
     }
   };
 
-  const handleTemplateClick = (template: string) => {
-    useTemplate(template);
-    if (currentQuestion) {
-      updateUserInput(currentQuestion.key, template);
-    }
+  const handleTemplateUse = (template: string) => {
+    // Populate the input field instead of sending immediately
+    setInputValue(template);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -133,46 +132,65 @@ export function ChatOnboarding() {
     }
   };
 
-  const questionLabels = [
-    'Startup Stage',
-    'Problem Definition',
-    'Target Customer',
-    'Value Proposition',
-    'Business Model',
-    'Market Size',
-    'Competitors',
-    'Competitive Advantage',
-    'Traction',
-    'Key Metrics',
-    'GTM Strategy',
-    'Funding Needs',
-    '12-Month Vision'
-  ];
-
-  // Filter labels based on stage
-  const getVisibleLabels = () => {
+  // Get all questions to show in tracker
+  const getAllQuestionLabels = () => {
     if (!startupStage) return ['Startup Stage'];
     
-    if (startupStage === 'later') {
-      // Skip early-stage only questions
-      return questionLabels.filter((_, idx) => 
-        idx === 0 || // Stage
-        idx === 4 || // Business Model
-        idx === 5 || // Market Size
-        idx === 6 || // Competitors
-        idx === 7 || // Advantage
-        idx === 8 || // Traction
-        idx === 9 || // Metrics
-        idx === 10 || // GTM
-        idx === 11 || // Funding
-        idx === 12 // Vision
+    const allQuestions = [];
+    
+    if (startupStage === 'early') {
+      allQuestions.push(
+        'Startup Stage',
+        'Customer',
+        'Problem',
+        'Consequences',
+        'Alternatives',
+        'Jobs to be Done',
+        'Solution',
+        'Unique Value',
+        'Unfair Advantage',
+        'Riskiest Assumption',
+        'Test Method',
+        'Business Model',
+        'Channels',
+        'Key Metrics',
+        '12-Week Goal',
+        'Risks',
+        'Fundraising Type',
+        'Fundraising Amount',
+        'Industry',
+        'Region'
+      );
+    } else {
+      allQuestions.push(
+        'Startup Stage',
+        'Main Focus',
+        'Bottlenecks',
+        'Goals',
+        'Systems & Tools',
+        'Process Gaps',
+        'Metrics',
+        'Risks',
+        'Vision',
+        'Fundraising Type',
+        'Fundraising Amount',
+        'Customer & Problem',
+        'UVP & Advantage',
+        'Revenue Model',
+        'Industry',
+        'Region'
       );
     }
     
-    return questionLabels.filter((_, idx) => idx !== 9); // Skip Key Metrics for early stage
+    return allQuestions;
   };
 
-  const visibleLabels = getVisibleLabels();
+  const getAnsweredQuestions = () => {
+    return messages.filter(m => m.role === 'user').length;
+  };
+
+  const questionLabels = getAllQuestionLabels();
+  const answeredCount = getAnsweredQuestions();
 
   return (
     <div className="h-full flex">
@@ -269,19 +287,17 @@ export function ChatOnboarding() {
 
             {/* Templates */}
             {currentQuestion && currentQuestion.templates.length > 0 && (
-              <div className="mb-3 flex flex-wrap gap-2">
-                {currentQuestion.templates.map((template, idx) => (
-                  <Button
-                    key={idx}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleTemplateClick(template)}
-                    className="text-xs"
-                  >
-                    <ChevronRight className="w-3 h-3 mr-1" />
-                    {template.slice(0, 50)}...
-                  </Button>
-                ))}
+              <div className="mb-3">
+                <p className="text-xs text-muted-foreground mb-2">Use a template to get started (you can edit it):</p>
+                <div className="flex flex-wrap gap-2">
+                  {currentQuestion.templates.map((template, idx) => (
+                    <TemplatePopover
+                      key={idx}
+                      template={template}
+                      onUse={handleTemplateUse}
+                    />
+                  ))}
+                </div>
               </div>
             )}
 
@@ -320,102 +336,71 @@ export function ChatOnboarding() {
           </div>
         ) : (
           <div className="border-t border-border bg-card p-4">
-            <Button onClick={() => navigate('/passport')} className="w-full" size="lg">
-              Finish & Generate Passport Preview
+            <Button onClick={() => navigate('/')} className="w-full" size="lg">
+              View Your Dashboard
             </Button>
           </div>
         )}
       </div>
 
-      {/* Right Sidebar - Progress Summary */}
+      {/* Right Sidebar - Question Tracker */}
       <div className="w-80 bg-muted/30 border-l border-border p-6 overflow-y-auto">
-        <h4 className="font-semibold text-foreground text-sm mb-4">
-          {!startupStage ? 'Stage Detection' : startupStage === 'early' ? 'Early-Stage Discovery' : 'Growth Assessment'}
+        <h4 className="font-semibold text-foreground text-sm mb-2">
+          Your Progress
         </h4>
+        <p className="text-xs text-muted-foreground mb-4">
+          Questions we need answers to
+        </p>
         
-        {!startupStage ? (
-          <div className="text-sm text-muted-foreground">
-            <p className="mb-3">We'll adapt the onboarding based on your stage:</p>
-            <div className="space-y-3">
-              <div className="p-3 bg-card border border-border rounded-lg">
-                <p className="font-medium text-foreground mb-1">🌱 Early Stage</p>
-                <p className="text-xs">Idea → MVP → Early Customers</p>
-                <p className="text-xs text-muted-foreground mt-1">Focus: Customer discovery, problem validation, experiments</p>
-              </div>
-              <div className="p-3 bg-card border border-border rounded-lg">
-                <p className="font-medium text-foreground mb-1">🚀 Growth Stage</p>
-                <p className="text-xs">Growing → Scale-up → Established</p>
-                <p className="text-xs text-muted-foreground mt-1">Focus: Operations, systems, scaling challenges</p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {startupStage === 'early' ? (
-              <>
-                <div className="text-xs text-muted-foreground space-y-2">
-                  <p className="font-medium text-foreground">Customer Discovery:</p>
-                  <div className="space-y-1 pl-2">
-                    <p>✓ Customer definition</p>
-                    <p>✓ Problem validation</p>
-                    <p>✓ Existing alternatives</p>
-                    <p>✓ Jobs to be done</p>
-                  </div>
-                  
-                  <p className="font-medium text-foreground mt-3">Solution & Validation:</p>
-                  <div className="space-y-1 pl-2">
-                    <p>✓ Proposed solution</p>
-                    <p>✓ Value proposition</p>
-                    <p>✓ Unfair advantage</p>
-                    <p>✓ Riskiest assumption</p>
-                    <p>✓ Test method</p>
-                  </div>
-                  
-                  <p className="font-medium text-foreground mt-3">Business Model:</p>
-                  <div className="space-y-1 pl-2">
-                    <p>✓ Revenue model</p>
-                    <p>✓ Distribution channels</p>
-                    <p>✓ Key metrics</p>
-                    <p>✓ 12-week goal</p>
-                    <p>✓ Risks</p>
-                    <p>✓ Fundraising plans</p>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="text-xs text-muted-foreground space-y-2">
-                  <p className="font-medium text-foreground">Operational Focus:</p>
-                  <div className="space-y-1 pl-2">
-                    <p>✓ Current priorities</p>
-                    <p>✓ Bottlenecks</p>
-                    <p>✓ Goals (Q/Y)</p>
-                    <p>✓ Systems & tools</p>
-                    <p>✓ Process gaps</p>
-                    <p>✓ Metrics tracked</p>
-                    <p>✓ Risks & compliance</p>
-                    <p>✓ Long-term vision</p>
-                    <p>✓ Fundraising plans</p>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
         {uploadedDocuments.length > 0 && (
-          <div className="mt-6 p-4 bg-card border border-border rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="mb-4 p-3 bg-card border border-border rounded-lg">
+            <div className="flex items-center gap-2 mb-1">
               <FileText className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">
+              <span className="text-xs font-medium text-foreground">
                 {uploadedDocuments.length} Document{uploadedDocuments.length > 1 ? 's' : ''} Uploaded
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Your documents will help us pre-fill information
+              {uploadedDocuments.map(doc => doc.name).join(', ')}
             </p>
           </div>
         )}
+        
+        <div className="space-y-2">
+          {questionLabels.map((label, idx) => {
+            const isAnswered = idx < answeredCount;
+            return (
+              <div
+                key={idx}
+                className={cn(
+                  "flex items-start gap-2 p-2 rounded text-xs transition-colors",
+                  isAnswered ? "bg-green-50 dark:bg-green-900/20" : "bg-card"
+                )}
+              >
+                <div className={cn(
+                  "flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5",
+                  isAnswered 
+                    ? "bg-green-500 text-white" 
+                    : "bg-muted text-muted-foreground border border-border"
+                )}>
+                  {isAnswered ? (
+                    <Check className="w-3 h-3" />
+                  ) : (
+                    <span className="text-[10px]">{idx + 1}</span>
+                  )}
+                </div>
+                <span className={cn(
+                  "flex-1",
+                  isAnswered 
+                    ? "text-green-700 dark:text-green-300 font-medium" 
+                    : "text-muted-foreground"
+                )}>
+                  {label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
 
         {isComplete && (
           <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg dark:bg-green-900/20 dark:border-green-800">
