@@ -12,25 +12,25 @@ import { useToast } from '@/hooks/use-toast';
 
 // Simple markdown parser for chat messages
 const parseMarkdown = (text: string) => {
-  return text
-    .split('\n')
-    .map((line, lineIdx) => {
-      // Handle bold text (**text**)
-      const parts = line.split(/(\*\*.*?\*\*)/g);
-      const elements = parts.map((part, idx) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          return <strong key={idx}>{part.slice(2, -2)}</strong>;
-        }
-        return part;
-      });
-      
-      return (
-        <span key={lineIdx}>
-          {elements}
-          {lineIdx < text.split('\n').length - 1 && <br />}
-        </span>
-      );
+  const lines = text.split('\n');
+  
+  return lines.map((line, lineIdx) => {
+    // Handle bold text (**text**)
+    const parts = line.split(/(\*\*.*?\*\*)/g);
+    const elements = parts.map((part, idx) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={idx}>{part.slice(2, -2)}</strong>;
+      }
+      return part;
     });
+    
+    return (
+      <span key={lineIdx}>
+        {elements}
+        {lineIdx < lines.length - 1 && <br />}
+      </span>
+    );
+  });
 };
 
 export function ChatOnboarding() {
