@@ -1,10 +1,21 @@
 import { useState, useEffect } from 'react';
-import { OnboardingMessage, OnboardingQuestion } from '@/types';
+import { OnboardingMessage, OnboardingQuestion, UploadedDocument } from '@/types';
 import { useStore } from '@/store';
 
 const N8N_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/4ce2573e-4415-4cba-aa4e-65a97223ce43';
 
 const onboardingQuestions: OnboardingQuestion[] = [
+  {
+    id: 0,
+    question: 'What stage is your startup at?',
+    templates: [
+      'Pre-seed / Idea stage - just getting started',
+      'Early stage - have MVP or initial traction',
+      'Growth stage - have product-market fit and scaling'
+    ],
+    key: 'stage',
+    stage: 'all'
+  },
   {
     id: 1,
     question: 'What problem are you solving?',
@@ -12,7 +23,8 @@ const onboardingQuestions: OnboardingQuestion[] = [
       'Companies struggle with [problem] because [reason]. This causes [impact].',
       'Current solutions fail at [gap] leading to [outcome].'
     ],
-    key: 'problem'
+    key: 'problem',
+    stage: 'early'
   },
   {
     id: 2,
@@ -21,7 +33,8 @@ const onboardingQuestions: OnboardingQuestion[] = [
       'Mid-sized [industry] companies with [characteristic].',
       '[Role] at [company size] who need [capability].'
     ],
-    key: 'customer'
+    key: 'customer',
+    stage: 'early'
   },
   {
     id: 3,
@@ -30,7 +43,8 @@ const onboardingQuestions: OnboardingQuestion[] = [
       'We help [customer] achieve [outcome] through [approach].',
       'Unlike alternatives, we provide [differentiator] to deliver [benefit].'
     ],
-    key: 'value'
+    key: 'value',
+    stage: 'early'
   },
   {
     id: 4,
@@ -39,7 +53,8 @@ const onboardingQuestions: OnboardingQuestion[] = [
       'SaaS subscription at $[price]/month with [pricing model].',
       '[Revenue model] with [payment structure] and [unit economics].'
     ],
-    key: 'business_model'
+    key: 'business_model',
+    stage: 'all'
   },
   {
     id: 5,
@@ -48,70 +63,78 @@ const onboardingQuestions: OnboardingQuestion[] = [
       'TAM of $[amount]B with [growth rate]% annual growth.',
       '[Number] potential customers spending $[amount] annually.'
     ],
-    key: 'market_size'
+    key: 'market_size',
+    stage: 'all'
   },
   {
     id: 6,
     question: 'Who are your main competitors?',
     templates: [
-      '[Competitor A] focuses on [segment], [Competitor B] targets [different segment].',
-      'Established players include [names]. New entrants are [names].'
+      '[Competitor A] focuses on [approach], [Competitor B] targets [segment].',
+      'Direct competitors: [names]. Indirect: [alternatives].'
     ],
-    key: 'competitors'
+    key: 'competitors',
+    stage: 'all'
   },
   {
     id: 7,
     question: 'What is your competitive advantage?',
     templates: [
-      'Our [technology/approach] enables [capability] that others cannot match.',
-      'We uniquely combine [factor 1] with [factor 2] to deliver [outcome].'
+      'We differentiate through [technology/approach] providing [specific benefit].',
+      'Our unique insight is [knowledge] enabling [capability].'
     ],
-    key: 'advantage'
+    key: 'advantage',
+    stage: 'all'
   },
   {
     id: 8,
     question: 'What traction have you achieved?',
     templates: [
-      '[Number] customers generating $[revenue] MRR with [growth]% month-over-month.',
-      '[Milestone] completed with [metric] proving [validation].'
+      '[Number] users/customers, $[revenue] MRR, [growth]% month-over-month.',
+      '[Metric]: [number]. Key achievement: [milestone].'
     ],
-    key: 'traction'
+    key: 'traction',
+    stage: 'all'
   },
   {
     id: 9,
     question: 'What are your key metrics?',
     templates: [
-      'CAC: $[amount], LTV: $[amount], retention: [percent]%.',
-      '[Metric 1]: [value], [Metric 2]: [value], improving [percent]% monthly.'
+      'CAC: $[amount], LTV: $[amount], Churn: [%], NPS: [score].',
+      'Monthly active: [number], Conversion: [%], Retention: [%].'
     ],
-    key: 'metrics'
+    key: 'metrics',
+    stage: 'later'
   },
   {
     id: 10,
     question: 'What is your go-to-market strategy?',
     templates: [
-      'Direct sales to [segment] via [channel] with [conversion] conversion rate.',
-      'Product-led growth through [tactic] supported by [marketing approach].'
+      'Start with [channel] targeting [segment], then expand to [next].',
+      '[Primary channel] with [tactics], supported by [secondary approach].'
     ],
-    key: 'gtm'
+    key: 'gtm',
+    stage: 'all'
   },
   {
     id: 11,
     question: 'What are your funding needs?',
     templates: [
-      'Raising $[amount] to [goal] over [timeline].',
-      'Seeking $[amount] for [use case 1], [use case 2], and [use case 3].'
+      'Raising $[amount] for [use case] to achieve [milestone].',
+      '$[amount] seed/Series [A/B] to [specific goal] over [timeframe].'
     ],
-    key: 'funding'
+    key: 'funding',
+    stage: 'all'
   },
   {
     id: 12,
-    question: 'Where do you see the company in 12 months?',
+    question: 'What is your 12-month vision?',
     templates: [
-      '[Revenue target] with [customer count] customers and [team size] team members.',
-      'Achieve [milestone] enabling [next phase] with [metric] validation.'
+      'Reach [metric] by [date], launch [feature], expand to [market].',
+      'Achieve [milestone], grow team to [size], reach [revenue target].'
     ],
-    key: 'vision'
+    key: 'vision',
+    stage: 'all'
   }
 ];
 
@@ -119,6 +142,8 @@ export function useOnboardingChat() {
   const [messages, setMessages] = useState<OnboardingMessage[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [hasSentToN8n, setHasSentToN8n] = useState(false);
+  const [startupStage, setStartupStage] = useState<'early' | 'later' | null>(null);
+  const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);
@@ -128,54 +153,116 @@ export function useOnboardingChat() {
   const userInputs = useStore((state) => state.userInputs);
   const toolActivationCount = useStore((state) => state.toolActivationCount);
 
+  // Filter questions based on stage
+  const filteredQuestions = onboardingQuestions.filter((q) => {
+    if (!startupStage) return q.id === 0; // Only show stage question first
+    if (q.stage === 'all') return true;
+    return q.stage === startupStage;
+  });
+
   const currentQuestion =
-    currentQuestionIndex < onboardingQuestions.length
-      ? onboardingQuestions[currentQuestionIndex]
+    currentQuestionIndex < filteredQuestions.length
+      ? filteredQuestions[currentQuestionIndex]
       : null;
 
-  const progress = (currentQuestionIndex / onboardingQuestions.length) * 100;
-  const isComplete = currentQuestionIndex >= onboardingQuestions.length;
+  const progress =
+    filteredQuestions.length > 0 ? (currentQuestionIndex / filteredQuestions.length) * 100 : 0;
+  const isComplete = currentQuestionIndex >= filteredQuestions.length;
 
   useEffect(() => {
-    if (messages.length === 0 && currentQuestion) {
-      setMessages([
-        {
-          id: '1',
-          role: 'system',
-          content: currentQuestion.question,
-          timestamp: new Date()
-        }
-      ]);
+    if (messages.length === 0 && filteredQuestions.length > 0) {
+      const firstMessage: OnboardingMessage = {
+        id: Date.now().toString(),
+        role: 'system',
+        content: filteredQuestions[0].question,
+        timestamp: new Date()
+      };
+      setMessages([firstMessage]);
     }
-  }, []);
+  }, [filteredQuestions]);
 
   const sendMessage = (content: string) => {
+    // Add user message
     const userMessage: OnboardingMessage = {
       id: Date.now().toString(),
       role: 'user',
       content,
       timestamp: new Date()
     };
-
     setMessages((prev) => [...prev, userMessage]);
-    setCurrentQuestionIndex((prev) => prev + 1);
 
-    setTimeout(() => {
-      if (currentQuestionIndex + 1 < onboardingQuestions.length) {
-        const nextQuestion = onboardingQuestions[currentQuestionIndex + 1];
+    // Handle stage selection
+    if (currentQuestion?.id === 0) {
+      const stageLower = content.toLowerCase();
+      if (stageLower.includes('early') || stageLower.includes('pre-seed') || stageLower.includes('idea')) {
+        setStartupStage('early');
+      } else if (stageLower.includes('growth') || stageLower.includes('scaling')) {
+        setStartupStage('later');
+      } else {
+        setStartupStage('early'); // Default to early
+      }
+    }
+
+    // Move to next question
+    const nextIndex = currentQuestionIndex + 1;
+    setCurrentQuestionIndex(nextIndex);
+
+    // Add next question if not complete
+    if (nextIndex < filteredQuestions.length) {
+      setTimeout(() => {
         const systemMessage: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
-          content: nextQuestion.question,
+          content: filteredQuestions[nextIndex].question,
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, systemMessage]);
-      }
-    }, 300);
+      }, 300);
+    }
   };
 
   const useTemplate = (template: string) => {
     sendMessage(template);
+  };
+
+  const uploadDocument = async (file: File): Promise<UploadedDocument> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const doc: UploadedDocument = {
+          id: Date.now().toString(),
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          uploadedAt: new Date(),
+          content: e.target?.result as string
+        };
+        
+        setUploadedDocuments((prev) => [...prev, doc]);
+        
+        // Add system message about upload
+        const uploadMessage: OnboardingMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'system',
+          content: `✓ Document uploaded: ${file.name}. I'll use this information to help fill in your profile.`,
+          timestamp: new Date()
+        };
+        setMessages((prev) => [...prev, uploadMessage]);
+        
+        resolve(doc);
+      };
+      
+      reader.onerror = () => {
+        reject(new Error('Failed to read file'));
+      };
+      
+      reader.readAsText(file);
+    });
+  };
+
+  const removeDocument = (docId: string) => {
+    setUploadedDocuments((prev) => prev.filter((d) => d.id !== docId));
   };
 
   // Send data to n8n when onboarding is complete
@@ -186,6 +273,7 @@ export function useOnboardingChat() {
           const payload = {
             timestamp: new Date().toISOString(),
             onboarding_completed: true,
+            startup_stage: startupStage,
             validation_scores: validation,
             startup_profile: {
               founder_name: passport.founderName,
@@ -222,6 +310,12 @@ export function useOnboardingChat() {
               commission: tool.commission,
               description: tool.description,
               pricing: tool.pricing
+            })),
+            uploaded_documents: uploadedDocuments.map(doc => ({
+              name: doc.name,
+              type: doc.type,
+              size: doc.size,
+              uploaded_at: doc.uploadedAt
             }))
           };
 
@@ -245,7 +339,7 @@ export function useOnboardingChat() {
 
       sendToN8n();
     }
-  }, [isComplete, hasSentToN8n, validation, passport, userInputs, milestones, signals, tools, toolActivationCount]);
+  }, [isComplete, hasSentToN8n, startupStage, validation, passport, userInputs, milestones, signals, tools, toolActivationCount, uploadedDocuments]);
 
   return {
     messages,
@@ -253,6 +347,10 @@ export function useOnboardingChat() {
     progress,
     isComplete,
     sendMessage,
-    useTemplate
+    useTemplate,
+    uploadDocument,
+    removeDocument,
+    uploadedDocuments,
+    startupStage
   };
 }

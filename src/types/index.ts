@@ -91,4 +91,14 @@ export interface OnboardingQuestion {
   question: string;
   templates: string[];
   key: string;
+  stage?: 'early' | 'later' | 'all';
+}
+
+export interface UploadedDocument {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  uploadedAt: Date;
+  content?: string;
 }
