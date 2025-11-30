@@ -41,6 +41,27 @@ export interface ValidationScores {
   solutionFit: number;
 }
 
+export interface Application {
+  id: string;
+  name: string;
+  type: 'accelerator' | 'grant' | 'competition' | 'incubator';
+  description: string;
+  benefits: string[];
+  eligibility: string[];
+  deadline: string;
+  matchScore: number;
+  industry?: string[];
+  trlRange?: string;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  status: 'active' | 'hiring' | 'pending';
+  startDate?: string;
+}
+
 export interface PassportData {
   founderName: string;
   startupName: string;
@@ -54,6 +75,8 @@ export interface PassportData {
   fundingReadiness: { item: string; status: 'complete' | 'in-progress' | 'pending' }[];
   lastUpdated: Date;
   euCompliant: boolean;
+  industry?: string;
+  trl?: number;
 }
 
 export interface OnboardingMessage {

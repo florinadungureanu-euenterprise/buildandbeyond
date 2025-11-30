@@ -123,8 +123,7 @@ export function useOnboardingChat() {
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);
   const signals = useStore((state) => state.signals);
-  const twoWeekTasks = useStore((state) => state.twoWeekTasks);
-  const threeMonthMilestones = useStore((state) => state.threeMonthMilestones);
+  const milestones = useStore((state) => state.twelveMonthMilestones);
   const passport = useStore((state) => state.passport);
   const userInputs = useStore((state) => state.userInputs);
   const toolActivationCount = useStore((state) => state.toolActivationCount);
@@ -204,13 +203,10 @@ export function useOnboardingChat() {
             },
             onboarding_responses: userInputs,
             user_activity: {
-              completed_tasks: twoWeekTasks.filter(t => t.completed).length,
-              total_tasks: twoWeekTasks.length,
-              completed_milestones: threeMonthMilestones.filter(m => m.completed).length,
-              total_milestones: threeMonthMilestones.length,
+              completed_milestones: milestones.filter(m => m.completed).length,
+              total_milestones: milestones.length,
               tools_activated: toolActivationCount,
-              tasks: twoWeekTasks,
-              milestones: threeMonthMilestones
+              milestones: milestones
             },
             market_signals: signals.map(signal => ({
               type: signal.type,
@@ -249,7 +245,7 @@ export function useOnboardingChat() {
 
       sendToN8n();
     }
-  }, [isComplete, hasSentToN8n, validation, passport, userInputs, twoWeekTasks, threeMonthMilestones, signals, tools, toolActivationCount]);
+  }, [isComplete, hasSentToN8n, validation, passport, userInputs, milestones, signals, tools, toolActivationCount]);
 
   return {
     messages,

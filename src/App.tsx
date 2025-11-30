@@ -7,6 +7,8 @@ import { PassportPage } from '@/pages/PassportPage';
 import { RoadmapPage } from '@/pages/RoadmapPage';
 import { SignalsPage } from '@/pages/SignalsPage';
 import { ToolsPage } from '@/pages/ToolsPage';
+import { ApplicationsPage } from '@/pages/ApplicationsPage';
+import { TeamPage } from '@/pages/TeamPage';
 
 function Layout() {
   return (
@@ -33,6 +35,8 @@ const router = createBrowserRouter(
         { path: '/roadmap', element: <RoadmapPage /> },
         { path: '/signals', element: <SignalsPage /> },
         { path: '/tools', element: <ToolsPage /> },
+        { path: '/applications', element: <ApplicationsPage /> },
+        { path: '/team', element: <TeamPage /> },
         { path: '*', element: <DashboardPage /> }
       ]
     }

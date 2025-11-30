@@ -6,7 +6,9 @@ const navItems = [
   { path: '/roadmap', label: 'Roadmap' },
   { path: '/signals', label: 'Market Signals' },
   { path: '/passport', label: 'Passport' },
-  { path: '/tools', label: 'Tools' }
+  { path: '/tools', label: 'Tools' },
+  { path: '/applications', label: 'Applications' },
+  { path: '/team', label: 'Team' }
 ];
 
 export function SidebarNav() {
