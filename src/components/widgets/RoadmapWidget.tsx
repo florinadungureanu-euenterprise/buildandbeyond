@@ -1,95 +1,83 @@
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '@/store';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Circle } from 'lucide-react';
 
 export function RoadmapWidget() {
   const navigate = useNavigate();
-  const twoWeekTasks = useStore((state) => state.twoWeekTasks);
-  const threeMonthMilestones = useStore((state) => state.threeMonthMilestones);
+  const milestones = useStore((state) => state.twelveMonthMilestones);
 
-  const twoWeekCompleted = twoWeekTasks.filter((t) => t.completed).length;
-  const twoWeekTotal = twoWeekTasks.length;
-  const twoWeekProgress = (twoWeekCompleted / twoWeekTotal) * 100;
+  // Get next 3 months of milestones
+  const now = new Date();
+  const threeMonthsLater = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
+  
+  const upcomingMilestones = milestones.filter((m) => {
+    const targetDate = new Date(m.targetDate);
+    return targetDate >= now && targetDate <= threeMonthsLater;
+  });
 
-  const threeMonthCompleted = threeMonthMilestones.filter((m) => m.completed).length;
-  const threeMonthTotal = threeMonthMilestones.length;
-  const threeMonthProgress = (threeMonthCompleted / threeMonthTotal) * 100;
+  const completedUpcoming = upcomingMilestones.filter((m) => m.completed).length;
+  const totalUpcoming = upcomingMilestones.length;
+  const upcomingProgress = totalUpcoming > 0 ? (completedUpcoming / totalUpcoming) * 100 : 0;
+
+  const overallComplete = milestones.filter((m) => m.completed).length;
+  const overallTotal = milestones.length;
+  const overallProgress = (overallComplete / overallTotal) * 100;
 
   return (
-    <Card className="p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Roadmap</h3>
-        <div className="text-xs text-gray-500">Auto-updated</div>
-      </div>
-
-      <div className="space-y-4">
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-sm font-medium text-gray-900">Next 2 Weeks</div>
-            <div className="text-xs text-gray-500">
-              {twoWeekCompleted}/{twoWeekTotal} Complete
-            </div>
-          </div>
-          <div
-            className="w-full h-2 bg-gray-200 rounded-full overflow-hidden"
-            role="progressbar"
-            aria-valuenow={Math.round(twoWeekProgress)}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Two week tasks progress"
-          >
-            <div
-              className="h-full bg-blue-500 rounded-full transition-all duration-300"
-              style={{ width: `${twoWeekProgress}%` }}
-            />
-          </div>
-          <div className="text-xs text-gray-600 mt-2">
-            {twoWeekTasks
-              .filter((t) => !t.completed)
-              .slice(0, 2)
-              .map((t) => t.title)
-              .join(', ')}
-          </div>
-        </div>
-
-        <div className="pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-sm font-medium text-gray-900">Next 3 Months</div>
-            <div className="text-xs text-gray-500">
-              {threeMonthCompleted}/{threeMonthTotal} Complete
-            </div>
-          </div>
-          <div
-            className="w-full h-2 bg-gray-200 rounded-full overflow-hidden"
-            role="progressbar"
-            aria-valuenow={Math.round(threeMonthProgress)}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Three month milestones progress"
-          >
-            <div
-              className="h-full bg-green-500 rounded-full transition-all duration-300"
-              style={{ width: `${threeMonthProgress}%` }}
-            />
-          </div>
-          <div className="text-xs text-gray-600 mt-2">
-            {threeMonthMilestones
-              .filter((m) => !m.completed)
-              .slice(0, 2)
-              .map((m) => m.title)
-              .join(', ')}
-          </div>
+    <Card className="shadow-sm">
+      <div className="p-6 pb-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-foreground">Roadmap</h3>
+          <div className="text-xs text-muted-foreground">Auto-updated</div>
         </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <button
-          onClick={() => navigate('/roadmap')}
-          className="w-full py-2 text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors"
-        >
-          View Detailed Roadmap
-        </button>
-      </div>
+      <CardContent>
+        <div className="space-y-4">
+          {/* Next 3 Months */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-foreground">Next 3 Months</span>
+              <span className="text-xs text-muted-foreground">
+                {completedUpcoming}/{totalUpcoming}
+              </span>
+            </div>
+            <Progress value={upcomingProgress} className="h-2 mb-2" />
+            <div className="space-y-1">
+              {upcomingMilestones
+                .filter((m) => !m.completed)
+                .slice(0, 2)
+                .map((milestone) => (
+                  <div key={milestone.id} className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Circle className="w-3 h-3" />
+                    {milestone.title}
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* 12 Month Overview */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-foreground">12-Month Progress</span>
+              <span className="text-xs text-muted-foreground">
+                {overallComplete}/{overallTotal}
+              </span>
+            </div>
+            <Progress value={overallProgress} className="h-2 mb-2" />
+            <p className="text-xs text-muted-foreground">
+              {milestones.filter((m) => !m.completed).length} milestones remaining this year
+            </p>
+          </div>
+
+          <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/roadmap')}>
+            View 12-Month Roadmap
+          </Button>
+        </div>
+      </CardContent>
     </Card>
   );
 }

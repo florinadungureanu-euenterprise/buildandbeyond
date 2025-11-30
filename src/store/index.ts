@@ -1,19 +1,19 @@
 import { create } from 'zustand';
-import { Task, Milestone, Tool, Signal, ValidationScores, PassportData } from '@/types';
+import { Task, Milestone, Tool, Signal, ValidationScores, PassportData, Application, TeamMember } from '@/types';
 
 interface AppState {
   validation: ValidationScores;
   tools: Tool[];
   signals: Signal[];
-  twoWeekTasks: Task[];
-  threeMonthMilestones: Milestone[];
+  twelveMonthMilestones: Milestone[];
   passport: PassportData;
   userInputs: Record<string, string>;
   showComplianceAlert: boolean;
   toolActivationCount: number;
+  applications: Application[];
+  teamMembers: TeamMember[];
 
   // Actions
-  toggleTask: (taskId: string) => void;
   toggleMilestone: (milestoneId: string) => void;
   addComplianceTasks: () => void;
   dismissComplianceAlert: () => void;
@@ -27,6 +27,60 @@ const createDemoData = () => {
   const tools: Tool[] = [
     {
       id: '1',
+      name: 'Lovable',
+      category: 'Development',
+      commission: 0,
+      description: 'AI-powered full-stack development platform for building web applications',
+      features: ['AI code generation', 'Full-stack support', 'Real-time preview', 'Database integration'],
+      pricing: 'Free tier available, Pro from $20/month'
+    },
+    {
+      id: '2',
+      name: 'Apify',
+      category: 'Data & Automation',
+      commission: 10,
+      description: 'Web scraping and automation platform for data extraction',
+      features: ['Web scraping', 'Data extraction', 'API integration', 'Scheduled runs'],
+      pricing: 'Free tier available, from $49/month'
+    },
+    {
+      id: '3',
+      name: 'n8n',
+      category: 'Automation',
+      commission: 0,
+      description: 'Workflow automation platform connecting apps and services',
+      features: ['Visual workflow builder', '400+ integrations', 'Self-hosted option', 'Custom nodes'],
+      pricing: 'Free self-hosted, Cloud from $20/month'
+    },
+    {
+      id: '4',
+      name: 'Mollie',
+      category: 'Payment Processing',
+      commission: 12,
+      description: 'European payment service provider with local payment methods',
+      features: ['Multiple payment methods', 'SEPA support', 'Recurring billing', 'PSD2 compliant'],
+      pricing: 'Transaction fees from 0.29€ + 1.8%'
+    },
+    {
+      id: '5',
+      name: 'ElevenLabs',
+      category: 'AI & Voice',
+      commission: 15,
+      description: 'AI voice generation and text-to-speech platform',
+      features: ['Natural voice synthesis', 'Voice cloning', 'Multiple languages', 'API access'],
+      pricing: 'Free tier available, from $5/month'
+    },
+    {
+      id: '6',
+      name: 'Tally',
+      category: 'Forms & Surveys',
+      commission: 8,
+      description: 'Simple form builder for collecting responses',
+      features: ['Unlimited forms', 'File uploads', 'Conditional logic', 'Integrations'],
+      pricing: 'Free tier available, Pro from $29/month'
+    },
+    {
+      id: '7',
       name: 'Analytics Pro',
       category: 'Data & Insights',
       commission: 15,
@@ -35,7 +89,7 @@ const createDemoData = () => {
       pricing: '$49/month'
     },
     {
-      id: '2',
+      id: '8',
       name: 'Growth Engine',
       category: 'Marketing Automation',
       commission: 8,
@@ -44,40 +98,13 @@ const createDemoData = () => {
       pricing: '$99/month'
     },
     {
-      id: '3',
+      id: '9',
       name: 'CRM Suite',
       category: 'Customer Management',
       commission: 12,
       description: 'Customer relationship management platform',
       features: ['Contact management', 'Sales pipeline', 'Task automation', 'Mobile app'],
       pricing: '$79/month'
-    },
-    {
-      id: '4',
-      name: 'PayFlow',
-      category: 'Payment Processing',
-      commission: 10,
-      description: 'Secure payment processing solution',
-      features: ['Multiple payment methods', 'Fraud detection', 'Recurring billing', 'PCI compliance'],
-      pricing: '2.9% + $0.30 per transaction'
-    },
-    {
-      id: '5',
-      name: 'TeamHub',
-      category: 'Team Collaboration',
-      commission: 7,
-      description: 'Project management and team collaboration',
-      features: ['Kanban boards', 'Time tracking', 'File sharing', 'Video calls'],
-      pricing: '$12/user/month'
-    },
-    {
-      id: '6',
-      name: 'CloudStore',
-      category: 'Infrastructure',
-      commission: 9,
-      description: 'Cloud storage and CDN services',
-      features: ['99.9% uptime', 'Global CDN', 'Auto-scaling', 'Developer API'],
-      pricing: '$0.02/GB'
     }
   ];
 
@@ -129,59 +156,193 @@ const createDemoData = () => {
     }
   ];
 
-  const twoWeekTasks: Task[] = [
-    { id: '1', title: 'Setup payment processing integration', completed: true, category: 'operations' },
-    { id: '2', title: 'Complete market research analysis', completed: true, category: 'market' },
-    { id: '3', title: 'Finalize MVP feature set', completed: true, category: 'product' },
-    { id: '4', title: 'Design user onboarding flow', completed: false, category: 'product' },
-    { id: '5', title: 'Set up analytics tracking', completed: false, category: 'operations' },
-    { id: '6', title: 'Draft initial marketing copy', completed: false, category: 'market' },
-    { id: '7', title: 'Conduct user testing sessions', completed: false, category: 'product' },
-    { id: '8', title: 'Implement feedback mechanisms', completed: false, category: 'product' },
-    { id: '9', title: 'Prepare investor pitch deck', completed: false, category: 'operations' },
-    { id: '10', title: 'Review security protocols', completed: false, category: 'operations' }
-  ];
-
-  const threeMonthMilestones: Milestone[] = [
+  const twelveMonthMilestones: Milestone[] = [
     {
       id: '1',
-      title: 'Beta Launch',
-      description: 'Launch private beta with 50 users',
-      targetDate: '2025-02-15',
+      title: 'Complete MVP Development',
+      description: 'Finish core product features and initial testing',
+      targetDate: '2025-01-31',
       completed: true,
       category: 'product'
     },
     {
       id: '2',
-      title: 'Secure Strategic Partnership',
-      description: 'Sign partnership agreement with industry leader',
+      title: 'Beta Launch',
+      description: 'Launch private beta with 50 users',
       targetDate: '2025-02-28',
       completed: true,
-      category: 'market'
+      category: 'product'
     },
     {
       id: '3',
+      title: 'Secure Strategic Partnership',
+      description: 'Sign partnership agreement with industry leader',
+      targetDate: '2025-03-31',
+      completed: false,
+      category: 'market'
+    },
+    {
+      id: '4',
       title: 'Expand Core Team',
       description: 'Hire 2 engineers and 1 marketing lead',
-      targetDate: '2025-03-15',
+      targetDate: '2025-04-30',
       completed: false,
       category: 'team'
     },
     {
-      id: '4',
-      title: 'Achieve Product-Market Fit',
-      description: 'Reach 40% weekly active user retention',
-      targetDate: '2025-03-30',
+      id: '5',
+      title: 'Public Launch',
+      description: 'Launch product publicly with full marketing campaign',
+      targetDate: '2025-05-31',
       completed: false,
       category: 'product'
     },
     {
-      id: '5',
+      id: '6',
+      title: 'Achieve Product-Market Fit',
+      description: 'Reach 40% weekly active user retention',
+      targetDate: '2025-06-30',
+      completed: false,
+      category: 'product'
+    },
+    {
+      id: '7',
       title: 'Seed Funding Round',
       description: 'Close $1M seed round',
-      targetDate: '2025-04-15',
+      targetDate: '2025-07-31',
       completed: false,
       category: 'funding'
+    },
+    {
+      id: '8',
+      title: 'Scale to 1000 Users',
+      description: 'Reach 1000 active paying customers',
+      targetDate: '2025-08-31',
+      completed: false,
+      category: 'market'
+    },
+    {
+      id: '9',
+      title: 'International Expansion',
+      description: 'Launch in 3 European markets',
+      targetDate: '2025-09-30',
+      completed: false,
+      category: 'market'
+    },
+    {
+      id: '10',
+      title: 'Advanced Features Release',
+      description: 'Release AI-powered analytics suite',
+      targetDate: '2025-10-31',
+      completed: false,
+      category: 'product'
+    },
+    {
+      id: '11',
+      title: 'Series A Preparation',
+      description: 'Prepare materials and metrics for Series A',
+      targetDate: '2025-11-30',
+      completed: false,
+      category: 'funding'
+    },
+    {
+      id: '12',
+      title: 'Year-End Review',
+      description: 'Complete annual review and plan for next year',
+      targetDate: '2025-12-31',
+      completed: false,
+      category: 'team'
+    }
+  ];
+
+  const applications: Application[] = [
+    {
+      id: '1',
+      name: 'Y Combinator',
+      type: 'accelerator',
+      description: 'World-renowned startup accelerator providing funding, mentorship, and network',
+      benefits: ['$500k investment', 'Silicon Valley network', 'Alumni community', 'Demo Day exposure'],
+      eligibility: ['Early-stage startup', 'Scalable business model', 'Strong founding team'],
+      deadline: '2025-03-15',
+      matchScore: 85,
+      industry: ['SaaS', 'Technology'],
+      trlRange: '4-6'
+    },
+    {
+      id: '2',
+      name: 'Horizon Europe Grant',
+      type: 'grant',
+      description: 'EU research and innovation funding program for breakthrough technologies',
+      benefits: ['Up to €2.5M funding', 'No equity dilution', 'EU market access', 'Research partnerships'],
+      eligibility: ['EU-based', 'Deep tech focus', 'TRL 3-6', 'Innovation potential'],
+      deadline: '2025-04-30',
+      matchScore: 92,
+      industry: ['Technology', 'SaaS', 'AI'],
+      trlRange: '3-6'
+    },
+    {
+      id: '3',
+      name: 'European Innovation Council',
+      type: 'grant',
+      description: 'Support for game-changing innovations with high-risk/high-gain potential',
+      benefits: ['€2.5M grant + €15M equity', 'Acceleration services', 'Business coaching', 'Investor network'],
+      eligibility: ['European company', 'Breakthrough innovation', 'Scale-up potential', 'TRL 5-8'],
+      deadline: '2025-06-01',
+      matchScore: 88,
+      industry: ['Technology', 'AI'],
+      trlRange: '5-8'
+    },
+    {
+      id: '4',
+      name: 'Techstars Accelerator',
+      type: 'accelerator',
+      description: 'Global accelerator network with mentor-driven programs',
+      benefits: ['$120k investment', 'Mentor network', 'Lifetime network access', 'Corporate partnerships'],
+      eligibility: ['Product traction', 'Scalable model', 'Committed founders'],
+      deadline: '2025-02-28',
+      matchScore: 78,
+      industry: ['SaaS', 'Technology'],
+      trlRange: '4-7'
+    },
+    {
+      id: '5',
+      name: 'EIT Digital Challenge',
+      type: 'competition',
+      description: 'European competition for digital technology startups',
+      benefits: ['€50k prize', 'EIT network access', 'Media exposure', 'Investor connections'],
+      eligibility: ['Digital innovation', 'EU presence', 'Scalable solution'],
+      deadline: '2025-05-15',
+      matchScore: 82,
+      industry: ['Technology', 'SaaS'],
+      trlRange: '4-6'
+    }
+  ];
+
+  const teamMembers: TeamMember[] = [
+    {
+      id: '1',
+      name: 'Alex Morgan',
+      role: 'CEO & Founder',
+      status: 'active',
+      startDate: '2024-01-01'
+    },
+    {
+      id: '2',
+      name: 'Senior Engineer',
+      role: 'Lead Developer',
+      status: 'hiring'
+    },
+    {
+      id: '3',
+      name: 'Marketing Lead',
+      role: 'Head of Marketing',
+      status: 'hiring'
+    },
+    {
+      id: '4',
+      name: 'Product Designer',
+      role: 'UX/UI Designer',
+      status: 'pending'
     }
   ];
 
@@ -204,7 +365,7 @@ const createDemoData = () => {
       'Lifetime value: $3,200 (12-month cohorts)',
       'Current traction: 150 signups, 50 active beta users'
     ],
-    roadmapSnapshot: '2-week focus: Complete core product features and onboarding. 3-month plan: Launch public beta, expand team, secure seed funding, and achieve product-market fit metrics.',
+    roadmapSnapshot: '12-month plan: Launch MVP, secure partnerships, expand team, achieve product-market fit, close seed funding, scale to 1000 users, expand internationally, release advanced features, and prepare for Series A.',
     complianceFlags: [
       'GDPR compliant',
       'EU/28th regime aligned',
@@ -220,10 +381,12 @@ const createDemoData = () => {
       { item: 'Due diligence materials', status: 'pending' }
     ],
     lastUpdated: new Date(now.getTime() - 3 * 60 * 60 * 1000),
-    euCompliant: true
+    euCompliant: true,
+    industry: 'SaaS',
+    trl: 5
   };
 
-  return { tools, signals, twoWeekTasks, threeMonthMilestones, passport };
+  return { tools, signals, twelveMonthMilestones, passport, applications, teamMembers };
 };
 
 export const useStore = create<AppState>((set) => {
@@ -237,55 +400,35 @@ export const useStore = create<AppState>((set) => {
     },
     tools: demoData.tools,
     signals: demoData.signals,
-    twoWeekTasks: demoData.twoWeekTasks,
-    threeMonthMilestones: demoData.threeMonthMilestones,
+    twelveMonthMilestones: demoData.twelveMonthMilestones,
     passport: demoData.passport,
     userInputs: {},
     showComplianceAlert: true,
     toolActivationCount: 0,
-
-    toggleTask: (taskId) =>
-      set((state) => ({
-        twoWeekTasks: state.twoWeekTasks.map((task) =>
-          task.id === taskId ? { ...task, completed: !task.completed } : task
-        )
-      })),
+    applications: demoData.applications,
+    teamMembers: demoData.teamMembers,
 
     toggleMilestone: (milestoneId) =>
       set((state) => ({
-        threeMonthMilestones: state.threeMonthMilestones.map((milestone) =>
+        twelveMonthMilestones: state.twelveMonthMilestones.map((milestone) =>
           milestone.id === milestoneId ? { ...milestone, completed: !milestone.completed } : milestone
         )
       })),
 
     addComplianceTasks: () =>
       set((state) => {
-        const newTasks: Task[] = [
-          {
-            id: `compliance-${Date.now()}-1`,
-            title: 'Update privacy policy for EU/28th regime v2.1',
-            completed: false,
-            category: 'compliance',
-            isNew: true
-          },
-          {
-            id: `compliance-${Date.now()}-2`,
-            title: 'Implement new data retention controls',
-            completed: false,
-            category: 'compliance',
-            isNew: true
-          },
-          {
-            id: `compliance-${Date.now()}-3`,
-            title: 'Conduct compliance audit documentation',
-            completed: false,
-            category: 'compliance',
-            isNew: true
-          }
-        ];
+        // Add compliance milestone to roadmap instead
+        const newMilestone: Milestone = {
+          id: `compliance-${Date.now()}`,
+          title: 'Complete EU/28th Compliance Update',
+          description: 'Update privacy policy, implement data retention controls, and conduct compliance audit',
+          targetDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          completed: false,
+          category: 'team'
+        };
 
         return {
-          twoWeekTasks: [...newTasks, ...state.twoWeekTasks],
+          twelveMonthMilestones: [newMilestone, ...state.twelveMonthMilestones],
           showComplianceAlert: false
         };
       }),

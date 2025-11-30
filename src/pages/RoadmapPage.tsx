@@ -1,5 +1,5 @@
-import { RoadmapBoard } from '@/components/roadmap/RoadmapBoard';
+import { RoadmapBoard12Month } from '@/components/roadmap/RoadmapBoard12Month';
 
 export function RoadmapPage() {
-  return <RoadmapBoard />;
+  return <RoadmapBoard12Month />;
 }
