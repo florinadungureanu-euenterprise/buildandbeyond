@@ -433,7 +433,7 @@ export function useOnboardingChat() {
     }
   }, []);
 
-  const sendMessage = (content: string) => {
+  const sendMessage = async (content: string) => {
     // Add user message
     const userMessage: OnboardingMessage = {
       id: Date.now().toString(),
@@ -442,6 +442,34 @@ export function useOnboardingChat() {
       timestamp: new Date()
     };
     setMessages((prev) => [...prev, userMessage]);
+
+    // Get AI guidance before responding with next question
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data: guidanceData } = await supabase.functions.invoke('chat-guidance', {
+        body: {
+          userMessage: content,
+          context: {
+            stage: startupStage,
+            currentQuestion: currentQuestion?.question
+          }
+        }
+      });
+
+      if (guidanceData?.guidance) {
+        // Add AI guidance response
+        const guidanceMessage: OnboardingMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'system',
+          content: guidanceData.guidance,
+          timestamp: new Date()
+        };
+        setMessages((prev) => [...prev, guidanceMessage]);
+      }
+    } catch (error) {
+      console.error('Failed to get AI guidance:', error);
+      // Continue without guidance if it fails
+    }
 
     // Handle stage detection (first response)
     if (currentQuestionIndex === -1) {

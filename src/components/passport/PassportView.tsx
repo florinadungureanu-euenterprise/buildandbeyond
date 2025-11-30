@@ -18,6 +18,16 @@ export function PassportView() {
     }
   }, [passport.founderName]);
 
+  // Check if data is demo/placeholder data
+  const isDemoData = (field: string) => {
+    if (!field || field.trim() === '') return true;
+    // Check for common demo content
+    if (field.includes('TechVenture') || field.includes('Alex Morgan')) return true;
+    return false;
+  };
+
+  const hasRealData = !isDemoData(passport.summary);
+
   return (
     <div className="h-full flex">
       <FounderProfileModal open={showFounderModal} onOpenChange={setShowFounderModal} />
@@ -74,7 +84,14 @@ export function PassportView() {
               <CheckCircle2 className="w-5 h-5 text-green-600" />
               <h2 className="text-lg font-semibold text-gray-900">Validation Summary</h2>
             </div>
-            <p className="text-sm text-gray-700 leading-relaxed">{passport.validationSummary}</p>
+            {hasRealData ? (
+              <p className="text-sm text-gray-700 leading-relaxed">{passport.validationSummary}</p>
+            ) : (
+              <div className="text-center py-4">
+                <Badge variant="outline" className="text-sm">Pending Analysis</Badge>
+                <p className="text-xs text-gray-500 mt-2">Complete onboarding to generate validation insights</p>
+              </div>
+            )}
           </Card>
 
           {/* Competitor Map */}
@@ -83,27 +100,41 @@ export function PassportView() {
               <TrendingUp className="w-5 h-5 text-purple-600" />
               <h2 className="text-lg font-semibold text-gray-900">Competitor Landscape</h2>
             </div>
-            <ul className="space-y-2">
-              {passport.competitorSnapshot.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-blue-600 mt-0.5">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            {hasRealData && passport.competitorSnapshot.length > 0 ? (
+              <ul className="space-y-2">
+                {passport.competitorSnapshot.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                    <span className="text-blue-600 mt-0.5">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-center py-4">
+                <Badge variant="outline" className="text-sm">Pending Analysis</Badge>
+                <p className="text-xs text-gray-500 mt-2">We'll analyze your competitive landscape after onboarding</p>
+              </div>
+            )}
           </Card>
 
           {/* Market Data */}
           <Card className="p-6 mb-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Market Data</h2>
-            <ul className="space-y-2">
-              {passport.marketData.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-green-600 mt-0.5">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            {hasRealData && passport.marketData.length > 0 ? (
+              <ul className="space-y-2">
+                {passport.marketData.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                    <span className="text-green-600 mt-0.5">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-center py-4">
+                <Badge variant="outline" className="text-sm">Pending Analysis</Badge>
+                <p className="text-xs text-gray-500 mt-2">Market intelligence will be gathered during onboarding</p>
+              </div>
+            )}
           </Card>
 
           {/* Roadmap Snapshot */}

@@ -1,10 +1,14 @@
 import { useStore } from '@/store';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { formatPercent } from '@/lib/utils';
 import { CheckCircle2 } from 'lucide-react';
 
 export function ValidationWidget() {
   const validation = useStore((state) => state.validation);
+
+  // Check if validation data is available (not zeros)
+  const hasValidationData = validation.marketFit > 0 || validation.problemValidation > 0 || validation.solutionFit > 0;
 
   const metrics = [
     { label: 'Market Fit', value: validation.marketFit, color: 'bg-green-500' },
@@ -19,29 +23,36 @@ export function ValidationWidget() {
         <CheckCircle2 className="w-6 h-6 text-green-500" />
       </div>
 
-      <div className="space-y-4">
-        {metrics.map((metric, index) => (
-          <div
-            key={metric.label}
-            className={`flex items-center justify-between ${
-              index < metrics.length - 1 ? 'pb-3 border-b border-gray-100' : ''
-            }`}
-          >
-            <span className="text-sm text-gray-600">{metric.label}</span>
-            <div className="flex items-center gap-2">
-              <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className={`h-full ${metric.color} rounded-full transition-all duration-300`}
-                  style={{ width: `${metric.value * 100}%` }}
-                />
+      {hasValidationData ? (
+        <div className="space-y-4">
+          {metrics.map((metric, index) => (
+            <div
+              key={metric.label}
+              className={`flex items-center justify-between ${
+                index < metrics.length - 1 ? 'pb-3 border-b border-gray-100' : ''
+              }`}
+            >
+              <span className="text-sm text-gray-600">{metric.label}</span>
+              <div className="flex items-center gap-2">
+                <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full ${metric.color} rounded-full transition-all duration-300`}
+                    style={{ width: `${metric.value * 100}%` }}
+                  />
+                </div>
+                <span className="text-sm font-medium text-gray-900 w-10 text-right">
+                  {formatPercent(metric.value)}
+                </span>
               </div>
-              <span className="text-sm font-medium text-gray-900 w-10 text-right">
-                {formatPercent(metric.value)}
-              </span>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-6">
+          <Badge variant="outline" className="text-sm mb-2">Pending</Badge>
+          <p className="text-xs text-gray-500">Complete onboarding to generate validation scores</p>
+        </div>
+      )}
 
       <div className="mt-6 pt-4 border-t border-gray-100">
         <button type="button" className="w-full py-2 text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors">
