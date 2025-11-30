@@ -9,7 +9,8 @@ const navItems = [
   { path: '/passport', label: 'Passport' },
   { path: '/tools', label: 'Tools' },
   { path: '/applications', label: 'Applications' },
-  { path: '/team', label: 'Team' }
+  { path: '/team', label: 'Team' },
+  { path: '/fundraising', label: 'Fundraising' }
 ];
 
 export function SidebarNav() {
