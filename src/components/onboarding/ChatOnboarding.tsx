@@ -26,7 +26,8 @@ export function ChatOnboarding() {
     uploadDocument,
     removeDocument,
     uploadedDocuments,
-    startupStage
+    startupStage,
+    totalQuestions
   } = useOnboardingChat();
   
   const updateUserInput = useStore((state) => state.updateUserInput);
@@ -158,7 +159,7 @@ export function ChatOnboarding() {
         <div className="bg-card border-b border-border p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-foreground">
-              {isComplete ? 'Complete!' : `Question ${Math.min(messages.filter(m => m.role === 'system').length, visibleLabels.length)} of ${visibleLabels.length}`}
+              {isComplete ? 'Complete!' : `Question ${Math.min(messages.filter(m => m.role === 'user').length + 1, totalQuestions)} of ${totalQuestions}`}
             </span>
             <span className="text-sm text-muted-foreground">{Math.round(progress)}%</span>
           </div>
@@ -177,9 +178,12 @@ export function ChatOnboarding() {
           </div>
           
           {startupStage && (
-            <div className="mt-2">
+            <div className="mt-2 flex gap-2">
               <Badge variant="outline" className="text-xs">
-                {startupStage === 'early' ? '🌱 Early Stage' : '🚀 Growth Stage'}
+                {startupStage === 'early' ? '🌱 Early Stage Path' : '🚀 Growth Stage Path'}
+              </Badge>
+              <Badge variant="secondary" className="text-xs">
+                {startupStage === 'early' ? '15 questions' : '8 questions'} + 2 universal
               </Badge>
             </div>
           )}
@@ -302,29 +306,77 @@ export function ChatOnboarding() {
 
       {/* Right Sidebar - Progress Summary */}
       <div className="w-80 bg-muted/30 border-l border-border p-6 overflow-y-auto">
-        <h4 className="font-semibold text-foreground text-sm mb-4">Your Progress</h4>
-        <div className="space-y-3">
-          {visibleLabels.map((step, idx) => {
-            const answered = idx < messages.filter((m) => m.role === 'user').length;
-            return (
-              <div key={step} className="flex items-center gap-2">
-                <div
-                  className={cn(
-                    'w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium',
-                    answered
-                      ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                      : 'bg-muted text-muted-foreground'
-                  )}
-                >
-                  {answered ? '✓' : idx + 1}
-                </div>
-                <span className={cn('text-sm', answered ? 'text-foreground' : 'text-muted-foreground')}>
-                  {step}
-                </span>
+        <h4 className="font-semibold text-foreground text-sm mb-4">
+          {!startupStage ? 'Stage Detection' : startupStage === 'early' ? 'Early-Stage Discovery' : 'Growth Assessment'}
+        </h4>
+        
+        {!startupStage ? (
+          <div className="text-sm text-muted-foreground">
+            <p className="mb-3">We'll adapt the onboarding based on your stage:</p>
+            <div className="space-y-3">
+              <div className="p-3 bg-card border border-border rounded-lg">
+                <p className="font-medium text-foreground mb-1">🌱 Early Stage</p>
+                <p className="text-xs">Idea → MVP → Early Customers</p>
+                <p className="text-xs text-muted-foreground mt-1">Focus: Customer discovery, problem validation, experiments</p>
               </div>
-            );
-          })}
-        </div>
+              <div className="p-3 bg-card border border-border rounded-lg">
+                <p className="font-medium text-foreground mb-1">🚀 Growth Stage</p>
+                <p className="text-xs">Growing → Scale-up → Established</p>
+                <p className="text-xs text-muted-foreground mt-1">Focus: Operations, systems, scaling challenges</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {startupStage === 'early' ? (
+              <>
+                <div className="text-xs text-muted-foreground space-y-2">
+                  <p className="font-medium text-foreground">Customer Discovery:</p>
+                  <div className="space-y-1 pl-2">
+                    <p>✓ Customer definition</p>
+                    <p>✓ Problem validation</p>
+                    <p>✓ Existing alternatives</p>
+                    <p>✓ Jobs to be done</p>
+                  </div>
+                  
+                  <p className="font-medium text-foreground mt-3">Solution & Validation:</p>
+                  <div className="space-y-1 pl-2">
+                    <p>✓ Proposed solution</p>
+                    <p>✓ Value proposition</p>
+                    <p>✓ Unfair advantage</p>
+                    <p>✓ Riskiest assumption</p>
+                    <p>✓ Test method</p>
+                  </div>
+                  
+                  <p className="font-medium text-foreground mt-3">Business Model:</p>
+                  <div className="space-y-1 pl-2">
+                    <p>✓ Revenue model</p>
+                    <p>✓ Distribution channels</p>
+                    <p>✓ Key metrics</p>
+                    <p>✓ 12-week goal</p>
+                    <p>✓ Risks</p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-xs text-muted-foreground space-y-2">
+                  <p className="font-medium text-foreground">Operational Focus:</p>
+                  <div className="space-y-1 pl-2">
+                    <p>✓ Current priorities</p>
+                    <p>✓ Bottlenecks</p>
+                    <p>✓ Goals (Q/Y)</p>
+                    <p>✓ Systems & tools</p>
+                    <p>✓ Process gaps</p>
+                    <p>✓ Metrics tracked</p>
+                    <p>✓ Risks & compliance</p>
+                    <p>✓ Long-term vision</p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
 
         {uploadedDocuments.length > 0 && (
           <div className="mt-6 p-4 bg-card border border-border rounded-lg">

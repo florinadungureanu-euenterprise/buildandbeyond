@@ -92,6 +92,48 @@ export interface OnboardingQuestion {
   templates: string[];
   key: string;
   stage?: 'early' | 'later' | 'all';
+  probe_questions?: string[];
+  context?: string;
+}
+
+export interface EmpathyMap {
+  says: string;
+  thinks: string;
+  does: string;
+  feels: string;
+}
+
+export interface OnboardingProfile {
+  stage_detected: string;
+  customer: string;
+  empathy_map: EmpathyMap;
+  problem: string;
+  consequences_of_problem: string;
+  existing_alternatives: string;
+  jobs_to_be_done: string;
+  solution: string;
+  unique_value_proposition: string;
+  unfair_advantage: string;
+  riskiest_assumption: string;
+  method_and_success_criterion: string;
+  industry: string;
+  region: string;
+  business_model: string;
+  channels: string;
+  revenue_streams: string;
+  cost_structure: string;
+  key_metrics: string;
+  twelve_week_goal: string;
+  risks: string;
+  later_stage_priorities: string;
+  later_stage_bottlenecks: string;
+  later_stage_goals: string;
+  later_stage_tools: string;
+  later_stage_process_gaps: string;
+  later_stage_metrics: string;
+  later_stage_risks: string;
+  later_stage_vision: string;
+  document_insights: string[];
 }
 
 export interface UploadedDocument {
