@@ -7,17 +7,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { cn } from '@/lib/utils';
 import { ExternalLink } from 'lucide-react';
 
-const commissionColors: Record<string, string> = {
-  high: 'bg-green-100 text-green-700',
-  medium: 'bg-blue-100 text-blue-700',
-  low: 'bg-purple-100 text-purple-700'
+const metricColors: Record<string, string> = {
+  cost_savings: 'bg-green-500 hover:bg-green-600',
+  time_savings: 'bg-blue-500 hover:bg-blue-600',
+  efficiency_gain: 'bg-purple-500 hover:bg-purple-600'
 };
-
-function getCommissionLevel(commission: number): string {
-  if (commission >= 12) return 'high';
-  if (commission >= 9) return 'medium';
-  return 'low';
-}
 
 export function ToolsList() {
   const tools = useStore((state) => state.tools);
@@ -64,23 +58,27 @@ export function ToolsList() {
       {/* Tools Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredTools.map((tool) => {
-          const level = getCommissionLevel(tool.commission);
           return (
             <Card
               key={tool.id}
               className="p-6 hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() => setSelectedTool(tool)}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{tool.name}</h3>
-                  <p className="text-xs text-gray-500">{tool.category}</p>
-                </div>
-                <Badge className={cn('text-xs font-semibold', commissionColors[level])}>
-                  +{tool.commission}%
-                </Badge>
+              <div className="mb-3">
+                <h3 className="font-semibold text-gray-900 mb-1">{tool.name}</h3>
+                <p className="text-xs text-gray-500">{tool.category}</p>
               </div>
               <p className="text-sm text-gray-600 mb-4">{tool.description}</p>
+              
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Badge className={cn('text-xs font-semibold text-white', metricColors.cost_savings)}>
+                  💰 {tool.metrics.cost_savings}
+                </Badge>
+                <Badge className={cn('text-xs font-semibold text-white', metricColors.time_savings)}>
+                  ⏱️ {tool.metrics.time_savings}
+                </Badge>
+              </div>
+              
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-gray-700">{tool.pricing}</span>
                 <ExternalLink className="w-4 h-4 text-gray-400" />
@@ -96,22 +94,27 @@ export function ToolsList() {
           {selectedTool && (
             <>
               <DialogHeader>
-                <DialogTitle className="flex items-center justify-between">
-                  <span>{selectedTool.name}</span>
-                  <Badge
-                    className={cn(
-                      'text-xs font-semibold',
-                      commissionColors[getCommissionLevel(selectedTool.commission)]
-                    )}
-                  >
-                    +{selectedTool.commission}% Commission
-                  </Badge>
-                </DialogTitle>
+                <DialogTitle>{selectedTool.name}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
                   <p className="text-sm text-gray-600 mb-2">{selectedTool.category}</p>
                   <p className="text-sm text-gray-700">{selectedTool.description}</p>
+                </div>
+                
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2">Impact Metrics</h4>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge className={cn('text-xs font-semibold text-white', metricColors.cost_savings)}>
+                      💰 {selectedTool.metrics.cost_savings} cost savings
+                    </Badge>
+                    <Badge className={cn('text-xs font-semibold text-white', metricColors.time_savings)}>
+                      ⏱️ {selectedTool.metrics.time_savings} time savings
+                    </Badge>
+                    <Badge className={cn('text-xs font-semibold text-white', metricColors.efficiency_gain)}>
+                      🚀 {selectedTool.metrics.efficiency_gain}
+                    </Badge>
+                  </div>
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-2">Key Features</h4>

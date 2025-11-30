@@ -6,6 +6,12 @@ export interface Task {
   isNew?: boolean;
 }
 
+export interface RoadmapTool {
+  tool: string;
+  metric: string;           // e.g., "85% cost savings"
+  purpose: string;
+}
+
 export interface Milestone {
   id: string;
   title: string;
@@ -13,16 +19,26 @@ export interface Milestone {
   targetDate: string;
   completed: boolean;
   category: 'product' | 'market' | 'team' | 'funding';
+  recommended_tools?: RoadmapTool[];
+}
+
+export interface ToolMetrics {
+  cost_savings: string;      // e.g., "85%"
+  time_savings: string;       // e.g., "70%"
+  efficiency_gain: string;    // e.g., "10x faster development"
 }
 
 export interface Tool {
   id: string;
   name: string;
   category: string;
-  commission: number;
   description: string;
   features: string[];
   pricing?: string;
+  metrics: ToolMetrics;
+  relevant_stages?: string[];
+  use_cases?: string[];
+  why_recommended?: string;
 }
 
 export interface Signal {
