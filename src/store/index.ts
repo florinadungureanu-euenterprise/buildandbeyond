@@ -487,7 +487,7 @@ const createDemoData = () => {
   ];
 
   const passport: PassportData = {
-    founderName: 'Alex Morgan',
+    founderName: '',
     startupName: 'TechVenture',
     tagline: 'Building the future of collaborative work',
     summary: 'TechVenture is a SaaS platform that reimagines team collaboration by combining AI-powered insights with intuitive project management. We serve mid-sized companies looking to improve productivity and reduce operational overhead.',
