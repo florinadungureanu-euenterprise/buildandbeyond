@@ -10,6 +10,7 @@ import { SignalsPage } from '@/pages/SignalsPage';
 import { ToolsPage } from '@/pages/ToolsPage';
 import { ApplicationsPage } from '@/pages/ApplicationsPage';
 import { TeamPage } from '@/pages/TeamPage';
+import { FundraisingPage } from '@/pages/FundraisingPage';
 
 function Layout() {
   return (
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
         { path: '/tools', element: <ToolsPage /> },
         { path: '/applications', element: <ApplicationsPage /> },
         { path: '/team', element: <TeamPage /> },
+        { path: '/fundraising', element: <FundraisingPage /> },
         { path: '*', element: <DashboardPage /> }
       ]
     }

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Task, Milestone, Tool, Signal, ValidationScores, PassportData, Application, TeamMember } from '@/types';
+import { Task, Milestone, Tool, Signal, ValidationScores, PassportData, Application, TeamMember, FundingData } from '@/types';
 
 interface AppState {
   validation: ValidationScores;
@@ -12,6 +12,7 @@ interface AppState {
   toolActivationCount: number;
   applications: Application[];
   teamMembers: TeamMember[];
+  fundingData: FundingData;
 
   // Actions
   toggleMilestone: (milestoneId: string) => void;
@@ -501,7 +502,133 @@ const createDemoData = () => {
     trl: 5
   };
 
-  return { tools, signals, twelveMonthMilestones, passport, applications, teamMembers };
+  const fundingData: FundingData = {
+    current_stage: 'Seed',
+    current_funding: {
+      amount_raised: 250000,
+      sources: ['Bootstrapped', 'Friends & Family'],
+      last_raise_date: '2024-06-15'
+    },
+    funding_goal: {
+      target_amount: 1000000,
+      target_date: '2025-07-31',
+      purpose: 'Accelerate product development, expand team, and scale go-to-market',
+      use_of_funds: [
+        { category: 'Product Development', percentage: 40, description: 'Engineering team expansion and feature development' },
+        { category: 'Marketing & Sales', percentage: 30, description: 'Customer acquisition and brand building' },
+        { category: 'Operations', percentage: 20, description: 'Infrastructure and business operations' },
+        { category: 'Reserve', percentage: 10, description: 'Emergency buffer and unexpected opportunities' }
+      ]
+    },
+    fundraising_type: 'Seed Round',
+    fundraising_amount: '$1M',
+    burn_rate: 35000,
+    runway_months: 18,
+    funding_routes: [
+      {
+        id: '1',
+        name: 'Angel Investment',
+        type: 'angel',
+        description: 'Individual investors providing early-stage capital',
+        typical_amount: '$25k - $250k',
+        timeline: '2-4 months',
+        match_score: 85,
+        requirements: ['Strong MVP', 'Clear market opportunity', 'Compelling pitch'],
+        pros: ['Flexible terms', 'Mentorship', 'Quick decision-making'],
+        cons: ['Smaller amounts', 'Multiple investors needed', 'Varied expectations'],
+        next_steps: ['Refine pitch deck', 'Join angel networks', 'Get warm intros']
+      },
+      {
+        id: '2',
+        name: 'Venture Capital',
+        type: 'vc',
+        description: 'Professional investors providing growth capital',
+        typical_amount: '$500k - $5M',
+        timeline: '4-6 months',
+        match_score: 78,
+        requirements: ['Product-market fit', 'Scalable business model', 'Strong team'],
+        pros: ['Larger amounts', 'Strategic support', 'Network access'],
+        cons: ['Equity dilution', 'Board seats', 'High growth expectations'],
+        next_steps: ['Build traction', 'Complete financial model', 'Research target VCs']
+      },
+      {
+        id: '3',
+        name: 'EU Horizon Europe',
+        type: 'grant',
+        description: 'EU research and innovation funding program',
+        typical_amount: '€2.5M - €10M',
+        timeline: '6-12 months',
+        match_score: 92,
+        requirements: ['EU-based', 'Innovation potential', 'TRL 3-6', 'Research component'],
+        pros: ['Non-dilutive', 'Large amounts', 'Credibility boost'],
+        cons: ['Lengthy process', 'Reporting requirements', 'Milestone-based'],
+        next_steps: ['Check eligibility', 'Find consortium partners', 'Prepare proposal']
+      },
+      {
+        id: '4',
+        name: 'EIC Accelerator',
+        type: 'grant',
+        description: 'European Innovation Council funding for breakthrough innovations',
+        typical_amount: '€2.5M grant + €15M equity',
+        timeline: '8-10 months',
+        match_score: 88,
+        requirements: ['Breakthrough innovation', 'European company', 'TRL 5-8', 'Scale-up potential'],
+        pros: ['Blended financing', 'EU network', 'Coaching services'],
+        cons: ['Highly competitive', 'Equity component', 'Extensive reporting'],
+        next_steps: ['Assess innovation readiness', 'Prepare video pitch', 'Submit application']
+      },
+      {
+        id: '5',
+        name: 'Accelerator Program',
+        type: 'accelerator',
+        description: 'Structured program with funding and mentorship',
+        typical_amount: '$25k - $150k',
+        timeline: '3-6 months',
+        match_score: 82,
+        requirements: ['Scalable idea', 'Committed team', 'Coachable founders'],
+        pros: ['Mentorship', 'Network', 'Fast-track learning'],
+        cons: ['Equity for small amounts', 'Time commitment', 'Relocation often required'],
+        next_steps: ['Research programs', 'Complete applications', 'Prepare for interviews']
+      }
+    ],
+    funding_milestones: [
+      {
+        id: '1',
+        title: 'Complete Pitch Deck',
+        description: 'Finalize investor-ready pitch deck with all key metrics',
+        target_date: '2025-03-15',
+        status: 'completed',
+        funding_type: 'Preparation'
+      },
+      {
+        id: '2',
+        title: 'Build Angel Investor Pipeline',
+        description: 'Identify and reach out to 20+ potential angel investors',
+        target_date: '2025-04-30',
+        status: 'in-progress',
+        funding_type: 'Angel Investment'
+      },
+      {
+        id: '3',
+        title: 'Submit EU Grant Applications',
+        description: 'Apply to Horizon Europe and EIC Accelerator programs',
+        target_date: '2025-05-31',
+        status: 'not-started',
+        funding_type: 'EU Grants'
+      },
+      {
+        id: '4',
+        title: 'Close Seed Round',
+        description: 'Secure $1M in seed funding from angels and/or VCs',
+        target_date: '2025-07-31',
+        status: 'not-started',
+        funding_type: 'Seed Round'
+      }
+    ],
+    readiness_score: 78
+  };
+
+  return { tools, signals, twelveMonthMilestones, passport, applications, teamMembers, fundingData };
 };
 
 export const useStore = create<AppState>((set) => {
@@ -522,6 +649,7 @@ export const useStore = create<AppState>((set) => {
     toolActivationCount: 0,
     applications: demoData.applications,
     teamMembers: demoData.teamMembers,
+    fundingData: demoData.fundingData,
 
     toggleMilestone: (milestoneId) =>
       set((state) => ({

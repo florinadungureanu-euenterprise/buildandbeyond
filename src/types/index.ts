@@ -162,3 +162,48 @@ export interface UploadedDocument {
   uploadedAt: Date;
   content?: string;
 }
+
+export interface FundingRoute {
+  id: string;
+  name: string;
+  type: 'angel' | 'vc' | 'grant' | 'accelerator' | 'crowdfunding' | 'loan';
+  description: string;
+  typical_amount: string;
+  timeline: string;
+  match_score: number;
+  requirements: string[];
+  pros: string[];
+  cons: string[];
+  next_steps: string[];
+}
+
+export interface FundingMilestone {
+  id: string;
+  title: string;
+  description: string;
+  target_date: string;
+  status: 'not-started' | 'in-progress' | 'completed';
+  funding_type: string;
+}
+
+export interface FundingData {
+  current_stage: string;
+  current_funding: {
+    amount_raised: number;
+    sources: string[];
+    last_raise_date?: string;
+  };
+  funding_goal: {
+    target_amount: number;
+    target_date: string;
+    purpose: string;
+    use_of_funds: { category: string; percentage: number; description: string }[];
+  };
+  fundraising_type: string;  // From onboarding
+  fundraising_amount: string; // From onboarding
+  burn_rate: number;
+  runway_months: number;
+  funding_routes: FundingRoute[];
+  funding_milestones: FundingMilestone[];
+  readiness_score: number;
+}
