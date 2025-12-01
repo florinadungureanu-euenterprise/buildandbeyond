@@ -75,8 +75,11 @@ export function ScreenTour({
           </DialogDescription>
         </DialogHeader>
         
-        <DialogFooter className="sm:justify-center">
-          <Button onClick={handleComplete} className="px-8 gap-2">
+        <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-between">
+          <Button variant="ghost" onClick={handleSkip} className="order-2 sm:order-1">
+            Skip
+          </Button>
+          <Button onClick={handleComplete} className="order-1 sm:order-2 gap-2">
             {isSequenceActive ? 'Next' : buttonText}
             {isSequenceActive && <ChevronRight className="w-4 h-4" />}
           </Button>
