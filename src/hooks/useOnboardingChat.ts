@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { OnboardingMessage, OnboardingQuestion, UploadedDocument, OnboardingProfile } from '@/types';
 import { useStore } from '@/store';
+import { useUserId } from './useUserId';
 
 const N8N_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/4ce2573e-4415-4cba-aa4e-65a97223ce43';
 const N8N_DOCUMENT_UPLOAD_URL = 'https://springervc.app.n8n.cloud/webhook/document-upload';
@@ -367,6 +368,7 @@ export function useOnboardingChat() {
   });
   const [isInFoundationalPhase, setIsInFoundationalPhase] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
+  const userId = useUserId();
   
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);
@@ -647,6 +649,7 @@ export function useOnboardingChat() {
           // Send immediately to n8n document upload webhook
           try {
             const uploadPayload = {
+              user_id: userId,
               session_id: sessionId,
               startup_profile: {
                 stage_detected: onboardingProfile.stage_detected || startupStage
@@ -748,6 +751,7 @@ export function useOnboardingChat() {
           const payload = {
             status: 'onboarding_complete',
             timestamp: new Date().toISOString(),
+            user_id: userId,
             session_id: sessionId,
             startup_profile: {
               // All fields - will be populated based on stage and documents
