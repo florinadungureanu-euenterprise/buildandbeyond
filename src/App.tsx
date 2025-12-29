@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { SidebarNav } from '@/components/SidebarNav';
 import { TopTabs } from '@/components/TopTabs';
 import { WelcomeTour } from '@/components/onboarding/WelcomeTour';
+import { useDataSync } from '@/hooks/useDataSync';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { OnboardingPage } from '@/pages/OnboardingPage';
 import { PassportPage } from '@/pages/PassportPage';
@@ -13,6 +14,9 @@ import { TeamPage } from '@/pages/TeamPage';
 import { FundraisingPage } from '@/pages/FundraisingPage';
 
 function Layout() {
+  // Enable automatic data sync to n8n
+  useDataSync();
+  
   return (
     <>
       <WelcomeTour />

@@ -451,6 +451,7 @@ export function useOnboardingChat() {
       const { data: guidanceData } = await supabase.functions.invoke('chat-guidance', {
         body: {
           userMessage: content,
+          userId: userId,
           context: {
             stage: startupStage,
             currentQuestion: currentQuestion?.question

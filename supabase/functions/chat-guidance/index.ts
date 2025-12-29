@@ -12,14 +12,14 @@ serve(async (req) => {
   }
 
   try {
-    const { userMessage, context } = await req.json();
+    const { userMessage, context, userId } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log('Processing chat guidance request:', { userMessage, context });
+    console.log('Processing chat guidance request:', { userMessage, context, userId });
 
     const systemPrompt = `You are the "Entrepreneur Whisperer" - an expert startup advisor helping founders build their ventures from idea to scale. 
 
