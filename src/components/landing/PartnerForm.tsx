@@ -36,7 +36,7 @@ export function PartnerForm() {
   const partnerTypes: { value: PartnerType; label: string; icon: React.ReactNode; desc: string }[] = [
     { value: 'programme', label: 'Venture Building Support', icon: <Building2 className="w-5 h-5" />, desc: 'Startup programmes, venture studios and venture builders' },
     { value: 'investor', label: 'Investor', icon: <TrendingUp className="w-5 h-5" />, desc: 'Dilutive and non-dilutive funding' },
-    { value: 'service_provider', label: 'Service Provider', icon: <Briefcase className="w-5 h-5" />, desc: 'Legal, accounting, marketing, tech services' },
+    { value: 'service_provider', label: 'Service Provider', icon: <Briefcase className="w-5 h-5" />, desc: 'Legal, accounting, marketing, tech services, etc.' },
     { value: 'event_organizer', label: 'Event Organizer', icon: <Calendar className="w-5 h-5" />, desc: 'Conference, hackathon, workshop organizers' },
     { value: 'community', label: 'Community', icon: <Users className="w-5 h-5" />, desc: 'Startup communities, networks, associations' },
     { value: 'corporate', label: 'Corporate', icon: <Building className="w-5 h-5" />, desc: 'Corporate innovation, partnerships, pilots' },
