@@ -258,7 +258,7 @@ export default function LandingPage() {
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm">
               <Building2 className="w-3.5 h-3.5 mr-1.5" />
-              For Programmes, Investors & Service Providers
+              For Programmes, Investors, Service Providers & More
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Reach Europe's most promising founders

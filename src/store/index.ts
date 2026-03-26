@@ -372,10 +372,10 @@ const exampleFundingData: FundingData = {
     },
   ],
   funding_milestones: [
-    { id: 'fm-1', title: 'Complete pitch deck', description: 'Finalize investor-ready pitch deck with market data', status: 'completed', target_date: '2026-01-15' },
-    { id: 'fm-2', title: 'Build investor pipeline', description: 'Identify and research 30+ target investors and programmes', status: 'in-progress', target_date: '2026-04-01' },
-    { id: 'fm-3', title: 'Submit grant applications', description: 'Apply to EIC Accelerator and national innovation grants', status: 'pending', target_date: '2026-06-01' },
-    { id: 'fm-4', title: 'Close pre-seed round', description: 'Secure EUR 500K from angels and/or pre-seed fund', status: 'pending', target_date: '2027-03-01' },
+    { id: 'fm-1', title: 'Complete pitch deck', description: 'Finalize investor-ready pitch deck with market data', status: 'completed', target_date: '2026-01-15', funding_type: 'angel' },
+    { id: 'fm-2', title: 'Build investor pipeline', description: 'Identify and research 30+ target investors and programmes', status: 'in-progress', target_date: '2026-04-01', funding_type: 'vc' },
+    { id: 'fm-3', title: 'Submit grant applications', description: 'Apply to EIC Accelerator and national innovation grants', status: 'not-started', target_date: '2026-06-01', funding_type: 'grant' },
+    { id: 'fm-4', title: 'Close pre-seed round', description: 'Secure EUR 500K from angels and/or pre-seed fund', status: 'not-started', target_date: '2027-03-01', funding_type: 'angel' },
   ],
   readiness_score: 62,
 };
