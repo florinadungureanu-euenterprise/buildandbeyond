@@ -39,7 +39,7 @@ export function PartnerForm() {
     { value: 'service_provider', label: 'Service Provider', icon: <Briefcase className="w-5 h-5" />, desc: 'Legal, accounting, marketing, tech services, etc.' },
     { value: 'event_organizer', label: 'Event Organizer', icon: <Calendar className="w-5 h-5" />, desc: 'Conference, hackathon, workshop organizers' },
     { value: 'community', label: 'Community', icon: <Users className="w-5 h-5" />, desc: 'Startup communities, networks, associations' },
-    { value: 'corporate', label: 'Corporate', icon: <Building className="w-5 h-5" />, desc: 'Corporate innovation, partnerships, pilots' },
+    { value: 'corporate', label: 'Corporate', icon: <Building className="w-5 h-5" />, desc: 'Corporate innovation, partnerships, pilots, startup programmes with credits' },
     { value: 'public_institution', label: 'Public Institution', icon: <Landmark className="w-5 h-5" />, desc: 'Universities, municipalities, government agencies' },
     { value: 'venue', label: 'Venue / Co-working / Hub', icon: <MapPin className="w-5 h-5" />, desc: 'Co-working spaces, innovation hubs, labs' },
     { value: 'freelancer', label: 'Freelancer', icon: <User className="w-5 h-5" />, desc: 'Independent consultants and specialists' },

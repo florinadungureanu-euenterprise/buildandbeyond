@@ -249,7 +249,7 @@ export default function LandingPage() {
               For the Ecosystem
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Reach Europe's most promising founders
+              Reach Europe's most promising innovations
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Whether you're a programme, investor, service provider, venue, or institution, connect with startups matched to your focus, stage, and geography.
