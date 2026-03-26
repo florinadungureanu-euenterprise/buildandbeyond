@@ -4,6 +4,7 @@ import { MarketSignalsWidget } from '@/components/widgets/MarketSignalsWidget';
 import { ToolMatchesWidget } from '@/components/widgets/ToolMatchesWidget';
 import { AlertBanner } from '@/components/AlertBanner';
 import { ScreenTour } from '@/components/tours/ScreenTour';
+import { MilestoneRecommendations } from '@/components/roadmap/MilestoneRecommendations';
 import { LayoutDashboard } from 'lucide-react';
 
 export function DashboardPage() {
@@ -16,6 +17,7 @@ export function DashboardPage() {
         icon={<LayoutDashboard className="w-12 h-12 text-primary" />}
       />
       <AlertBanner />
+      <MilestoneRecommendations />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ValidationWidget />
         <ToolMatchesWidget />

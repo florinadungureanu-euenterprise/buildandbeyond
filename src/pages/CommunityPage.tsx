@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,7 +11,8 @@ import { ScreenTour } from '@/components/tours/ScreenTour';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { MessageSquare, Plus, ThumbsUp, MessageCircle, Search, Send, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageSquare, Plus, ThumbsUp, MessageCircle, Search, Send, Trash2, ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { FounderMatching } from '@/components/matching/FounderMatching';
 
 type PostCategory = 'general' | 'hiring' | 'updates' | 'events' | 'resources' | 'feedback';
 
@@ -362,6 +364,20 @@ export function CommunityPage() {
           <h1 className="text-3xl font-bold text-foreground">Community</h1>
           <p className="mt-2 text-muted-foreground">Connect, share, and grow with fellow founders</p>
         </div>
+      </div>
+
+      <Tabs defaultValue="forum" className="w-full">
+        <TabsList>
+          <TabsTrigger value="forum" className="gap-1.5"><MessageSquare className="w-4 h-4" /> Forum</TabsTrigger>
+          <TabsTrigger value="matching" className="gap-1.5"><Users className="w-4 h-4" /> Founder Matching</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="matching" className="mt-6">
+          <FounderMatching />
+        </TabsContent>
+
+        <TabsContent value="forum" className="mt-6 space-y-6">
+      <div className="flex justify-end">
         <Button onClick={() => setShowNewPost(true)} className="gap-2">
           <Plus className="w-4 h-4" /> New Post
         </Button>
@@ -430,6 +446,8 @@ export function CommunityPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

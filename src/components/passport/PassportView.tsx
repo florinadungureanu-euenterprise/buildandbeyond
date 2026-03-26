@@ -7,6 +7,7 @@ import { CheckCircle2, FileText, Save, TrendingUp, UserPlus } from 'lucide-react
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
+import { ShareablePassport } from './ShareablePassport';
 
 export function PassportView() {
   const passport = useStore((state) => state.passport);
@@ -225,8 +226,10 @@ export function PassportView() {
 
       {/* Right Sidebar - Provider CTAs */}
       <div className="w-80 bg-white border-l border-gray-200 p-6 flex flex-col">
-        <h4 className="font-semibold text-gray-900 text-sm mb-4">Provider Actions</h4>
-        <div className="space-y-3">
+        <ShareablePassport />
+        
+        <div className="mt-4 space-y-3">
+          <h4 className="font-semibold text-gray-900 text-sm">Provider Actions</h4>
           <Button className="w-full justify-start" variant="default">
             <Save className="w-4 h-4 mr-2" />
             Save to Profile
