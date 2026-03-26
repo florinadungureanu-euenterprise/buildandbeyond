@@ -645,70 +645,55 @@ export function useOnboardingChat() {
           
           setUploadedDocuments((prev) => [...prev, doc]);
           
-          // Send immediately to n8n document upload webhook
+          // Save document to database
           try {
-            const uploadPayload = {
-              user_id: userId,
-              session_id: sessionId,
-              startup_profile: {
-                stage_detected: onboardingProfile.stage_detected || startupStage
-              },
-              uploaded_documents: [{
+            console.log('Saving document to database:', file.name);
+            
+            const { error } = await supabase
+              .from('uploaded_documents' as any)
+              .insert({
+                user_id: userId,
                 name: file.name,
                 type: file.type,
                 size: file.size,
-                uploaded_at: new Date().toISOString(),
                 content: base64Content
-              }]
-            };
-            
-            console.log('Sending document to n8n for parsing:', file.name);
-            
-            const response = await fetch(N8N_DOCUMENT_UPLOAD_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(uploadPayload)
-            });
-            
-            if (response.ok) {
-              const result = await response.json();
-              console.log('Document processed by n8n:', result);
+              } as any);
+
+            if (!error) {
+              console.log('Document saved to database');
               
               // Store document insights
               setOnboardingProfile(prev => ({
                 ...prev,
                 document_insights: [
                   ...(prev.document_insights || []),
-                  `Uploaded ${file.name} - Extracted ${result.fields_extracted || 0} fields via n8n`
+                  `Uploaded ${file.name}`
                 ]
               }));
               
-              // Add system message about successful parsing
               const uploadMessage: OnboardingMessage = {
                 id: (Date.now() + 1).toString(),
                 role: 'system',
-                content: `✓ Document processed: ${file.name}. Extracted ${result.fields_extracted || 0} fields automatically. This will help pre-fill your foundational information.`,
+                content: `✓ Document uploaded: ${file.name}. Your document has been saved.`,
                 timestamp: new Date()
               };
               setMessages((prev) => [...prev, uploadMessage]);
             } else {
-              console.error('Document upload failed:', response.status);
-              // Still add basic message
+              console.error('Document save failed:', error);
               const uploadMessage: OnboardingMessage = {
                 id: (Date.now() + 1).toString(),
                 role: 'system',
-                content: `✓ Document uploaded: ${file.name}. Processing in background...`,
+                content: `✓ Document uploaded: ${file.name}.`,
                 timestamp: new Date()
               };
               setMessages((prev) => [...prev, uploadMessage]);
             }
           } catch (uploadError) {
-            console.error('Error sending document to n8n:', uploadError);
-            // Still show upload success to user
+            console.error('Error saving document:', uploadError);
             const uploadMessage: OnboardingMessage = {
               id: (Date.now() + 1).toString(),
               role: 'system',
-              content: `✓ Document uploaded: ${file.name}. Processing in background...`,
+              content: `✓ Document uploaded: ${file.name}.`,
               timestamp: new Date()
             };
             setMessages((prev) => [...prev, uploadMessage]);
