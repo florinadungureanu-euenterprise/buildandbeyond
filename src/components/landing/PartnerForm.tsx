@@ -25,6 +25,7 @@ export function PartnerForm() {
     services_offered: '',
     target_stages: '',
     investment_range: '',
+    funding_type: '',
     geographic_coverage: '',
     pricing_model: '',
     description: '',
@@ -33,8 +34,8 @@ export function PartnerForm() {
   });
 
   const partnerTypes: { value: PartnerType; label: string; icon: React.ReactNode; desc: string }[] = [
-    { value: 'programme', label: 'Programme / Accelerator', icon: <Building2 className="w-5 h-5" />, desc: 'Accelerators, incubators, grant programmes' },
-    { value: 'investor', label: 'Investor', icon: <TrendingUp className="w-5 h-5" />, desc: 'Angels, VCs, family offices, corporate VCs' },
+    { value: 'programme', label: 'Venture Building Support', icon: <Building2 className="w-5 h-5" />, desc: 'Startup programmes, venture studios and venture builders' },
+    { value: 'investor', label: 'Investor', icon: <TrendingUp className="w-5 h-5" />, desc: 'Dilutive and non-dilutive funding' },
     { value: 'service_provider', label: 'Service Provider', icon: <Briefcase className="w-5 h-5" />, desc: 'Legal, accounting, marketing, tech services' },
     { value: 'event_organizer', label: 'Event Organizer', icon: <Calendar className="w-5 h-5" />, desc: 'Conference, hackathon, workshop organizers' },
     { value: 'community', label: 'Community', icon: <Users className="w-5 h-5" />, desc: 'Startup communities, networks, associations' },
@@ -147,10 +148,23 @@ export function PartnerForm() {
               <Input value={form.target_stages} onChange={e => setForm(f => ({ ...f, target_stages: e.target.value }))} placeholder="e.g., Pre-seed, Seed, Series A" />
             </div>
             {form.type === 'investor' && (
-              <div>
-                <Label>Investment Range</Label>
-                <Input value={form.investment_range} onChange={e => setForm(f => ({ ...f, investment_range: e.target.value }))} placeholder="e.g., €50K - €500K" />
-              </div>
+              <>
+                <div>
+                  <Label>Funding Type</Label>
+                  <Select value={form.funding_type || ''} onValueChange={val => setForm(f => ({ ...f, funding_type: val }))}>
+                    <SelectTrigger><SelectValue placeholder="Select funding type..." /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="dilutive">Dilutive (equity-based)</SelectItem>
+                      <SelectItem value="non_dilutive">Non-dilutive (grants, loans, subsidies)</SelectItem>
+                      <SelectItem value="both">Both dilutive and non-dilutive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Investment Range</Label>
+                  <Input value={form.investment_range} onChange={e => setForm(f => ({ ...f, investment_range: e.target.value }))} placeholder="e.g., €50K - €500K" />
+                </div>
+              </>
             )}
             <div>
               <Label>Geographic Coverage</Label>

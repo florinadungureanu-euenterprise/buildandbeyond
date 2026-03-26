@@ -166,9 +166,9 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
                 <Rocket className="w-6 h-6" />
               </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"How do I find the right accelerator or programme?"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Grants & Programs</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Discover accelerators, EU grants, and competitions scored by fit to your startup profile.</p>
+              <p className="text-sm font-medium text-muted-foreground mb-1">"How do I find the right resource to scale?"</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Venture Building Support</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">Discover accelerators, competitions, venture builders, and experts scored by fit to your startup profile.</p>
             </Card>
           </div>
         </div>
@@ -277,7 +277,7 @@ export default function LandingPage() {
                 <Users className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-foreground mb-2">Targeted Matching</h3>
-              <p className="text-sm text-muted-foreground">Get matched with founders based on industry, stage, geography, and needs. No noise, only relevant connections.</p>
+              <p className="text-sm text-muted-foreground">Get matched with founders and partners based on industry, stage, geography, and needs. No noise, only relevant connections.</p>
             </Card>
             <Card className="p-6 text-center border-border">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
@@ -286,6 +286,13 @@ export default function LandingPage() {
               <h3 className="font-semibold text-foreground mb-2">Platform Visibility</h3>
               <p className="text-sm text-muted-foreground">Feature your programme, fund, or service directly in founder dashboards, recommendations, and the trusted-by section.</p>
             </Card>
+          </div>
+
+          {/* CTA before form */}
+          <div className="text-center mb-10">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Ready to join? Select your organization type below and complete the intake form. Our team will review your application and get you onboarded so you can start benefiting from the platform right away.
+            </p>
           </div>
 
           {/* Partner Form */}
