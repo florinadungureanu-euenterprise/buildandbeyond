@@ -55,7 +55,7 @@ export default function LandingPage() {
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            The AI co-pilot that builds your roadmap, validates your market, finds your funding — and keeps you on track.
+            The trusted co-pilot that builds your roadmap, validates your market, finds your funding and keeps you on track.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
