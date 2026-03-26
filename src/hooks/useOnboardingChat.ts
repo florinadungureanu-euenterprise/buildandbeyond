@@ -836,7 +836,7 @@ export function useOnboardingChat() {
     // Process market signals
     if (marketResult.status === 'fulfilled' && marketResult.value.success && marketResult.value.signals) {
       console.log('Research agent found', marketResult.value.signals.length, 'market signals');
-      useStore.getState().setResearchSignals(marketResult.value.signals);
+      useStore.getState().setResearchSignals(marketResult.value.signals as any);
     }
 
     // Process passport enrichment
