@@ -1,4 +1,3 @@
-import { FounderProfileModal } from '@/components/onboarding/FounderProfileModal';
 import { useStore } from '@/store';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -6,20 +5,37 @@ import { Button } from '@/components/ui/button';
 import { timeAgo, formatDate } from '@/lib/utils';
 import { CheckCircle2, FileText, Save, TrendingUp, UserPlus } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 export function PassportView() {
   const passport = useStore((state) => state.passport);
-  const [showFounderModal, setShowFounderModal] = useState(false);
-
+  const updatePassport = useStore((state) => state.updatePassport);
   const dataLoaded = useStore((state) => state.dataLoaded);
+  const { user } = useAuth();
 
-  // Only show founder modal if data has loaded and founderName is still empty
+  // Load profile data into passport on mount (no modal needed)
   useEffect(() => {
-    if (!dataLoaded) return;
-    if (!passport.founderName || passport.founderName === 'Alex Morgan') {
-      setShowFounderModal(true);
-    }
-  }, [passport.founderName, dataLoaded]);
+    if (!dataLoaded || !user) return;
+    if (passport.founderName && passport.founderName !== '' && passport.founderName !== 'Alex Morgan') return;
+    
+    supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          const d = data as any;
+          if (d.full_name) {
+            updatePassport({
+              founderName: d.full_name,
+              startupName: d.company_name || passport.startupName,
+            });
+          }
+        }
+      });
+  }, [dataLoaded, user]);
 
   // Check if data is demo/placeholder data
   const isDemoData = (field: string) => {
@@ -34,7 +50,7 @@ export function PassportView() {
 
   return (
     <div className="h-full flex">
-      <FounderProfileModal open={showFounderModal} onOpenChange={setShowFounderModal} />
+      {/* No modal needed - profile managed in Settings */}
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto p-8">

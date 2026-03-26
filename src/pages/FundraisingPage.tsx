@@ -9,8 +9,8 @@ export function FundraisingPage() {
     <div className="p-8 space-y-6">
       <ScreenTour
         screenKey="fundraising"
-        title="Fundraising Hub 💰"
-        description="Your complete fundraising command center: current funding status, funding goals & timeline, public & private funding routes, grant opportunities, and investor connections. Track your path to capital and choose the best route for your stage."
+        title="Fundraising Intelligence 💰"
+        description="Outcome: Raise smarter, not harder.\n\nYour personalized funding strategy with matched routes (grants, angels, VCs, subsidies), readiness metrics, and milestone tracking. Know exactly when and how to raise."
         icon={<DollarSign className="w-12 h-12 text-primary" />}
       />
       <div>

@@ -8,7 +8,7 @@ export function PassportPage() {
       <ScreenTour
         screenKey="passport"
         title="Your Startup Passport 🪪"
-        description="A living profile of your venture: summary, validation, architecture, market evidence, milestones, and compliance status. Share it with incubators, partners, and investors."
+        description="Outcome: One profile that opens doors everywhere.\n\nA living document of your venture: summary, validation, market evidence, milestones, and compliance. Share it with investors, accelerators, and partners."
         icon={<Badge className="w-12 h-12 text-primary" />}
       />
       <div>

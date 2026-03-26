@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useStore } from '@/store';
 
 const TOUR_SEQUENCE_KEY = 'tourSequenceComplete';
 const CURRENT_TOUR_INDEX_KEY = 'currentTourIndex';
@@ -18,8 +19,9 @@ const TOUR_SEQUENCE: TourStep[] = [
   { path: '/passport', screenKey: 'passport', name: 'Passport' },
   { path: '/tools', screenKey: 'tools', name: 'Tools' },
   { path: '/applications', screenKey: 'applications', name: 'Applications' },
-  { path: '/team', screenKey: 'team', name: 'Team' },
   { path: '/fundraising', screenKey: 'fundraising', name: 'Fundraising' },
+  { path: '/community', screenKey: 'community', name: 'Community' },
+  { path: '/settings', screenKey: 'settings', name: 'Settings' },
 ];
 
 export function useTourSequence() {
@@ -53,10 +55,22 @@ export function useTourSequence() {
       localStorage.setItem(CURRENT_TOUR_INDEX_KEY, nextIndex.toString());
       navigate(TOUR_SEQUENCE[nextIndex].path);
     } else {
-      // Sequence complete
+      // Sequence complete - reset example data
       localStorage.setItem(TOUR_SEQUENCE_KEY, 'true');
       localStorage.removeItem(CURRENT_TOUR_INDEX_KEY);
       setIsSequenceActive(false);
+      
+      const store = useStore.getState();
+      if (!store.onboardingComplete) {
+        store.setValidation({ marketFit: 0, problemValidation: 0, solutionFit: 0 });
+        store.setMilestones([]);
+        store.setSignals([]);
+        store.updatePassport({
+          founderName: '', startupName: '', tagline: '', summary: '',
+          validationSummary: '', competitorSnapshot: [], marketData: [],
+          roadmapSnapshot: '', complianceFlags: [], fundingReadiness: [],
+        });
+      }
     }
   };
 

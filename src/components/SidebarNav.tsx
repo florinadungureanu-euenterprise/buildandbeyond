@@ -12,7 +12,8 @@ const navItems = [
   { path: '/tools', label: 'Tools' },
   { path: '/applications', label: 'Applications' },
   { path: '/events', label: 'Events' },
-  { path: '/fundraising', label: 'Fundraising' }
+  { path: '/fundraising', label: 'Fundraising' },
+  { path: '/community', label: 'Community' }
 ];
 
 export function SidebarNav() {
@@ -57,9 +58,9 @@ export function SidebarNav() {
 
       <div className="pt-4 border-t border-gray-200 space-y-3">
         <div className="text-xs text-gray-500 uppercase tracking-wider mb-3">Account</div>
-        <button type="button" className="text-sm text-gray-700 hover:text-blue-600 transition-colors">
+        <Link to="/settings" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
           Settings
-        </button>
+        </Link>
         <button
           type="button"
           onClick={handleLogout}

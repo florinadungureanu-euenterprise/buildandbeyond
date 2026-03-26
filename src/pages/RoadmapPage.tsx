@@ -8,7 +8,7 @@ export function RoadmapPage() {
       <ScreenTour
         screenKey="roadmap"
         title="Your Personalized Roadmap 🗺️"
-        description="Here you'll see your next steps for the next 12 months, auto-generated from your stage, goals, and needs.\n\nYour roadmap updates as your context changes — no manual work required."
+        description="Outcome: Never wonder what to do next.\n\nA 12-month action plan auto-generated from your stage, goals, and industry. It adapts as your context changes."
         icon={<Map className="w-12 h-12 text-primary" />}
       />
       <div>
