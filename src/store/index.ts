@@ -745,6 +745,29 @@ export const useStore = create<AppState>((set) => {
             route.id === routeId ? { ...route, applied: true } : route
           )
         }
-      }))
+      })),
+
+    setResearchSignals: (newSignals) =>
+      set((state) => ({
+        signals: [
+          ...newSignals.map((s, i) => ({
+            ...s,
+            id: `research-${Date.now()}-${i}`,
+            timestamp: new Date(),
+          })),
+          ...state.signals,
+        ]
+      })),
+
+    addResearchApplications: (newApps) =>
+      set((state) => ({
+        applications: [
+          ...state.applications,
+          ...newApps.map((a, i) => ({
+            ...a,
+            id: `research-${Date.now()}-${i}`,
+          })),
+        ]
+      })),
   };
 });
