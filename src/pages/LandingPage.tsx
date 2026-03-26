@@ -249,6 +249,48 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Fundraising Section */}
+      <section className="py-24 px-6 bg-muted/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm">
+              <DollarSign className="w-3.5 h-3.5 mr-1.5" />
+              Fundraising Intelligence
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Find the right funding for your stage
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              From grants and accelerators to angel rounds and VC, we match you with funding routes scored by fit to your profile.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="p-6 border-border text-center">
+              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-4 text-green-700">
+                <FileText className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Grants & Public Funding</h3>
+              <p className="text-sm text-muted-foreground">EU grants, national innovation programmes, and non-dilutive funding matched to your sector and location.</p>
+            </Card>
+            <Card className="p-6 border-border text-center">
+              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mx-auto mb-4 text-purple-700">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Angel & VC Matching</h3>
+              <p className="text-sm text-muted-foreground">Get matched with investors based on stage, thesis, geography, and check size. Track your pipeline in one place.</p>
+            </Card>
+            <Card className="p-6 border-border text-center">
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4 text-blue-700">
+                <BarChart3 className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Readiness Scoring</h3>
+              <p className="text-sm text-muted-foreground">Track burn rate, runway, and investor readiness. Know exactly when and how much to raise.</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Events Preview */}
       <EventsPreview />
 
