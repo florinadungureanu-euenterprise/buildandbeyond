@@ -50,7 +50,7 @@ export function PassportView() {
 
   return (
     <div className="h-full flex">
-      <FounderProfileModal open={showFounderModal} onOpenChange={setShowFounderModal} />
+      {/* No modal needed - profile managed in Settings */}
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto p-8">
