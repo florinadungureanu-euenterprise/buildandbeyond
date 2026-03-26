@@ -277,7 +277,7 @@ export default function LandingPage() {
                 <Users className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-foreground mb-2">Targeted Matching</h3>
-              <p className="text-sm text-muted-foreground">Get matched with founders based on industry, stage, geography, and needs. No noise, only relevant connections.</p>
+              <p className="text-sm text-muted-foreground">Get matched with founders and partners based on industry, stage, geography, and needs. No noise, only relevant connections.</p>
             </Card>
             <Card className="p-6 text-center border-border">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
