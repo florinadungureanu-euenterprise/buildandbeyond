@@ -24,6 +24,8 @@ interface AppState {
   markToolSubscribed: (toolId: string) => void;
   markApplicationApplied: (applicationId: string) => void;
   markFundingRouteApplied: (routeId: string) => void;
+  setResearchSignals: (signals: Signal[]) => void;
+  addResearchApplications: (apps: Application[]) => void;
 }
 
 const createDemoData = () => {
