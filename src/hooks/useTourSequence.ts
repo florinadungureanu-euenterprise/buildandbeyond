@@ -55,10 +55,22 @@ export function useTourSequence() {
       localStorage.setItem(CURRENT_TOUR_INDEX_KEY, nextIndex.toString());
       navigate(TOUR_SEQUENCE[nextIndex].path);
     } else {
-      // Sequence complete
+      // Sequence complete - reset example data
       localStorage.setItem(TOUR_SEQUENCE_KEY, 'true');
       localStorage.removeItem(CURRENT_TOUR_INDEX_KEY);
       setIsSequenceActive(false);
+      
+      const store = useStore.getState();
+      if (!store.onboardingComplete) {
+        store.setValidation({ marketFit: 0, problemValidation: 0, solutionFit: 0 });
+        store.setMilestones([]);
+        store.setSignals([]);
+        store.updatePassport({
+          founderName: '', startupName: '', tagline: '', summary: '',
+          validationSummary: '', competitorSnapshot: [], marketData: [],
+          roadmapSnapshot: '', complianceFlags: [], fundingReadiness: [],
+        });
+      }
     }
   };
 
