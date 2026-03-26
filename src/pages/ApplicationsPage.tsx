@@ -8,7 +8,7 @@ export function ApplicationsPage() {
       <ScreenTour
         screenKey="applications"
         title="Apply to Programs & Opportunities 📝"
-        description="Accelerators, grants, partners — all aligned with your stage.\n\nYour Passport autofills up to 80% of common application questions, saving you hours of repetitive work."
+        description="Outcome: Apply to the right programs in minutes, not hours.\n\nAccelerators, grants, and partners matched to your stage. Your Passport autofills up to 80% of common application questions."
         icon={<FileCheck className="w-12 h-12 text-primary" />}
       />
       <div>

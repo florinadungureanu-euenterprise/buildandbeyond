@@ -11,8 +11,8 @@ export function DashboardPage() {
     <div className="p-8 space-y-6">
       <ScreenTour
         screenKey="dashboard"
-        title="Your Startup Command Center 🧭"
-        description="This is where you track your progress: validation results, recommended tools, key market signals, and your next roadmap steps. Everything here updates automatically as you build."
+        title="Your Command Center 🧭"
+        description="Outcome: Always know what to focus on next.\n\nSee your validation scores, upcoming milestones, market signals, and tool recommendations in one view. Everything updates as you build."
         icon={<LayoutDashboard className="w-12 h-12 text-primary" />}
       />
       <AlertBanner />

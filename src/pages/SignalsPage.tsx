@@ -8,7 +8,7 @@ export function SignalsPage() {
       <ScreenTour
         screenKey="signals"
         title="Real-Time Market Intelligence 📈"
-        description="We monitor live shifts in your segment — pricing changes, competitor activity, demand spikes, funding patterns — and show you what actually matters for your strategy.\n\nStay ahead of the curve with actionable insights."
+        description="Outcome: Spot opportunities before your competitors.\n\nLive monitoring of pricing changes, competitor moves, demand shifts, and funding patterns in your segment."
         icon={<TrendingUp className="w-12 h-12 text-primary" />}
       />
       <div>
