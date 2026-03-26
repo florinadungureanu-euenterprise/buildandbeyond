@@ -12,7 +12,8 @@ const navItems = [
   { path: '/tools', label: 'Tools' },
   { path: '/applications', label: 'Applications' },
   { path: '/events', label: 'Events' },
-  { path: '/fundraising', label: 'Fundraising' }
+  { path: '/fundraising', label: 'Fundraising' },
+  { path: '/community', label: 'Community' }
 ];
 
 export function SidebarNav() {
