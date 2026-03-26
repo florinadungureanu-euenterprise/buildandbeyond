@@ -28,7 +28,23 @@ const signalStyles: Record<string, { bg: string; border: string; title: string; 
 
 export function MarketSignalsWidget() {
   const signals = useStore((state) => state.signals);
+  const onboardingComplete = useStore((state) => state.onboardingComplete);
   const displaySignals = signals.slice(0, 3);
+
+  if (!onboardingComplete || signals.length === 0) {
+    return (
+      <Card className="p-6 shadow-sm">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Market Signals</h3>
+        <div className="text-center py-6">
+          <div className="flex items-center justify-center gap-1 mb-2">
+            <div className="w-2 h-2 bg-muted-foreground rounded-full" />
+            <div className="text-xs text-muted-foreground">Waiting for data</div>
+          </div>
+          <p className="text-sm text-muted-foreground">Market signals will appear here after onboarding</p>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-6 shadow-sm">

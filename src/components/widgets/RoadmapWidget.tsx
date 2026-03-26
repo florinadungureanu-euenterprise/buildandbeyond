@@ -8,6 +8,23 @@ import { Circle } from 'lucide-react';
 export function RoadmapWidget() {
   const navigate = useNavigate();
   const milestones = useStore((state) => state.twelveMonthMilestones);
+  const onboardingComplete = useStore((state) => state.onboardingComplete);
+
+  if (!onboardingComplete || milestones.length === 0) {
+    return (
+      <Card className="shadow-sm">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Roadmap</h3>
+          <div className="text-center py-6">
+            <p className="text-sm text-muted-foreground">Your personalized roadmap will be generated after onboarding</p>
+            <Button variant="outline" className="mt-3" onClick={() => navigate('/onboarding')}>
+              Start Onboarding
+            </Button>
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   // Get next 3 months of milestones
   const now = new Date();

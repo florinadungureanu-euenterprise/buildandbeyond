@@ -16,6 +16,17 @@ export function RoadmapBoard12Month() {
   const milestones = useStore((state) => state.twelveMonthMilestones);
   const toggleMilestone = useStore((state) => state.toggleMilestone);
 
+  if (milestones.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <Card className="p-12">
+          <h2 className="text-xl font-semibold text-foreground mb-2">No Roadmap Yet</h2>
+          <p className="text-muted-foreground">Complete onboarding to generate your personalized 12-month roadmap with milestones matched to your stage and goals.</p>
+        </Card>
+      </div>
+    );
+  }
+
   const completedCount = milestones.filter((m) => m.completed).length;
   const completionPercentage = (completedCount / milestones.length) * 100;
 
