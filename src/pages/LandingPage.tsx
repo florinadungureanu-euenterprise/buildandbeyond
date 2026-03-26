@@ -101,7 +101,7 @@ export default function LandingPage() {
             ))}
           </div>
           <p className="text-sm text-muted-foreground text-center mt-6 max-w-2xl mx-auto">
-            By using proprietary and open-source data, Build&nbsp;&amp;&nbsp;Beyond simplifies this by giving you personalized access to the European innovation ecosystem — so you can focus on building, not searching.
+            By using proprietary and open-source data, Build&nbsp;&amp;&nbsp;Beyond simplifies this by giving you personalized access to the European innovation ecosystem, so you can focus on building, not searching.
           </p>
         </div>
       </section>
