@@ -219,7 +219,7 @@ export default function LandingPage() {
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-foreground">Pro</h3>
                 <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">€29</span>
+                  <span className="text-4xl font-extrabold text-foreground">€11</span>
                   <span className="text-muted-foreground ml-1">/month</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">For founders ready to build &amp; raise</p>
