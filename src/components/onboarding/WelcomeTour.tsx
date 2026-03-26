@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Sparkles } from 'lucide-react';
 import { useTourSequence } from '@/hooks/useTourSequence';
+import { useStore } from '@/store';
 
 const TOUR_SEEN_KEY = 'welcomeTourSeen';
 
@@ -11,7 +12,6 @@ export function WelcomeTour() {
   const { startTourSequence } = useTourSequence();
 
   useEffect(() => {
-    // Check if user has seen the tour
     const tourSeen = localStorage.getItem(TOUR_SEEN_KEY);
     if (!tourSeen) {
       setIsOpen(true);
@@ -30,11 +30,13 @@ export function WelcomeTour() {
 
   const handleSkip = () => {
     handleClose();
+    // Reset example data since they skipped the tour
+    resetExampleData();
   };
 
   const tourContent = {
     title: "Welcome to Build & Beyond 🚀",
-    description: "Your workspace for turning ideas, projects, or organizations into momentum.\n\nHere, you'll get a tailored roadmap, live market insights, tool recommendations, and a Passport that grows with you.\n\nLet's take a quick tour through each section.",
+    description: "Your workspace for turning ideas, projects, or organizations into momentum.\n\nWe'll show you example data during this tour so you can see what the platform looks like in action. After the tour, sections will reset and get populated with your real data as you go through onboarding.\n\nLet's take a quick look at each section.",
     icon: <Sparkles className="w-12 h-12 text-primary" />,
     action: "Start Tour"
   };
@@ -69,4 +71,19 @@ export function WelcomeTour() {
       </DialogContent>
     </Dialog>
   );
+}
+
+function resetExampleData() {
+  const store = useStore.getState();
+  // Only reset if onboarding hasn't been completed
+  if (!store.onboardingComplete) {
+    store.setValidation({ marketFit: 0, problemValidation: 0, solutionFit: 0 });
+    store.setMilestones([]);
+    store.setSignals([]);
+    store.updatePassport({
+      founderName: '', startupName: '', tagline: '', summary: '',
+      validationSummary: '', competitorSnapshot: [], marketData: [],
+      roadmapSnapshot: '', complianceFlags: [], fundingReadiness: [],
+    });
+  }
 }
