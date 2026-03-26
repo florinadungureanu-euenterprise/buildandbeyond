@@ -16,7 +16,7 @@ const metricColors: Record<string, string> = {
 };
 
 export function ToolsList() {
-  const tools = useStore((state) => state.tools);
+  const { tools, loading } = useScrapedTools();
   const markToolSubscribed = useStore((state) => state.markToolSubscribed);
   const [selectedTool, setSelectedTool] = useState<typeof tools[0] | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
