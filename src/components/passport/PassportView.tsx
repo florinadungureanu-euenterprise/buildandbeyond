@@ -11,12 +11,15 @@ export function PassportView() {
   const passport = useStore((state) => state.passport);
   const [showFounderModal, setShowFounderModal] = useState(false);
 
-  // Check if founder information is missing
+  const dataLoaded = useStore((state) => state.dataLoaded);
+
+  // Only show founder modal if data has loaded and founderName is still empty
   useEffect(() => {
+    if (!dataLoaded) return;
     if (!passport.founderName || passport.founderName === 'Alex Morgan') {
       setShowFounderModal(true);
     }
-  }, [passport.founderName]);
+  }, [passport.founderName, dataLoaded]);
 
   // Check if data is demo/placeholder data
   const isDemoData = (field: string) => {
