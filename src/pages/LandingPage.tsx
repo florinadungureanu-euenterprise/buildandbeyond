@@ -99,31 +99,31 @@ export default function LandingPage() {
               {
                 icon: <Sparkles className="w-6 h-6" />,
                 title: 'AI Entrepreneur Whisperer',
-                description: 'Guided Q&A that maps your idea into a structured venture profile — even if you\'re starting from scratch.',
+                description: 'Guided Q&A that maps your idea into a structured venture profile, even if you\'re starting from scratch.',
                 color: 'text-primary',
               },
               {
                 icon: <FileText className="w-6 h-6" />,
                 title: 'Startup Passport',
-                description: 'A living, shareable profile: summary, validation, competitors, market data, compliance status — always up to date.',
+                description: 'A living, shareable profile: summary, validation, competitors, market data, compliance status, always up to date.',
                 color: 'text-primary',
               },
               {
                 icon: <Map className="w-6 h-6" />,
                 title: '12-Month Roadmap',
-                description: 'Auto-generated milestones matched to your stage, goals, and market — with tool recommendations at every step.',
+                description: 'Auto-generated milestones matched to your stage, goals, and market, with tool recommendations at every step.',
                 color: 'text-primary',
               },
               {
                 icon: <BarChart3 className="w-6 h-6" />,
                 title: 'Market Signals',
-                description: 'Real-time competitor moves, funding trends, and regulatory changes — researched by AI, delivered to your dashboard.',
+                description: 'Real-time competitor moves, funding trends, and regulatory changes, researched by AI, delivered to your dashboard.',
                 color: 'text-primary',
               },
               {
                 icon: <Zap className="w-6 h-6" />,
                 title: 'Tool Recommendations',
-                description: 'Curated tools matched to your roadmap stage — from dev platforms to payments to automation.',
+                description: 'Curated tools matched to your roadmap stage, from dev platforms to payments to automation.',
                 color: 'text-primary',
               },
               {
@@ -153,7 +153,7 @@ export default function LandingPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: '1', title: 'Choose your path', desc: 'Guided chat, intake form, or document upload — pick what fits your stage.' },
+              { step: '1', title: 'Choose your path', desc: 'Guided chat, intake form, or document upload, pick what fits your stage.' },
               { step: '2', title: 'AI does the research', desc: 'Market analysis, competitor mapping, and opportunity matching happen automatically.' },
               { step: '3', title: 'Get your roadmap', desc: 'Dashboard, passport, and signals populate with personalized, actionable insights.' },
             ].map((item) => (
@@ -306,7 +306,7 @@ export default function LandingPage() {
               Reach Europe's most promising founders
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join Build & Beyond as a partner — connect with startups matched to your focus, stage, and geography.
+              Join Build & Beyond as a partner, connect with startups matched to your focus, stage, and geography.
             </p>
           </div>
 
@@ -324,7 +324,7 @@ export default function LandingPage() {
                 <Users className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-foreground mb-2">Targeted Matching</h3>
-              <p className="text-sm text-muted-foreground">Get matched with founders based on industry, stage, geography, and needs — no noise.</p>
+              <p className="text-sm text-muted-foreground">Get matched with founders based on industry, stage, geography, and needs, no noise.</p>
             </Card>
             <Card className="p-6 text-center border-border">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
