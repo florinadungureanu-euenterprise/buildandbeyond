@@ -364,6 +364,20 @@ export function CommunityPage() {
           <h1 className="text-3xl font-bold text-foreground">Community</h1>
           <p className="mt-2 text-muted-foreground">Connect, share, and grow with fellow founders</p>
         </div>
+      </div>
+
+      <Tabs defaultValue="forum" className="w-full">
+        <TabsList>
+          <TabsTrigger value="forum" className="gap-1.5"><MessageSquare className="w-4 h-4" /> Forum</TabsTrigger>
+          <TabsTrigger value="matching" className="gap-1.5"><Users className="w-4 h-4" /> Founder Matching</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="matching" className="mt-6">
+          <FounderMatching />
+        </TabsContent>
+
+        <TabsContent value="forum" className="mt-6 space-y-6">
+      <div className="flex justify-end">
         <Button onClick={() => setShowNewPost(true)} className="gap-2">
           <Plus className="w-4 h-4" /> New Post
         </Button>
