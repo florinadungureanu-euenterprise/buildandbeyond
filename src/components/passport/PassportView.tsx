@@ -7,6 +7,7 @@ import { CheckCircle2, FileText, Save, TrendingUp, UserPlus } from 'lucide-react
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
+import { ShareablePassport } from './ShareablePassport';
 
 export function PassportView() {
   const passport = useStore((state) => state.passport);
