@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   Rocket, Zap, Globe, Shield, Map, BarChart3, 
   FileText, Users, CheckCircle2, ArrowRight, Sparkles,
-  Building2, Briefcase, TrendingUp, Calendar, MapPin
+  Building2, Briefcase, TrendingUp, Calendar, MapPin, DollarSign
 } from 'lucide-react';
 import { PartnerForm } from '@/components/landing/PartnerForm';
 import { EventsPreview } from '@/components/landing/EventsPreview';
@@ -55,7 +55,7 @@ export default function LandingPage() {
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            The AI co-pilot that builds your roadmap, validates your market, finds your funding — and keeps you on track.
+            The trusted co-pilot that builds your roadmap, validates your market, finds your funding and keeps you on track.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -99,31 +99,31 @@ export default function LandingPage() {
               {
                 icon: <Sparkles className="w-6 h-6" />,
                 title: 'AI Entrepreneur Whisperer',
-                description: 'Guided Q&A that maps your idea into a structured venture profile — even if you\'re starting from scratch.',
+                description: 'Guided Q&A that maps your idea into a structured venture profile, even if you\'re starting from scratch.',
                 color: 'text-primary',
               },
               {
                 icon: <FileText className="w-6 h-6" />,
                 title: 'Startup Passport',
-                description: 'A living, shareable profile: summary, validation, competitors, market data, compliance status — always up to date.',
+                description: 'A living, shareable profile: summary, validation, competitors, market data, compliance status, always up to date.',
                 color: 'text-primary',
               },
               {
                 icon: <Map className="w-6 h-6" />,
                 title: '12-Month Roadmap',
-                description: 'Auto-generated milestones matched to your stage, goals, and market — with tool recommendations at every step.',
+                description: 'Auto-generated milestones matched to your stage, goals, and market, with tool recommendations at every step.',
                 color: 'text-primary',
               },
               {
                 icon: <BarChart3 className="w-6 h-6" />,
                 title: 'Market Signals',
-                description: 'Real-time competitor moves, funding trends, and regulatory changes — researched by AI, delivered to your dashboard.',
+                description: 'Real-time competitor moves, funding trends, and regulatory changes, researched by AI, delivered to your dashboard.',
                 color: 'text-primary',
               },
               {
                 icon: <Zap className="w-6 h-6" />,
                 title: 'Tool Recommendations',
-                description: 'Curated tools matched to your roadmap stage — from dev platforms to payments to automation.',
+                description: 'Curated tools matched to your roadmap stage, from dev platforms to payments to automation.',
                 color: 'text-primary',
               },
               {
@@ -153,7 +153,7 @@ export default function LandingPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: '1', title: 'Choose your path', desc: 'Guided chat, intake form, or document upload — pick what fits your stage.' },
+              { step: '1', title: 'Choose your path', desc: 'Guided chat, intake form, or document upload, pick what fits your stage.' },
               { step: '2', title: 'AI does the research', desc: 'Market analysis, competitor mapping, and opportunity matching happen automatically.' },
               { step: '3', title: 'Get your roadmap', desc: 'Dashboard, passport, and signals populate with personalized, actionable insights.' },
             ].map((item) => (
@@ -219,7 +219,7 @@ export default function LandingPage() {
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-foreground">Pro</h3>
                 <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">€29</span>
+                  <span className="text-4xl font-extrabold text-foreground">€11</span>
                   <span className="text-muted-foreground ml-1">/month</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">For founders ready to build &amp; raise</p>
@@ -231,8 +231,7 @@ export default function LandingPage() {
                   '12-Month Roadmap',
                   'Tool Recommendations',
                   'Grants & Programs Matching',
-                  'Fundraising Tracker',
-                  'Team Management',
+                  'Fundraising Hub',
                   'Passport PDF Export',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-2 text-sm text-foreground">
@@ -250,6 +249,48 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Fundraising Section */}
+      <section className="py-24 px-6 bg-muted/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm">
+              <DollarSign className="w-3.5 h-3.5 mr-1.5" />
+              Fundraising Intelligence
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Find the right funding for your stage
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              From grants and accelerators to angel rounds and VC, we match you with funding routes scored by fit to your profile.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="p-6 border-border text-center">
+              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-4 text-green-700">
+                <FileText className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Grants & Public Funding</h3>
+              <p className="text-sm text-muted-foreground">EU grants, national innovation programmes, and non-dilutive funding matched to your sector and location.</p>
+            </Card>
+            <Card className="p-6 border-border text-center">
+              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mx-auto mb-4 text-purple-700">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Angel & VC Matching</h3>
+              <p className="text-sm text-muted-foreground">Get matched with investors based on stage, thesis, geography, and check size. Track your pipeline in one place.</p>
+            </Card>
+            <Card className="p-6 border-border text-center">
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4 text-blue-700">
+                <BarChart3 className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Readiness Scoring</h3>
+              <p className="text-sm text-muted-foreground">Track burn rate, runway, and investor readiness. Know exactly when and how much to raise.</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Events Preview */}
       <EventsPreview />
 
@@ -259,13 +300,13 @@ export default function LandingPage() {
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm">
               <Building2 className="w-3.5 h-3.5 mr-1.5" />
-              For Programmes, Investors & Service Providers
+              For Programmes, Investors, Service Providers & More
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Reach Europe's most promising founders
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join Build & Beyond as a partner — connect with startups matched to your focus, stage, and geography.
+              Join Build & Beyond as a partner, connect with startups matched to your focus, stage, and geography.
             </p>
           </div>
 
@@ -283,7 +324,7 @@ export default function LandingPage() {
                 <Users className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-foreground mb-2">Targeted Matching</h3>
-              <p className="text-sm text-muted-foreground">Get matched with founders based on industry, stage, geography, and needs — no noise.</p>
+              <p className="text-sm text-muted-foreground">Get matched with founders based on industry, stage, geography, and needs, no noise.</p>
             </Card>
             <Card className="p-6 text-center border-border">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">

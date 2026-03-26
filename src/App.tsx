@@ -12,7 +12,7 @@ import { SignalsPage } from '@/pages/SignalsPage';
 import { ToolsPage } from '@/pages/ToolsPage';
 import { ApplicationsPage } from '@/pages/ApplicationsPage';
 import { EventsPage } from '@/pages/EventsPage';
-import { TeamPage } from '@/pages/TeamPage';
+
 import { FundraisingPage } from '@/pages/FundraisingPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -79,7 +79,7 @@ const router = createBrowserRouter(
         { path: '/tools', element: <ToolsPage /> },
         { path: '/applications', element: <ApplicationsPage /> },
         { path: '/events', element: <EventsPage /> },
-        { path: '/team', element: <TeamPage /> },
+        
         { path: '/fundraising', element: <FundraisingPage /> },
       ]
     },
