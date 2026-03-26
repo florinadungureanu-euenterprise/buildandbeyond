@@ -56,7 +56,7 @@ export default function LandingPage() {
           </h1>
           
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
-            With initiatives like EU&nbsp;Inc accelerating cross-border innovation, entering and scaling in the European market is becoming more accessible — but navigating funding, partners, and opportunities is still fragmented.
+            With initiatives like EU&nbsp;Inc accelerating cross-border innovation, entering and scaling in the European market is becoming more accessible, but navigating funding, partners, and opportunities is still fragmented.
           </p>
           
           <p className="text-base md:text-lg text-foreground/80 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
