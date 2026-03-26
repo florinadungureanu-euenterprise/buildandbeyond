@@ -4,12 +4,14 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { timeAgo, cn } from '@/lib/utils';
-import { Activity, TrendingUp, AlertTriangle, FileText } from 'lucide-react';
+import { Activity, TrendingUp, AlertTriangle, FileText, DollarSign, Lightbulb, ExternalLink } from 'lucide-react';
 
-const signalIcons = {
+const signalIcons: Record<string, any> = {
   competitor: TrendingUp,
   trend: Activity,
-  regulatory: FileText
+  regulatory: FileText,
+  funding: DollarSign,
+  opportunity: Lightbulb,
 };
 
 const signalStyles: Record<string, { bg: string; border: string; title: string; text: string }> = {
@@ -30,6 +32,18 @@ const signalStyles: Record<string, { bg: string; border: string; title: string; 
     border: 'border-amber-200',
     title: 'text-amber-900',
     text: 'text-amber-700'
+  },
+  funding: {
+    bg: 'bg-purple-50',
+    border: 'border-purple-200',
+    title: 'text-purple-900',
+    text: 'text-purple-700'
+  },
+  opportunity: {
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-200',
+    title: 'text-emerald-900',
+    text: 'text-emerald-700'
   }
 };
 
@@ -43,10 +57,12 @@ export function SignalsList() {
   const signals = useStore((state) => state.signals);
   const [selectedType, setSelectedType] = useState<string>('all');
 
-  const types = ['all', 'competitor', 'trend', 'regulatory'];
+  const types = ['all', 'competitor', 'trend', 'regulatory', 'funding', 'opportunity'];
 
   const filteredSignals =
     selectedType === 'all' ? signals : signals.filter((s) => s.type === selectedType);
+
+  const researchSignalCount = signals.filter(s => s.source).length;
 
   return (
     <div className="p-8">
@@ -64,18 +80,20 @@ export function SignalsList() {
         </p>
       </div>
 
-      {/* Auto-refresh Banner */}
+      {/* Research Banner */}
       <Card className="p-4 mb-6 bg-blue-50 border-blue-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Activity className="w-5 h-5 text-blue-600" />
             <span className="text-sm font-medium text-blue-900">
-              Automatic updates every 4 hours
+              {researchSignalCount > 0
+                ? `${researchSignalCount} AI-researched signals from your market`
+                : 'Signals auto-populate after onboarding'}
             </span>
           </div>
-          <Button variant="outline" size="sm">
-            Configure Settings
-          </Button>
+          <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+            Powered by AI Research
+          </Badge>
         </div>
       </Card>
 
@@ -97,8 +115,8 @@ export function SignalsList() {
       {/* Signals List */}
       <div className="space-y-4">
         {filteredSignals.map((signal) => {
-          const styles = signalStyles[signal.type];
-          const Icon = signalIcons[signal.type];
+          const styles = signalStyles[signal.type] || signalStyles.trend;
+          const Icon = signalIcons[signal.type] || Activity;
 
           return (
             <Card key={signal.id} className={cn('p-6 border-l-4', styles.bg, styles.border)}>
@@ -114,7 +132,7 @@ export function SignalsList() {
                       <h3 className={cn('text-lg font-semibold mb-1', styles.title)}>
                         {signal.title}
                       </h3>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <Badge variant="secondary" className="capitalize text-xs">
                           {signal.type}
                         </Badge>
@@ -124,6 +142,17 @@ export function SignalsList() {
                         <span className="text-xs text-gray-500">
                           {timeAgo(signal.timestamp)}
                         </span>
+                        {signal.source && (
+                          <a
+                            href={signal.source}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            Source
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -143,6 +172,7 @@ export function SignalsList() {
         <Card className="p-12 text-center">
           <Activity className="w-12 h-12 text-gray-400 mx-auto mb-3" />
           <p className="text-gray-600">No signals found for the selected filter</p>
+          <p className="text-sm text-gray-400 mt-1">Complete onboarding to auto-generate market signals</p>
         </Card>
       )}
     </div>

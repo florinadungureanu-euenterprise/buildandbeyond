@@ -728,7 +728,7 @@ export function useOnboardingChat() {
     }
   };
 
-  // Send data to n8n when onboarding is complete
+  // Send data to database and trigger research when onboarding is complete
   useEffect(() => {
     if (isComplete && !hasSentToN8n) {
       const saveOnboardingData = async () => {
@@ -798,6 +798,9 @@ export function useOnboardingChat() {
 
           console.log('Successfully saved onboarding data to database');
           setHasSentToN8n(true);
+
+          // Trigger research agent in the background
+          triggerResearchAgent(profileData);
         } catch (error) {
           console.error('Error saving onboarding data:', error);
         }
@@ -806,6 +809,70 @@ export function useOnboardingChat() {
       saveOnboardingData();
     }
   }, [isComplete, hasSentToN8n, onboardingProfile, startupStage, uploadedDocuments, validation, milestones, signals, toolActivationCount]);
+
+  // Background research agent trigger
+  const triggerResearchAgent = async (profileData: any) => {
+    const { researchAgent } = await import('@/lib/api/research-agent');
+    const { useStore } = await import('@/store');
+
+    const researchProfile = {
+      industry: profileData.industry,
+      region: profileData.region,
+      solution: profileData.solution,
+      customer: profileData.customer,
+      stage: profileData.stage_detected,
+      fundraisingType: profileData.fundraising_type,
+    };
+
+    console.log('Triggering research agent with profile:', researchProfile);
+
+    // Run all 3 research actions in parallel
+    const [marketResult, passportResult, opportunitiesResult] = await Promise.allSettled([
+      researchAgent.researchMarket(researchProfile, userId),
+      researchAgent.enrichPassport(researchProfile, userId),
+      researchAgent.findOpportunities(researchProfile, userId),
+    ]);
+
+    // Process market signals
+    if (marketResult.status === 'fulfilled' && marketResult.value.success && marketResult.value.signals) {
+      console.log('Research agent found', marketResult.value.signals.length, 'market signals');
+      useStore.getState().setResearchSignals(marketResult.value.signals);
+    }
+
+    // Process passport enrichment
+    if (passportResult.status === 'fulfilled' && passportResult.value.success && passportResult.value.passport) {
+      const enrichment = passportResult.value.passport;
+      console.log('Research agent enriched passport:', enrichment);
+      useStore.getState().updatePassport({
+        competitorSnapshot: enrichment.topCompetitors || [],
+        marketData: [
+          enrichment.marketSize ? `Market Size: ${enrichment.marketSize}` : '',
+          enrichment.marketGrowthRate ? `Growth Rate: ${enrichment.marketGrowthRate}` : '',
+          enrichment.fundingLandscape ? `Funding: ${enrichment.fundingLandscape}` : '',
+          enrichment.regulatoryNotes ? `Regulatory: ${enrichment.regulatoryNotes}` : '',
+          enrichment.suggestedPositioning ? `Positioning: ${enrichment.suggestedPositioning}` : '',
+          ...(enrichment.keyInsights || []),
+        ].filter(Boolean),
+      });
+    }
+
+    // Process opportunities as applications
+    if (opportunitiesResult.status === 'fulfilled' && opportunitiesResult.value.success && opportunitiesResult.value.opportunities) {
+      const newApps = opportunitiesResult.value.opportunities.map(opp => ({
+        id: '',
+        name: opp.name,
+        type: (opp.type === 'vc' || opp.type === 'angel' ? 'accelerator' : opp.type) as any,
+        description: opp.description,
+        benefits: opp.benefits,
+        eligibility: opp.eligibility || [],
+        deadline: opp.deadline || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        matchScore: opp.matchScore || 70,
+        url: opp.url,
+      }));
+      console.log('Research agent found', newApps.length, 'opportunities');
+      useStore.getState().addResearchApplications(newApps);
+    }
+  };
 
   return {
     messages,
