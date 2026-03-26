@@ -14,7 +14,117 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      uploaded_documents: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          name: string
+          size: number
+          type: string
+          user_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          size: number
+          type: string
+          user_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          size?: number
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_data: {
+        Row: {
+          applications: Json | null
+          applied_applications: string[] | null
+          applied_funding_routes: string[] | null
+          created_at: string
+          funding_data: Json | null
+          milestones: Json | null
+          onboarding_profile: Json | null
+          passport: Json | null
+          subscribed_tools: string[] | null
+          team_members: Json | null
+          tool_activation_count: number | null
+          updated_at: string
+          user_id: string
+          user_inputs: Json | null
+          validation: Json | null
+        }
+        Insert: {
+          applications?: Json | null
+          applied_applications?: string[] | null
+          applied_funding_routes?: string[] | null
+          created_at?: string
+          funding_data?: Json | null
+          milestones?: Json | null
+          onboarding_profile?: Json | null
+          passport?: Json | null
+          subscribed_tools?: string[] | null
+          team_members?: Json | null
+          tool_activation_count?: number | null
+          updated_at?: string
+          user_id: string
+          user_inputs?: Json | null
+          validation?: Json | null
+        }
+        Update: {
+          applications?: Json | null
+          applied_applications?: string[] | null
+          applied_funding_routes?: string[] | null
+          created_at?: string
+          funding_data?: Json | null
+          milestones?: Json | null
+          onboarding_profile?: Json | null
+          passport?: Json | null
+          subscribed_tools?: string[] | null
+          team_members?: Json | null
+          tool_activation_count?: number | null
+          updated_at?: string
+          user_id?: string
+          user_inputs?: Json | null
+          validation?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
