@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 const tabs = [
   { path: '/whisperer', label: 'Your Entrepreneur Whisperer' },
-  { path: '/', label: 'Dashboard' }
+  { path: '/dashboard', label: 'Dashboard' }
 ];
 
 export function TopTabs() {

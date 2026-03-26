@@ -13,10 +13,19 @@ import { ToolsPage } from '@/pages/ToolsPage';
 import { ApplicationsPage } from '@/pages/ApplicationsPage';
 import { TeamPage } from '@/pages/TeamPage';
 import { FundraisingPage } from '@/pages/FundraisingPage';
+import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
+
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="flex h-screen items-center justify-center bg-muted/30"><div className="text-muted-foreground">Loading...</div></div>;
+  if (user) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
+}
+
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -60,7 +69,7 @@ const router = createBrowserRouter(
     {
       element: <Layout />,
       children: [
-        { path: '/', element: <DashboardPage /> },
+        { path: '/dashboard', element: <DashboardPage /> },
         { path: '/whisperer', element: <OnboardingPage /> },
         { path: '/onboarding', element: <OnboardingPage /> },
         { path: '/passport', element: <PassportPage /> },
@@ -72,8 +81,9 @@ const router = createBrowserRouter(
         { path: '/fundraising', element: <FundraisingPage /> },
       ]
     },
-    { path: '/login', element: <LoginPage /> },
-    { path: '/signup', element: <SignupPage /> },
+    { path: '/', element: <PublicRoute><LandingPage /></PublicRoute> },
+    { path: '/login', element: <PublicRoute><LoginPage /></PublicRoute> },
+    { path: '/signup', element: <PublicRoute><SignupPage /></PublicRoute> },
     { path: '/forgot-password', element: <ForgotPasswordPage /> },
     { path: '/reset-password', element: <ResetPasswordPage /> },
     { path: '*', element: <Navigate to="/" replace /> }
