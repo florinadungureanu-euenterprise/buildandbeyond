@@ -84,7 +84,7 @@ export default function LandingPage() {
             Breaking barriers to scaling in Europe
           </h2>
           <p className="text-muted-foreground text-center mb-6 max-w-3xl mx-auto">
-            Europe is one of the world's largest and most diverse markets, offering access to EU funding programmes, grants, accelerators, venture capital, and cross-border partnerships. But for most founders, the challenge isn't opportunity — it's visibility, access, and investing in the right resources based on their industry and stage.
+            Europe is one of the world's largest and most diverse markets, offering access to EU funding programmes, grants, accelerators, venture capital, and cross-border partnerships. But for most founders, the challenge isn't opportunity, it's visibility, access, and investing in the right resources based on their industry and stage.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
             {[
