@@ -13,12 +13,25 @@ const metricColors: Record<string, string> = {
 export function ToolMatchesWidget() {
   const navigate = useNavigate();
   const tools = useStore((state) => state.tools);
+  const onboardingComplete = useStore((state) => state.onboardingComplete);
   const displayTools = tools.slice(0, 3);
+
+  if (!onboardingComplete) {
+    return (
+      <Card className="p-6 shadow-sm">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Tool Matches</h3>
+        <div className="text-center py-6">
+          <p className="text-sm text-muted-foreground">Complete onboarding to get personalized tool recommendations</p>
+          <button onClick={() => navigate('/onboarding')} className="mt-3 text-sm text-primary font-medium hover:underline">Start Onboarding</button>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Tool Matches</h3>
+        <h3 className="text-lg font-semibold text-foreground">Tool Matches</h3>
         <Badge variant="secondary" className="bg-blue-100 text-blue-700">
           {tools.length} Tools
         </Badge>

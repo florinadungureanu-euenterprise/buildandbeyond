@@ -799,6 +799,92 @@ export function useOnboardingChat() {
           console.log('Successfully saved onboarding data to database');
           setHasSentToN8n(true);
 
+          // Populate platform sections from onboarding data
+          const store = (await import('@/store')).useStore.getState();
+          
+          // Set onboarding complete flag
+          store.setOnboardingComplete(true);
+
+          // Populate passport from profile
+          store.updatePassport({
+            founderName: profileData.customer ? '' : '', // Will be set from FounderProfileModal
+            startupName: profileData.solution ? profileData.solution.split(' ')[0] || 'My Startup' : 'My Startup',
+            tagline: profileData.unique_value_proposition || '',
+            summary: profileData.solution || '',
+            validationSummary: profileData.riskiest_assumption
+              ? `Key assumption to validate: ${profileData.riskiest_assumption}. Method: ${profileData.method_and_success_criterion || 'TBD'}`
+              : '',
+            roadmapSnapshot: profileData.twelve_week_goal || profileData.later_stage_goals || '',
+            industry: profileData.industry || '',
+            complianceFlags: profileData.region?.toLowerCase().includes('europe') ? ['EU/28th regime aligned'] : [],
+            euCompliant: profileData.region?.toLowerCase().includes('europe') || false,
+          });
+
+          // Set validation scores based on available data
+          const hasCustomer = !!profileData.customer;
+          const hasProblem = !!profileData.problem;
+          const hasSolution = !!profileData.solution;
+          store.setValidation({
+            marketFit: hasCustomer && hasProblem ? 0.3 : 0,
+            problemValidation: hasProblem ? 0.4 : 0,
+            solutionFit: hasSolution ? 0.25 : 0,
+          });
+
+          // Generate initial milestones from 12-week goal
+          if (profileData.twelve_week_goal || profileData.later_stage_goals) {
+            const now = new Date();
+            const initialMilestones = [
+              {
+                id: 'onb-1',
+                title: 'Validate Core Assumption',
+                description: profileData.riskiest_assumption || 'Test your key hypothesis with real users',
+                targetDate: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                completed: false,
+                category: 'product' as const,
+              },
+              {
+                id: 'onb-2',
+                title: profileData.twelve_week_goal || profileData.later_stage_goals || 'Reach first milestone',
+                description: 'Primary goal from onboarding',
+                targetDate: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                completed: false,
+                category: 'market' as const,
+              },
+            ];
+            if (profileData.fundraising_type && profileData.fundraising_type.toLowerCase() !== 'n/a' && !profileData.fundraising_type.toLowerCase().includes('bootstrap')) {
+              initialMilestones.push({
+                id: 'onb-3',
+                title: `Prepare for ${profileData.fundraising_type}`,
+                description: profileData.fundraising_amount ? `Target: ${profileData.fundraising_amount}` : 'Prepare fundraising materials',
+                targetDate: new Date(now.getTime() + 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                completed: false,
+                category: 'funding',
+              } as any);
+            }
+            store.setMilestones(initialMilestones);
+          }
+
+          // Set funding data if fundraising
+          if (profileData.fundraising_type && profileData.fundraising_type.toLowerCase() !== 'n/a') {
+            store.setFundingData({
+              current_stage: profileData.stage_detected || '',
+              current_funding: { amount_raised: 0, sources: [] },
+              funding_goal: {
+                target_amount: parseInt(profileData.fundraising_amount?.replace(/[^0-9]/g, '') || '0'),
+                target_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                purpose: profileData.fundraising_amount || '',
+                use_of_funds: [],
+              },
+              fundraising_type: profileData.fundraising_type,
+              fundraising_amount: profileData.fundraising_amount || '',
+              burn_rate: 0,
+              runway_months: 0,
+              funding_routes: [],
+              funding_milestones: [],
+              readiness_score: 0,
+            });
+          }
+
           // Trigger research agent in the background
           triggerResearchAgent(profileData);
         } catch (error) {

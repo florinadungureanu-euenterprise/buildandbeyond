@@ -3,13 +3,11 @@ import { useStore } from '@/store';
 import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
-// Debounce time in milliseconds
 const SYNC_DEBOUNCE_MS = 2000;
 
 async function syncToDatabase(userId: string, stateData: Record<string, unknown>): Promise<void> {
   try {
     console.log('Syncing user data to database...');
-
     const row = {
       user_id: userId,
       passport: stateData.passport as any,
@@ -40,10 +38,105 @@ async function syncToDatabase(userId: string, stateData: Record<string, unknown>
   }
 }
 
+async function loadFromDatabase(userId: string): Promise<boolean> {
+  try {
+    console.log('Loading user data from database...');
+    const { data, error } = await supabase
+      .from('user_data' as any)
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error || !data) {
+      console.log('No saved data found, using empty state');
+      useStore.getState().hydrateState({ dataLoaded: true } as any);
+      return false;
+    }
+
+    const row = data as any;
+    const store = useStore.getState();
+
+    // Hydrate passport
+    if (row.passport && Object.keys(row.passport).length > 0 && row.passport.startupName) {
+      store.updatePassport({
+        ...row.passport,
+        lastUpdated: row.passport.lastUpdated ? new Date(row.passport.lastUpdated) : new Date(),
+      });
+    }
+
+    // Hydrate validation
+    if (row.validation && (row.validation.marketFit > 0 || row.validation.problemValidation > 0)) {
+      store.setValidation(row.validation);
+    }
+
+    // Hydrate milestones
+    if (row.milestones && Array.isArray(row.milestones) && row.milestones.length > 0) {
+      store.setMilestones(row.milestones);
+    }
+
+    // Hydrate applications
+    if (row.applications && Array.isArray(row.applications) && row.applications.length > 0) {
+      // Restore applied status
+      const appliedIds = row.applied_applications || [];
+      const apps = row.applications.map((a: any) => ({
+        ...a,
+        applied: appliedIds.includes(a.id) || a.applied,
+      }));
+      store.setApplications(apps);
+    }
+
+    // Hydrate team members
+    if (row.team_members && Array.isArray(row.team_members) && row.team_members.length > 0) {
+      store.setTeamMembers(row.team_members);
+    }
+
+    // Hydrate funding data
+    if (row.funding_data && row.funding_data.current_stage) {
+      const appliedRouteIds = row.applied_funding_routes || [];
+      const fundingData = {
+        ...row.funding_data,
+        funding_routes: (row.funding_data.funding_routes || []).map((r: any) => ({
+          ...r,
+          applied: appliedRouteIds.includes(r.id) || r.applied,
+        })),
+      };
+      store.setFundingData(fundingData);
+    }
+
+    // Hydrate tool subscriptions
+    if (row.subscribed_tools && row.subscribed_tools.length > 0) {
+      row.subscribed_tools.forEach((toolId: string) => {
+        store.markToolSubscribed(toolId);
+      });
+    }
+
+    // Hydrate user inputs
+    if (row.user_inputs && Object.keys(row.user_inputs).length > 0) {
+      Object.entries(row.user_inputs).forEach(([key, value]) => {
+        store.updateUserInput(key, value as string);
+      });
+    }
+
+    // Check if onboarding was completed
+    if (row.onboarding_profile && Object.keys(row.onboarding_profile).length > 0) {
+      store.setOnboardingComplete(true);
+    }
+
+    store.hydrateState({ dataLoaded: true } as any);
+    console.log('Successfully loaded data from database');
+    return true;
+  } catch (error) {
+    console.error('Error loading data:', error);
+    useStore.getState().hydrateState({ dataLoaded: true } as any);
+    return false;
+  }
+}
+
 export function useDataSync() {
   const { user } = useAuth();
   const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSyncRef = useRef<string>('');
+  const hasLoadedRef = useRef(false);
 
   const passport = useStore((state) => state.passport);
   const userInputs = useStore((state) => state.userInputs);
@@ -54,9 +147,18 @@ export function useDataSync() {
   const fundingData = useStore((state) => state.fundingData);
   const toolActivationCount = useStore((state) => state.toolActivationCount);
   const tools = useStore((state) => state.tools);
+  const dataLoaded = useStore((state) => state.dataLoaded);
 
+  // Load data from DB on first mount
   useEffect(() => {
-    if (!user) return;
+    if (!user || hasLoadedRef.current) return;
+    hasLoadedRef.current = true;
+    loadFromDatabase(user.id);
+  }, [user]);
+
+  // Sync to DB on state changes (only after initial load)
+  useEffect(() => {
+    if (!user || !dataLoaded) return;
     const userId = user.id;
 
     const stateHash = JSON.stringify({
@@ -84,7 +186,7 @@ export function useDataSync() {
         clearTimeout(syncTimeoutRef.current);
       }
     };
-  }, [user, passport, userInputs, validation, milestones, applications, teamMembers, fundingData, toolActivationCount, tools]);
+  }, [user, dataLoaded, passport, userInputs, validation, milestones, applications, teamMembers, fundingData, toolActivationCount, tools]);
 
   const forceSync = () => {
     if (!user) return;

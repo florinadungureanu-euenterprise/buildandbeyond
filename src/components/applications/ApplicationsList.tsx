@@ -33,6 +33,17 @@ export function ApplicationsList() {
   // Sort by match score descending
   const sortedApps = [...filteredApps].sort((a, b) => b.matchScore - a.matchScore);
 
+  if (applications.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <Card className="p-12">
+          <h2 className="text-xl font-semibold text-foreground mb-2">No Programs Found Yet</h2>
+          <p className="text-muted-foreground">Complete onboarding to discover grants, accelerators, and programs matched to your startup profile.</p>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8">
       <div className="mb-6">
