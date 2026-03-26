@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.research-agent]
 verify_jwt = false
+
+[functions.map-intake-form]
+verify_jwt = false
