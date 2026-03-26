@@ -11,6 +11,7 @@ import { RoadmapPage } from '@/pages/RoadmapPage';
 import { SignalsPage } from '@/pages/SignalsPage';
 import { ToolsPage } from '@/pages/ToolsPage';
 import { ApplicationsPage } from '@/pages/ApplicationsPage';
+import { EventsPage } from '@/pages/EventsPage';
 import { TeamPage } from '@/pages/TeamPage';
 import { FundraisingPage } from '@/pages/FundraisingPage';
 import LandingPage from '@/pages/LandingPage';
