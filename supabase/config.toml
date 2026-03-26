@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.scrape-tools]
 verify_jwt = false
+
+[functions.slack-notify]
+verify_jwt = false
