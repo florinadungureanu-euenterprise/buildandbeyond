@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   Rocket, Zap, Globe, Shield, Map, BarChart3, 
   FileText, Users, CheckCircle2, ArrowRight, Sparkles,
-  Building2, Briefcase, TrendingUp, Calendar, MapPin
+  Building2, Briefcase, TrendingUp, Calendar, MapPin, DollarSign
 } from 'lucide-react';
 import { PartnerForm } from '@/components/landing/PartnerForm';
 import { EventsPreview } from '@/components/landing/EventsPreview';
