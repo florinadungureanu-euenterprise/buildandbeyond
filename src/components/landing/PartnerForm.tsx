@@ -147,10 +147,23 @@ export function PartnerForm() {
               <Input value={form.target_stages} onChange={e => setForm(f => ({ ...f, target_stages: e.target.value }))} placeholder="e.g., Pre-seed, Seed, Series A" />
             </div>
             {form.type === 'investor' && (
-              <div>
-                <Label>Investment Range</Label>
-                <Input value={form.investment_range} onChange={e => setForm(f => ({ ...f, investment_range: e.target.value }))} placeholder="e.g., €50K - €500K" />
-              </div>
+              <>
+                <div>
+                  <Label>Funding Type</Label>
+                  <Select value={form.funding_type || ''} onValueChange={val => setForm(f => ({ ...f, funding_type: val }))}>
+                    <SelectTrigger><SelectValue placeholder="Select funding type..." /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="dilutive">Dilutive (equity-based)</SelectItem>
+                      <SelectItem value="non_dilutive">Non-dilutive (grants, loans, subsidies)</SelectItem>
+                      <SelectItem value="both">Both dilutive and non-dilutive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Investment Range</Label>
+                  <Input value={form.investment_range} onChange={e => setForm(f => ({ ...f, investment_range: e.target.value }))} placeholder="e.g., €50K - €500K" />
+                </div>
+              </>
             )}
             <div>
               <Label>Geographic Coverage</Label>
