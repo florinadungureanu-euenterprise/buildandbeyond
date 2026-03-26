@@ -1,5 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { LogOut } from 'lucide-react';
 
 const navItems = [
   { path: '/whisperer', label: 'Your Entrepreneur Whisperer' },
@@ -10,18 +12,26 @@ const navItems = [
   { path: '/tools', label: 'Tools' },
   { path: '/applications', label: 'Applications' },
   { path: '/events', label: 'Events' },
-  
   { path: '/fundraising', label: 'Fundraising' }
 ];
 
 export function SidebarNav() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <nav className="w-64 bg-white border-r border-gray-200 p-6 flex flex-col">
       <div className="mb-8">
-        <div className="text-2xl font-bold text-blue-600">Build &</div>
-        <div className="text-xl font-bold text-blue-600">Beyond</div>
+        <Link to="/" className="block">
+          <div className="text-2xl font-bold text-blue-600">Build &</div>
+          <div className="text-xl font-bold text-blue-600">Beyond</div>
+        </Link>
       </div>
 
       <div className="space-y-2 flex-1">
@@ -45,10 +55,18 @@ export function SidebarNav() {
         })}
       </div>
 
-      <div className="pt-4 border-t border-gray-200">
+      <div className="pt-4 border-t border-gray-200 space-y-3">
         <div className="text-xs text-gray-500 uppercase tracking-wider mb-3">Account</div>
         <button type="button" className="text-sm text-gray-700 hover:text-blue-600 transition-colors">
           Settings
+        </button>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-sm text-gray-700 hover:text-red-600 transition-colors w-full"
+        >
+          <LogOut className="w-4 h-4" />
+          Log out
         </button>
       </div>
     </nav>
