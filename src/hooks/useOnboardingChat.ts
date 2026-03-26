@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { OnboardingMessage, OnboardingQuestion, UploadedDocument, OnboardingProfile } from '@/types';
 import { useStore } from '@/store';
 import { useUserId } from './useUserId';
-
-const N8N_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/4ce2573e-4415-4cba-aa4e-65a97223ce43';
-const N8N_DOCUMENT_UPLOAD_URL = 'https://springervc.app.n8n.cloud/webhook/document-upload';
+import { supabase } from '@/integrations/supabase/client';
 
 // Generate a unique session ID
 const generateSessionId = () => {
@@ -647,70 +645,55 @@ export function useOnboardingChat() {
           
           setUploadedDocuments((prev) => [...prev, doc]);
           
-          // Send immediately to n8n document upload webhook
+          // Save document to database
           try {
-            const uploadPayload = {
-              user_id: userId,
-              session_id: sessionId,
-              startup_profile: {
-                stage_detected: onboardingProfile.stage_detected || startupStage
-              },
-              uploaded_documents: [{
+            console.log('Saving document to database:', file.name);
+            
+            const { error } = await supabase
+              .from('uploaded_documents' as any)
+              .insert({
+                user_id: userId,
                 name: file.name,
                 type: file.type,
                 size: file.size,
-                uploaded_at: new Date().toISOString(),
                 content: base64Content
-              }]
-            };
-            
-            console.log('Sending document to n8n for parsing:', file.name);
-            
-            const response = await fetch(N8N_DOCUMENT_UPLOAD_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(uploadPayload)
-            });
-            
-            if (response.ok) {
-              const result = await response.json();
-              console.log('Document processed by n8n:', result);
+              } as any);
+
+            if (!error) {
+              console.log('Document saved to database');
               
               // Store document insights
               setOnboardingProfile(prev => ({
                 ...prev,
                 document_insights: [
                   ...(prev.document_insights || []),
-                  `Uploaded ${file.name} - Extracted ${result.fields_extracted || 0} fields via n8n`
+                  `Uploaded ${file.name}`
                 ]
               }));
               
-              // Add system message about successful parsing
               const uploadMessage: OnboardingMessage = {
                 id: (Date.now() + 1).toString(),
                 role: 'system',
-                content: `✓ Document processed: ${file.name}. Extracted ${result.fields_extracted || 0} fields automatically. This will help pre-fill your foundational information.`,
+                content: `✓ Document uploaded: ${file.name}. Your document has been saved.`,
                 timestamp: new Date()
               };
               setMessages((prev) => [...prev, uploadMessage]);
             } else {
-              console.error('Document upload failed:', response.status);
-              // Still add basic message
+              console.error('Document save failed:', error);
               const uploadMessage: OnboardingMessage = {
                 id: (Date.now() + 1).toString(),
                 role: 'system',
-                content: `✓ Document uploaded: ${file.name}. Processing in background...`,
+                content: `✓ Document uploaded: ${file.name}.`,
                 timestamp: new Date()
               };
               setMessages((prev) => [...prev, uploadMessage]);
             }
           } catch (uploadError) {
-            console.error('Error sending document to n8n:', uploadError);
-            // Still show upload success to user
+            console.error('Error saving document:', uploadError);
             const uploadMessage: OnboardingMessage = {
               id: (Date.now() + 1).toString(),
               role: 'system',
-              content: `✓ Document uploaded: ${file.name}. Processing in background...`,
+              content: `✓ Document uploaded: ${file.name}.`,
               timestamp: new Date()
             };
             setMessages((prev) => [...prev, uploadMessage]);
@@ -747,106 +730,79 @@ export function useOnboardingChat() {
   // Send data to n8n when onboarding is complete
   useEffect(() => {
     if (isComplete && !hasSentToN8n) {
-      const sendToN8n = async () => {
+      const saveOnboardingData = async () => {
         try {
-          const payload = {
-            status: 'onboarding_complete',
-            timestamp: new Date().toISOString(),
-            user_id: userId,
-            session_id: sessionId,
-            startup_profile: {
-              // All fields - will be populated based on stage and documents
-              stage_detected: onboardingProfile.stage_detected,
-              
-              // Early-stage foundational fields (REQUIRED for both stages)
-              customer: onboardingProfile.customer || '',
-              empathy_map: {
-                says: onboardingProfile.problem || '',
-                thinks: onboardingProfile.consequences_of_problem || '',
-                does: onboardingProfile.existing_alternatives || '',
-                feels: onboardingProfile.jobs_to_be_done || ''
-              },
-              problem: onboardingProfile.problem || '',
-              consequences_of_problem: onboardingProfile.consequences_of_problem || '',
-              existing_alternatives: onboardingProfile.existing_alternatives || '',
-              jobs_to_be_done: onboardingProfile.jobs_to_be_done || '',
-              solution: onboardingProfile.solution || '',
-              unique_value_proposition: onboardingProfile.unique_value_proposition || '',
-              unfair_advantage: onboardingProfile.unfair_advantage || '',
-              riskiest_assumption: onboardingProfile.riskiest_assumption || '',
-              method_and_success_criterion: onboardingProfile.method_and_success_criterion || '',
-              business_model: onboardingProfile.business_model || '',
-              channels: onboardingProfile.channels || '',
-              revenue_streams: onboardingProfile.revenue_streams || '',
-              cost_structure: onboardingProfile.cost_structure || '',
-              key_metrics: onboardingProfile.key_metrics || '',
-              twelve_week_goal: onboardingProfile.twelve_week_goal || '',
-              risks: onboardingProfile.risks || '',
-              fundraising_type: onboardingProfile.fundraising_type || '',
-              fundraising_amount: onboardingProfile.fundraising_amount || '',
-              
-              // Later-stage operational fields (populated only for later stage)
-              later_stage_priorities: onboardingProfile.later_stage_priorities || '',
-              later_stage_bottlenecks: onboardingProfile.later_stage_bottlenecks || '',
-              later_stage_goals: onboardingProfile.later_stage_goals || '',
-              later_stage_tools: onboardingProfile.later_stage_tools || '',
-              later_stage_process_gaps: onboardingProfile.later_stage_process_gaps || '',
-              later_stage_metrics: onboardingProfile.later_stage_metrics || '',
-              later_stage_risks: onboardingProfile.later_stage_risks || '',
-              later_stage_vision: onboardingProfile.later_stage_vision || '',
-              
-              // Universal fields
-              industry: onboardingProfile.industry || '',
-              region: onboardingProfile.region || '',
-              
-              // Document tracking
-              document_insights: onboardingProfile.document_insights || []
+          const profileData = {
+            stage_detected: onboardingProfile.stage_detected,
+            customer: onboardingProfile.customer || '',
+            empathy_map: {
+              says: onboardingProfile.problem || '',
+              thinks: onboardingProfile.consequences_of_problem || '',
+              does: onboardingProfile.existing_alternatives || '',
+              feels: onboardingProfile.jobs_to_be_done || ''
             },
-            // Raw uploaded documents for n8n to parse
-            uploaded_documents: uploadedDocuments.map(doc => ({
-              name: doc.name,
-              type: doc.type,
-              size: doc.size,
-              uploaded_at: doc.uploadedAt,
-              content: doc.content // Full content for parsing
-            })),
-            // Metadata
-            requires_document_parsing: startupStage === 'later' && uploadedDocuments.length > 0,
-            manual_answers_provided: startupStage === 'early',
-            // Legacy fields for backward compatibility
-            validation_scores: validation,
-            user_activity: {
-              completed_milestones: milestones.filter(m => m.completed).length,
-              total_milestones: milestones.length,
-              tools_activated: toolActivationCount
-            },
-            market_signals: signals.map(signal => ({
-              type: signal.type,
-              title: signal.title,
-              message: signal.message,
-              priority: signal.priority
-            }))
+            problem: onboardingProfile.problem || '',
+            consequences_of_problem: onboardingProfile.consequences_of_problem || '',
+            existing_alternatives: onboardingProfile.existing_alternatives || '',
+            jobs_to_be_done: onboardingProfile.jobs_to_be_done || '',
+            solution: onboardingProfile.solution || '',
+            unique_value_proposition: onboardingProfile.unique_value_proposition || '',
+            unfair_advantage: onboardingProfile.unfair_advantage || '',
+            riskiest_assumption: onboardingProfile.riskiest_assumption || '',
+            method_and_success_criterion: onboardingProfile.method_and_success_criterion || '',
+            business_model: onboardingProfile.business_model || '',
+            channels: onboardingProfile.channels || '',
+            revenue_streams: onboardingProfile.revenue_streams || '',
+            cost_structure: onboardingProfile.cost_structure || '',
+            key_metrics: onboardingProfile.key_metrics || '',
+            twelve_week_goal: onboardingProfile.twelve_week_goal || '',
+            risks: onboardingProfile.risks || '',
+            fundraising_type: onboardingProfile.fundraising_type || '',
+            fundraising_amount: onboardingProfile.fundraising_amount || '',
+            later_stage_priorities: onboardingProfile.later_stage_priorities || '',
+            later_stage_bottlenecks: onboardingProfile.later_stage_bottlenecks || '',
+            later_stage_goals: onboardingProfile.later_stage_goals || '',
+            later_stage_tools: onboardingProfile.later_stage_tools || '',
+            later_stage_process_gaps: onboardingProfile.later_stage_process_gaps || '',
+            later_stage_metrics: onboardingProfile.later_stage_metrics || '',
+            later_stage_risks: onboardingProfile.later_stage_risks || '',
+            later_stage_vision: onboardingProfile.later_stage_vision || '',
+            industry: onboardingProfile.industry || '',
+            region: onboardingProfile.region || '',
+            document_insights: onboardingProfile.document_insights || []
           };
 
-          console.log('Sending structured onboarding data to n8n:', payload);
-          
-          await fetch(N8N_WEBHOOK_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            mode: 'no-cors',
-            body: JSON.stringify(payload),
-          });
-          
-          console.log('Successfully sent data to n8n');
+          // Save onboarding profile to user_data table
+          await supabase
+            .from('user_data' as any)
+            .upsert({
+              user_id: userId,
+              onboarding_profile: profileData,
+              updated_at: new Date().toISOString()
+            } as any, { onConflict: 'user_id' });
+
+          // Save chat messages
+          const chatRows = messages.map(msg => ({
+            user_id: userId,
+            session_id: sessionId,
+            role: msg.role,
+            content: msg.content
+          }));
+
+          if (chatRows.length > 0) {
+            await supabase
+              .from('chat_messages' as any)
+              .insert(chatRows as any);
+          }
+
+          console.log('Successfully saved onboarding data to database');
           setHasSentToN8n(true);
         } catch (error) {
-          console.error('Error sending data to n8n:', error);
+          console.error('Error saving onboarding data:', error);
         }
       };
 
-      sendToN8n();
+      saveOnboardingData();
     }
   }, [isComplete, hasSentToN8n, onboardingProfile, startupStage, uploadedDocuments, validation, milestones, signals, toolActivationCount]);
 
