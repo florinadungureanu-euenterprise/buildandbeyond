@@ -1,8 +1,9 @@
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
 import { SidebarNav } from '@/components/SidebarNav';
 import { TopTabs } from '@/components/TopTabs';
 import { WelcomeTour } from '@/components/onboarding/WelcomeTour';
 import { useDataSync } from '@/hooks/useDataSync';
+import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { OnboardingPage } from '@/pages/OnboardingPage';
 import { PassportPage } from '@/pages/PassportPage';
@@ -12,13 +13,34 @@ import { ToolsPage } from '@/pages/ToolsPage';
 import { ApplicationsPage } from '@/pages/ApplicationsPage';
 import { TeamPage } from '@/pages/TeamPage';
 import { FundraisingPage } from '@/pages/FundraisingPage';
+import LoginPage from '@/pages/LoginPage';
+import SignupPage from '@/pages/SignupPage';
+import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-muted/30">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+}
 
 function Layout() {
-  // Enable automatic data sync to n8n
   useDataSync();
-  
+
   return (
-    <>
+    <ProtectedRoute>
       <WelcomeTour />
       <div className="flex h-screen bg-gray-50">
         <SidebarNav />
@@ -29,7 +51,7 @@ function Layout() {
           </div>
         </div>
       </div>
-    </>
+    </ProtectedRoute>
   );
 }
 
@@ -40,7 +62,7 @@ const router = createBrowserRouter(
       children: [
         { path: '/', element: <DashboardPage /> },
         { path: '/whisperer', element: <OnboardingPage /> },
-        { path: '/onboarding', element: <OnboardingPage /> }, // Keep old route for compatibility
+        { path: '/onboarding', element: <OnboardingPage /> },
         { path: '/passport', element: <PassportPage /> },
         { path: '/roadmap', element: <RoadmapPage /> },
         { path: '/signals', element: <SignalsPage /> },
@@ -48,9 +70,13 @@ const router = createBrowserRouter(
         { path: '/applications', element: <ApplicationsPage /> },
         { path: '/team', element: <TeamPage /> },
         { path: '/fundraising', element: <FundraisingPage /> },
-        { path: '*', element: <DashboardPage /> }
       ]
-    }
+    },
+    { path: '/login', element: <LoginPage /> },
+    { path: '/signup', element: <SignupPage /> },
+    { path: '/forgot-password', element: <ForgotPasswordPage /> },
+    { path: '/reset-password', element: <ResetPasswordPage /> },
+    { path: '*', element: <Navigate to="/" replace /> }
   ],
   {
     future: {
@@ -60,7 +86,11 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;
