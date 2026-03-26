@@ -496,7 +496,7 @@ export default function LandingPage() {
         <div className="max-w-2xl mx-auto text-center">
           <Globe className="w-10 h-10 text-primary mx-auto mb-4" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-            Stay ahead of Europe's startup opportunities
+            Stay ahead of Europe's innovation opportunities
           </h2>
           <p className="text-muted-foreground mb-6">
             Get curated access to the latest EU funding calls, startup programmes, ecosystem insights, and partnership opportunities — directly in your inbox. Join founders, innovators, and ecosystem builders who are already navigating Europe smarter.
