@@ -41,6 +41,102 @@ export type Database = {
         }
         Relationships: []
       }
+      event_submissions: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_date: string
+          id: string
+          location: string
+          organizer: string | null
+          status: string
+          submitted_by: string
+          tags: string[] | null
+          title: string
+          type: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_date: string
+          id?: string
+          location: string
+          organizer?: string | null
+          status?: string
+          submitted_by: string
+          tags?: string[] | null
+          title: string
+          type?: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_date?: string
+          id?: string
+          location?: string
+          organizer?: string | null
+          status?: string
+          submitted_by?: string
+          tags?: string[] | null
+          title?: string
+          type?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      partner_submissions: {
+        Row: {
+          company_name: string
+          contact_name: string
+          created_at: string
+          description: string | null
+          email: string
+          geographic_coverage: string | null
+          id: string
+          investment_range: string | null
+          pricing_model: string | null
+          services_offered: string | null
+          status: string
+          target_stages: string | null
+          type: string
+          website: string | null
+        }
+        Insert: {
+          company_name: string
+          contact_name: string
+          created_at?: string
+          description?: string | null
+          email: string
+          geographic_coverage?: string | null
+          id?: string
+          investment_range?: string | null
+          pricing_model?: string | null
+          services_offered?: string | null
+          status?: string
+          target_stages?: string | null
+          type: string
+          website?: string | null
+        }
+        Update: {
+          company_name?: string
+          contact_name?: string
+          created_at?: string
+          description?: string | null
+          email?: string
+          geographic_coverage?: string | null
+          id?: string
+          investment_range?: string | null
+          pricing_model?: string | null
+          services_offered?: string | null
+          status?: string
+          target_stages?: string | null
+          type?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
