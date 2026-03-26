@@ -45,12 +45,21 @@ export function ToolsList() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">Loading tools...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Matches</h1>
-        <p className="text-sm text-gray-600">
-          Curated tools matched to your startup's needs
+        <h1 className="text-2xl font-bold text-foreground mb-2">Tool Matches</h1>
+        <p className="text-sm text-muted-foreground">
+          {tools.length} curated tools matched to your startup's needs
         </p>
       </div>
 
