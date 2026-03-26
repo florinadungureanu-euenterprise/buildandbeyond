@@ -303,7 +303,7 @@ export const useStore = create<AppState>((set) => ({
   userInputs: {},
   showComplianceAlert: false,
   toolActivationCount: 0,
-  applications: [],
+  applications: defaultApplications,
   teamMembers: [],
   fundingData: emptyFundingData,
   onboardingComplete: false,
