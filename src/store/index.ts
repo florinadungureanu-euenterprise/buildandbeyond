@@ -391,7 +391,7 @@ export const useStore = create<AppState>((set) => ({
   toolActivationCount: 0,
   applications: defaultApplications,
   teamMembers: [],
-  fundingData: emptyFundingData,
+  fundingData: exampleFundingData,
   onboardingComplete: false,
   dataLoaded: false,
 

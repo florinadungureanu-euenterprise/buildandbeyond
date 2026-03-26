@@ -111,7 +111,7 @@ export function PartnerForm() {
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
       {/* Partner Type Selection */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {partnerTypes.map(pt => (
           <Card
             key={pt.value}
