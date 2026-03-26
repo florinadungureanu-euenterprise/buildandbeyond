@@ -46,7 +46,7 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto text-center">
           <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium">
             <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-            AI-Powered European Startup Intelligence
+            Your Trusted European Innovation Intelligence
           </Badge>
           
           <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight leading-[1.1] mb-6">
