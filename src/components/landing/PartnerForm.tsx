@@ -4,12 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CheckCircle2, Building2, Briefcase, TrendingUp, Send, Users, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
-import { Calendar, MapPin, Building, Laptop, User } from 'lucide-react';
+import { Calendar, MapPin, Building, Laptop, User, Landmark } from 'lucide-react';
 
 type PartnerType = 'programme' | 'investor' | 'service_provider' | 'event_organizer' | 'community' | 'corporate' | 'public_institution' | 'venue' | 'freelancer';
 
@@ -29,6 +28,8 @@ export function PartnerForm() {
     geographic_coverage: '',
     pricing_model: '',
     description: '',
+    institution_type: '',
+    institution_goals: '',
   });
 
   const partnerTypes: { value: PartnerType; label: string; icon: React.ReactNode; desc: string }[] = [
@@ -38,7 +39,7 @@ export function PartnerForm() {
     { value: 'event_organizer', label: 'Event Organizer', icon: <Calendar className="w-5 h-5" />, desc: 'Conference, hackathon, workshop organizers' },
     { value: 'community', label: 'Community', icon: <Users className="w-5 h-5" />, desc: 'Startup communities, networks, associations' },
     { value: 'corporate', label: 'Corporate', icon: <Building className="w-5 h-5" />, desc: 'Corporate innovation, partnerships, pilots' },
-    { value: 'public_institution', label: 'Public Institution', icon: <Globe className="w-5 h-5" />, desc: 'Government agencies, EU bodies, public orgs' },
+    { value: 'public_institution', label: 'Public Institution', icon: <Landmark className="w-5 h-5" />, desc: 'Universities, municipalities, government agencies' },
     { value: 'venue', label: 'Venue / Co-working / Hub', icon: <MapPin className="w-5 h-5" />, desc: 'Co-working spaces, innovation hubs, labs' },
     { value: 'freelancer', label: 'Freelancer', icon: <User className="w-5 h-5" />, desc: 'Independent consultants and specialists' },
   ];
@@ -66,7 +67,6 @@ export function PartnerForm() {
         status: 'new',
       } as any);
 
-      // Trigger automated email
       try {
         await supabase.functions.invoke('partner-welcome', {
           body: {
@@ -83,7 +83,6 @@ export function PartnerForm() {
       setSubmitted(true);
       toast({ title: 'Application submitted! 🎉', description: 'We\'ll review your application and get back to you shortly.' });
     } catch (err) {
-      // Still show success for UX since we want to handle gracefully
       setSubmitted(true);
       toast({ title: 'Application received!', description: 'Our team will be in touch soon.' });
     } finally {
@@ -131,9 +130,9 @@ export function PartnerForm() {
         <>
           {/* Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><Label>Company / Organization Name *</Label><Input value={form.company_name} onChange={e => setForm(f => ({ ...f, company_name: e.target.value }))} placeholder="Your organization" /></div>
+            <div><Label>Organization Name *</Label><Input value={form.company_name} onChange={e => setForm(f => ({ ...f, company_name: e.target.value }))} placeholder="Your organization" /></div>
             <div><Label>Contact Name *</Label><Input value={form.contact_name} onChange={e => setForm(f => ({ ...f, contact_name: e.target.value }))} placeholder="Your full name" /></div>
-            <div><Label>Email *</Label><Input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="you@company.com" /></div>
+            <div><Label>Email *</Label><Input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="you@organization.com" /></div>
             <div><Label>Website</Label><Input value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://..." /></div>
           </div>
 
@@ -157,17 +156,43 @@ export function PartnerForm() {
               <Label>Geographic Coverage</Label>
               <Input value={form.geographic_coverage} onChange={e => setForm(f => ({ ...f, geographic_coverage: e.target.value }))} placeholder="e.g., EU-wide, DACH region, Global" />
             </div>
-            {form.type === 'service_provider' && (
+            {(form.type === 'service_provider' || form.type === 'freelancer') && (
               <div>
                 <Label>Pricing Model</Label>
-                <Input value={form.pricing_model} onChange={e => setForm(f => ({ ...f, pricing_model: e.target.value }))} placeholder="e.g., Retainer, Project-based, Equity" />
+                <Input value={form.pricing_model} onChange={e => setForm(f => ({ ...f, pricing_model: e.target.value }))} placeholder="e.g., Retainer, Project-based, Equity, Hourly" />
               </div>
+            )}
+
+            {/* Public Institution specific fields */}
+            {form.type === 'public_institution' && (
+              <>
+                <div>
+                  <Label>Institution Type</Label>
+                  <Select value={form.institution_type} onValueChange={val => setForm(f => ({ ...f, institution_type: val }))}>
+                    <SelectTrigger><SelectValue placeholder="Select type..." /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="university">University / Research Institution</SelectItem>
+                      <SelectItem value="school">School / Educational Body</SelectItem>
+                      <SelectItem value="municipality">Municipality / City</SelectItem>
+                      <SelectItem value="regional_gov">Regional Government</SelectItem>
+                      <SelectItem value="national_gov">National Government Agency</SelectItem>
+                      <SelectItem value="eu_body">EU Body / Intergovernmental</SelectItem>
+                      <SelectItem value="public_fund">Public Funding Agency</SelectItem>
+                      <SelectItem value="other">Other Public Institution</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Goals & Objectives</Label>
+                  <Input value={form.institution_goals} onChange={e => setForm(f => ({ ...f, institution_goals: e.target.value }))} placeholder="e.g., Support local startups, innovation scouting, R&D collaboration" />
+                </div>
+              </>
             )}
           </div>
 
           <div>
-            <Label>Why do you want to join Build & Beyond?</Label>
-            <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Tell us about your interest in partnering with European startups..." rows={4} />
+            <Label>What do you want to gain from Build & Beyond?</Label>
+            <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Tell us what outcomes you're looking for and how we can help you achieve them..." rows={4} />
           </div>
 
           <Button type="submit" size="lg" className="w-full" disabled={submitting}>
