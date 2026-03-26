@@ -465,7 +465,7 @@ export default function LandingPage() {
             Ready to shape what's next?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Whether you're building the next big thing or enabling those who do, Build & Beyond is your launchpad.
+            Whether you're building the next big thing or enabling those who do, Build&nbsp;&amp;&nbsp;Beyond is your launchpad.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
@@ -488,6 +488,44 @@ export default function LandingPage() {
               <Building2 className="w-5 h-5 ml-2" />
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter CTA */}
+      <section className="py-20 px-6 border-t border-border">
+        <div className="max-w-2xl mx-auto text-center">
+          <Globe className="w-10 h-10 text-primary mx-auto mb-4" />
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+            Stay ahead of Europe's startup opportunities
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Get curated access to the latest EU funding calls, startup programmes, ecosystem insights, and partnership opportunities — directly in your inbox. Join founders, innovators, and ecosystem builders who are already navigating Europe smarter.
+          </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const input = (e.target as HTMLFormElement).elements.namedItem('newsletter_email') as HTMLInputElement;
+              if (input?.value) {
+                // TODO: wire to backend
+                input.value = '';
+                alert('Thanks for subscribing! 🎉');
+              }
+            }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto"
+          >
+            <input
+              name="newsletter_email"
+              type="email"
+              required
+              placeholder="you@startup.com"
+              className="flex-1 w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+            <Button type="submit" size="lg" className="whitespace-nowrap">
+              Join the newsletter
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </form>
+          <p className="text-xs text-muted-foreground mt-3">No spam. Unsubscribe anytime.</p>
         </div>
       </section>
 
