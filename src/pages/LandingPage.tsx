@@ -72,7 +72,7 @@ export default function LandingPage() {
       {/* Social proof bar */}
       <section className="py-8 border-y border-border bg-muted/30">
         <div className="max-w-5xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
-          <span className="flex items-center gap-2"><Globe className="w-4 h-4" /> EU/28th Compliant</span>
+          <span className="flex items-center gap-2"><Globe className="w-4 h-4" /> EU Regulation-Ready</span>
           <span className="flex items-center gap-2"><Shield className="w-4 h-4" /> GDPR Ready</span>
           <span className="flex items-center gap-2"><Zap className="w-4 h-4" /> AI-Powered Research</span>
           <span className="flex items-center gap-2"><Users className="w-4 h-4" /> Built for European Founders</span>
