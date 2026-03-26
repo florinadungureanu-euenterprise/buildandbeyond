@@ -9,7 +9,9 @@ import { CheckCircle2, Building2, Briefcase, TrendingUp, Send } from 'lucide-rea
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
-type PartnerType = 'programme' | 'investor' | 'service_provider';
+import { Calendar, MapPin, Building, Laptop, User } from 'lucide-react';
+
+type PartnerType = 'programme' | 'investor' | 'service_provider' | 'event_organizer' | 'community' | 'corporate' | 'public_institution' | 'venue' | 'freelancer';
 
 export function PartnerForm() {
   const { toast } = useToast();
@@ -33,6 +35,12 @@ export function PartnerForm() {
     { value: 'programme', label: 'Programme / Accelerator', icon: <Building2 className="w-5 h-5" />, desc: 'Accelerators, incubators, grant programmes' },
     { value: 'investor', label: 'Investor', icon: <TrendingUp className="w-5 h-5" />, desc: 'Angels, VCs, family offices, corporate VCs' },
     { value: 'service_provider', label: 'Service Provider', icon: <Briefcase className="w-5 h-5" />, desc: 'Legal, accounting, marketing, tech services' },
+    { value: 'event_organizer', label: 'Event Organizer', icon: <Calendar className="w-5 h-5" />, desc: 'Conference, hackathon, workshop organizers' },
+    { value: 'community', label: 'Community', icon: <Users className="w-5 h-5" />, desc: 'Startup communities, networks, associations' },
+    { value: 'corporate', label: 'Corporate', icon: <Building className="w-5 h-5" />, desc: 'Corporate innovation, partnerships, pilots' },
+    { value: 'public_institution', label: 'Public Institution', icon: <Globe className="w-5 h-5" />, desc: 'Government agencies, EU bodies, public orgs' },
+    { value: 'venue', label: 'Venue / Co-working / Hub', icon: <MapPin className="w-5 h-5" />, desc: 'Co-working spaces, innovation hubs, labs' },
+    { value: 'freelancer', label: 'Freelancer', icon: <User className="w-5 h-5" />, desc: 'Independent consultants and specialists' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
