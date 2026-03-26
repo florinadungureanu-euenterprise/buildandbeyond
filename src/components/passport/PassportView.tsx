@@ -50,7 +50,7 @@ export function PassportView() {
             </div>
             <div className="flex items-center gap-2 mt-3">
               <Badge variant="secondary" className="bg-green-100 text-green-700">
-                EU/28th Compliant
+                Regulation-Ready
               </Badge>
               <Badge variant="secondary">AI-summarized</Badge>
               <Badge variant="secondary">Source-linked</Badge>
