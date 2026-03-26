@@ -45,12 +45,13 @@ export interface Tool {
 
 export interface Signal {
   id: string;
-  type: 'competitor' | 'trend' | 'regulatory';
+  type: 'competitor' | 'trend' | 'regulatory' | 'funding' | 'opportunity';
   title: string;
   message: string;
   suggestedAction: string;
   timestamp: Date;
   priority: 'high' | 'medium' | 'low';
+  source?: string;
 }
 
 export interface ValidationScores {
