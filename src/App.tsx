@@ -78,6 +78,7 @@ const router = createBrowserRouter(
         { path: '/signals', element: <SignalsPage /> },
         { path: '/tools', element: <ToolsPage /> },
         { path: '/applications', element: <ApplicationsPage /> },
+        { path: '/events', element: <EventsPage /> },
         { path: '/team', element: <TeamPage /> },
         { path: '/fundraising', element: <FundraisingPage /> },
       ]
