@@ -266,6 +266,7 @@ const defaultApplications: Application[] = [
   },
 ];
 
+const emptyPassport: PassportData = {
   founderName: '',
   startupName: '',
   tagline: '',
