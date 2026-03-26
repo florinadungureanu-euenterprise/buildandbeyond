@@ -25,6 +25,7 @@ export function PartnerForm() {
     services_offered: '',
     target_stages: '',
     investment_range: '',
+    funding_type: '',
     geographic_coverage: '',
     pricing_model: '',
     description: '',

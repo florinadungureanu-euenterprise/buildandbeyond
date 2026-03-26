@@ -288,6 +288,13 @@ export default function LandingPage() {
             </Card>
           </div>
 
+          {/* CTA before form */}
+          <div className="text-center mb-10">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Ready to join? Select your organization type below and complete the intake form. Our team will review your application and get you onboarded so you can start benefiting from the platform right away.
+            </p>
+          </div>
+
           {/* Partner Form */}
           <PartnerForm />
         </div>
