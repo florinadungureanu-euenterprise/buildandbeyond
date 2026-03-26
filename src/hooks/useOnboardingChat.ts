@@ -366,7 +366,8 @@ export function useOnboardingChat() {
   });
   const [isInFoundationalPhase, setIsInFoundationalPhase] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
-  const userId = useUserId();
+  const { user } = useAuth();
+  const userId = user?.id || '';
   
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);
