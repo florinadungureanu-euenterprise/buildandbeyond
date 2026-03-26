@@ -1,54 +1,47 @@
 import { useEffect, useRef } from 'react';
 import { useStore } from '@/store';
 import { getUserId } from './useUserId';
-
-const N8N_SYNC_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/user-data-sync';
+import { supabase } from '@/integrations/supabase/client';
 
 // Debounce time in milliseconds
 const SYNC_DEBOUNCE_MS = 2000;
 
-interface SyncPayload {
-  user_id: string;
-  timestamp: string;
-  event_type: 'state_update' | 'full_sync';
-  data: {
-    passport: ReturnType<typeof useStore.getState>['passport'];
-    userInputs: ReturnType<typeof useStore.getState>['userInputs'];
-    validation: ReturnType<typeof useStore.getState>['validation'];
-    milestones: ReturnType<typeof useStore.getState>['twelveMonthMilestones'];
-    applications: ReturnType<typeof useStore.getState>['applications'];
-    teamMembers: ReturnType<typeof useStore.getState>['teamMembers'];
-    fundingData: ReturnType<typeof useStore.getState>['fundingData'];
-    toolActivationCount: number;
-    subscribedTools: string[];
-    appliedApplications: string[];
-    appliedFundingRoutes: string[];
-  };
-}
-
-async function syncToN8n(payload: SyncPayload): Promise<void> {
+async function syncToDatabase(userId: string, stateData: Record<string, unknown>): Promise<void> {
   try {
-    console.log('Syncing user data to n8n:', payload.event_type);
-    
-    await fetch(N8N_SYNC_WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'no-cors',
-      body: JSON.stringify(payload),
-    });
-    
-    console.log('Successfully synced data to n8n');
+    console.log('Syncing user data to database...');
+
+    const { error } = await supabase
+      .from('user_data')
+      .upsert({
+        user_id: userId,
+        passport: stateData.passport,
+        user_inputs: stateData.userInputs,
+        validation: stateData.validation,
+        milestones: stateData.milestones,
+        applications: stateData.applications,
+        team_members: stateData.teamMembers,
+        funding_data: stateData.fundingData,
+        tool_activation_count: stateData.toolActivationCount as number,
+        subscribed_tools: stateData.subscribedTools as string[],
+        applied_applications: stateData.appliedApplications as string[],
+        applied_funding_routes: stateData.appliedFundingRoutes as string[],
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' });
+
+    if (error) {
+      console.error('Error syncing data to database:', error);
+    } else {
+      console.log('Successfully synced data to database');
+    }
   } catch (error) {
-    console.error('Error syncing data to n8n:', error);
+    console.error('Error syncing data:', error);
   }
 }
 
 export function useDataSync() {
-  const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSyncRef = useRef<string>('');
-  
+
   // Get all relevant state
   const passport = useStore((state) => state.passport);
   const userInputs = useStore((state) => state.userInputs);
@@ -86,26 +79,19 @@ export function useDataSync() {
 
     // Debounce the sync
     syncTimeoutRef.current = setTimeout(() => {
-      const payload: SyncPayload = {
-        user_id: userId,
-        timestamp: new Date().toISOString(),
-        event_type: 'state_update',
-        data: {
-          passport,
-          userInputs,
-          validation,
-          milestones,
-          applications,
-          teamMembers,
-          fundingData,
-          toolActivationCount,
-          subscribedTools: tools.filter(t => t.subscribed).map(t => t.id),
-          appliedApplications: applications.filter(a => a.applied).map(a => a.id),
-          appliedFundingRoutes: fundingData.funding_routes.filter(r => r.applied).map(r => r.id)
-        }
-      };
-
-      syncToN8n(payload);
+      syncToDatabase(userId, {
+        passport,
+        userInputs,
+        validation,
+        milestones,
+        applications,
+        teamMembers,
+        fundingData,
+        toolActivationCount,
+        subscribedTools: tools.filter(t => t.subscribed).map(t => t.id),
+        appliedApplications: applications.filter(a => a.applied).map(a => a.id),
+        appliedFundingRoutes: fundingData.funding_routes.filter(r => r.applied).map(r => r.id)
+      });
       lastSyncRef.current = stateHash;
     }, SYNC_DEBOUNCE_MS);
 
@@ -122,27 +108,20 @@ export function useDataSync() {
     if (!userId) return;
 
     const state = useStore.getState();
-    
-    const payload: SyncPayload = {
-      user_id: userId,
-      timestamp: new Date().toISOString(),
-      event_type: 'full_sync',
-      data: {
-        passport: state.passport,
-        userInputs: state.userInputs,
-        validation: state.validation,
-        milestones: state.twelveMonthMilestones,
-        applications: state.applications,
-        teamMembers: state.teamMembers,
-        fundingData: state.fundingData,
-        toolActivationCount: state.toolActivationCount,
-        subscribedTools: state.tools.filter(t => t.subscribed).map(t => t.id),
-        appliedApplications: state.applications.filter(a => a.applied).map(a => a.id),
-        appliedFundingRoutes: state.fundingData.funding_routes.filter(r => r.applied).map(r => r.id)
-      }
-    };
 
-    syncToN8n(payload);
+    syncToDatabase(userId, {
+      passport: state.passport,
+      userInputs: state.userInputs,
+      validation: state.validation,
+      milestones: state.twelveMonthMilestones,
+      applications: state.applications,
+      teamMembers: state.teamMembers,
+      fundingData: state.fundingData,
+      toolActivationCount: state.toolActivationCount,
+      subscribedTools: state.tools.filter(t => t.subscribed).map(t => t.id),
+      appliedApplications: state.applications.filter(a => a.applied).map(a => a.id),
+      appliedFundingRoutes: state.fundingData.funding_routes.filter(r => r.applied).map(r => r.id)
+    });
   };
 
   return { forceSync };

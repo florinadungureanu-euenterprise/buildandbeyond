@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { OnboardingMessage, OnboardingQuestion, UploadedDocument, OnboardingProfile } from '@/types';
 import { useStore } from '@/store';
 import { useUserId } from './useUserId';
-
-const N8N_WEBHOOK_URL = 'https://springervc.app.n8n.cloud/webhook/4ce2573e-4415-4cba-aa4e-65a97223ce43';
-const N8N_DOCUMENT_UPLOAD_URL = 'https://springervc.app.n8n.cloud/webhook/document-upload';
+import { supabase } from '@/integrations/supabase/client';
 
 // Generate a unique session ID
 const generateSessionId = () => {
