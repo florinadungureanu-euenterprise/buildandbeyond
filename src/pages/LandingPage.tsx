@@ -60,7 +60,7 @@ export default function LandingPage() {
           </p>
           
           <p className="text-base md:text-lg text-foreground/80 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-            Build&nbsp;&amp;&nbsp;Beyond helps founders, funders, and innovators discover the right tools, talent, funding, and opportunities in the European innovation ecosystem — all in one place.
+            Build&nbsp;&amp;&nbsp;Beyond helps founders, funders, and innovators discover the right tools, talent, funding, and opportunities in the European innovation ecosystem, all in one place.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
