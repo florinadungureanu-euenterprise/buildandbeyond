@@ -12,6 +12,8 @@ import { SignalsPage } from '@/pages/SignalsPage';
 import { ToolsPage } from '@/pages/ToolsPage';
 import { ApplicationsPage } from '@/pages/ApplicationsPage';
 import { EventsPage } from '@/pages/EventsPage';
+import { SettingsPage } from '@/pages/SettingsPage';
+import { CommunityPage } from '@/pages/CommunityPage';
 
 import { FundraisingPage } from '@/pages/FundraisingPage';
 import LandingPage from '@/pages/LandingPage';
@@ -79,8 +81,9 @@ const router = createBrowserRouter(
         { path: '/tools', element: <ToolsPage /> },
         { path: '/applications', element: <ApplicationsPage /> },
         { path: '/events', element: <EventsPage /> },
-        
         { path: '/fundraising', element: <FundraisingPage /> },
+        { path: '/settings', element: <SettingsPage /> },
+        { path: '/community', element: <CommunityPage /> },
       ]
     },
     { path: '/', element: <LandingPage /> },

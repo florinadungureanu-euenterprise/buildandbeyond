@@ -18,8 +18,9 @@ const TOUR_SEQUENCE: TourStep[] = [
   { path: '/passport', screenKey: 'passport', name: 'Passport' },
   { path: '/tools', screenKey: 'tools', name: 'Tools' },
   { path: '/applications', screenKey: 'applications', name: 'Applications' },
-  { path: '/team', screenKey: 'team', name: 'Team' },
   { path: '/fundraising', screenKey: 'fundraising', name: 'Fundraising' },
+  { path: '/community', screenKey: 'community', name: 'Community' },
+  { path: '/settings', screenKey: 'settings', name: 'Settings' },
 ];
 
 export function useTourSequence() {
