@@ -231,7 +231,6 @@ export default function LandingPage() {
                   '12-Month Roadmap',
                   'Tool Recommendations',
                   'Grants & Programs Matching',
-                  'Fundraising Tracker',
                   'Team Management',
                   'Passport PDF Export',
                 ].map((item) => (
