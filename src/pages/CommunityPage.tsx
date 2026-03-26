@@ -152,7 +152,7 @@ function PostCard({ post, userId, onRefresh }: { post: ForumPost; userId: string
     }));
 
     // Load profile names
-    const userIds = [...new Set(flat.map((r: any) => r.user_id))];
+    const userIds = [...new Set(flat.map((r: any) => r.user_id))] as string[];
     if (userIds.length > 0) {
       const { data: profiles } = await supabase.from('profiles').select('id, full_name').in('id', userIds);
       const nameMap: Record<string, string> = {};
