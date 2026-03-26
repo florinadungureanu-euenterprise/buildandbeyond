@@ -250,6 +250,55 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Events Preview */}
+      <EventsPreview />
+
+      {/* Supply Side - Partner CTA */}
+      <section id="partners" className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm">
+              <Building2 className="w-3.5 h-3.5 mr-1.5" />
+              For Programmes, Investors & Service Providers
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Reach Europe's most promising founders
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Join Build & Beyond as a partner — connect with startups matched to your focus, stage, and geography.
+            </p>
+          </div>
+
+          {/* Benefits for partners */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <Card className="p-6 text-center border-border">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Qualified Deal Flow</h3>
+              <p className="text-sm text-muted-foreground">Access pre-validated startups with comprehensive passport profiles and readiness scores.</p>
+            </Card>
+            <Card className="p-6 text-center border-border">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
+                <Users className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Targeted Matching</h3>
+              <p className="text-sm text-muted-foreground">Get matched with founders based on industry, stage, geography, and needs — no noise.</p>
+            </Card>
+            <Card className="p-6 text-center border-border">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
+                <Briefcase className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Platform Visibility</h3>
+              <p className="text-sm text-muted-foreground">Feature your programme, fund, or service directly in founder dashboards and recommendations.</p>
+            </Card>
+          </div>
+
+          {/* Partner Form */}
+          <PartnerForm />
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-24 px-6 bg-primary/5">
         <div className="max-w-3xl mx-auto text-center">
