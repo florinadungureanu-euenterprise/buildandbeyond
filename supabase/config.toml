@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.partner-welcome]
 verify_jwt = false
+
+[functions.scrape-tools]
+verify_jwt = false
