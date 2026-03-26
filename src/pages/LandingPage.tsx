@@ -50,7 +50,7 @@ export default function LandingPage() {
           </Badge>
           
           <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight leading-[1.1] mb-6">
-            Scale and expand your startup across{' '}
+            Scale and expand across{' '}
             <span className="text-primary">Europe</span>
             {' '}faster than ever
           </h1>
