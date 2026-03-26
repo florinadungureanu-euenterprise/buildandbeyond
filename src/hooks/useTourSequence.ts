@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useStore } from '@/store';
 
 const TOUR_SEQUENCE_KEY = 'tourSequenceComplete';
 const CURRENT_TOUR_INDEX_KEY = 'currentTourIndex';
