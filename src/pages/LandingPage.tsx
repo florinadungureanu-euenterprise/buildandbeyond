@@ -46,18 +46,21 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto text-center">
           <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium">
             <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-            AI-Powered Startup Intelligence
+            AI-Powered European Startup Intelligence
           </Badge>
           
           <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight leading-[1.1] mb-6">
-            From Idea to{' '}
-            <span className="text-primary">Unicorn</span>
-            <br />
-            and Beyond
+            Scale and expand your startup across{' '}
+            <span className="text-primary">Europe</span>
+            {' '}faster than ever
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            The trusted co-pilot that builds your roadmap, validates your market, finds your funding and keeps you on track.
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
+            With initiatives like EU&nbsp;Inc accelerating cross-border innovation, entering and scaling in the European market is becoming more accessible — but navigating funding, partners, and opportunities is still fragmented.
+          </p>
+          
+          <p className="text-base md:text-lg text-foreground/80 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+            Build&nbsp;&amp;&nbsp;Beyond helps founders, funders, and innovators discover the right tools, talent, funding, and opportunities in the European innovation ecosystem — all in one place.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -71,6 +74,35 @@ export default function LandingPage() {
             </Button>
             <p className="text-sm text-muted-foreground">No credit card required</p>
           </div>
+        </div>
+      </section>
+
+      {/* Breaking Barriers Context */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-center">
+            Breaking barriers to scaling in Europe
+          </h2>
+          <p className="text-muted-foreground text-center mb-6 max-w-3xl mx-auto">
+            Europe is one of the world's largest and most diverse markets, offering access to EU funding programmes, grants, accelerators, venture capital, and cross-border partnerships. But for most founders, the challenge isn't opportunity — it's visibility, access, and investing in the right resources based on their industry and stage.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            {[
+              'Which EU grants or investors are relevant to my startup?',
+              'Which accelerators or venture builders should I apply to?',
+              'Who are the right partners in each country?',
+              'Which AI tools are relevant for my current stage?',
+              'How do I get not just to my next round but all the way to exit?',
+            ].map((q, i) => (
+              <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                <Search className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>{q}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground text-center mt-6 max-w-2xl mx-auto">
+            By using proprietary and open-source data, Build&nbsp;&amp;&nbsp;Beyond simplifies this by giving you personalized access to the European innovation ecosystem — so you can focus on building, not searching.
+          </p>
         </div>
       </section>
 
@@ -433,7 +465,7 @@ export default function LandingPage() {
             Ready to shape what's next?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Whether you're building the next big thing or enabling those who do, Build & Beyond is your launchpad.
+            Whether you're building the next big thing or enabling those who do, Build&nbsp;&amp;&nbsp;Beyond is your launchpad.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
@@ -456,6 +488,44 @@ export default function LandingPage() {
               <Building2 className="w-5 h-5 ml-2" />
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter CTA */}
+      <section className="py-20 px-6 border-t border-border">
+        <div className="max-w-2xl mx-auto text-center">
+          <Globe className="w-10 h-10 text-primary mx-auto mb-4" />
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+            Stay ahead of Europe's startup opportunities
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Get curated access to the latest EU funding calls, startup programmes, ecosystem insights, and partnership opportunities — directly in your inbox. Join founders, innovators, and ecosystem builders who are already navigating Europe smarter.
+          </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const input = (e.target as HTMLFormElement).elements.namedItem('newsletter_email') as HTMLInputElement;
+              if (input?.value) {
+                // TODO: wire to backend
+                input.value = '';
+                alert('Thanks for subscribing! 🎉');
+              }
+            }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto"
+          >
+            <input
+              name="newsletter_email"
+              type="email"
+              required
+              placeholder="you@startup.com"
+              className="flex-1 w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+            <Button type="submit" size="lg" className="whitespace-nowrap">
+              Join the newsletter
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </form>
+          <p className="text-xs text-muted-foreground mt-3">No spam. Unsubscribe anytime.</p>
         </div>
       </section>
 
