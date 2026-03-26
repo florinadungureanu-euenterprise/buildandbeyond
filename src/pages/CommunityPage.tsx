@@ -298,7 +298,7 @@ export function CommunityPage() {
     if (error) { console.error(error); setLoading(false); return; }
 
     const postIds = (postsData || []).map((p: any) => p.id);
-    const userIds = [...new Set((postsData || []).map((p: any) => p.user_id))];
+    const userIds = [...new Set((postsData || []).map((p: any) => p.user_id))] as string[];
 
     // Batch fetch likes, reply counts, profiles
     const [likesRes, userLikesRes, repliesRes, profilesRes] = await Promise.all([
