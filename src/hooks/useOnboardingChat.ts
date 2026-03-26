@@ -858,8 +858,8 @@ export function useOnboardingChat() {
                 description: profileData.fundraising_amount ? `Target: ${profileData.fundraising_amount}` : 'Prepare fundraising materials',
                 targetDate: new Date(now.getTime() + 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
                 completed: false,
-                category: 'funding' as const,
-              });
+                category: 'funding',
+              } as any);
             }
             store.setMilestones(initialMilestones);
           }
