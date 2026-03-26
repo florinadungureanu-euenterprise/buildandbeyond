@@ -231,7 +231,7 @@ export default function LandingPage() {
                   '12-Month Roadmap',
                   'Tool Recommendations',
                   'Grants & Programs Matching',
-                  'Team Management',
+                  'Fundraising Hub',
                   'Passport PDF Export',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-2 text-sm text-foreground">
