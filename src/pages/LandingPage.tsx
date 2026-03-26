@@ -166,9 +166,9 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
                 <Rocket className="w-6 h-6" />
               </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"How do I find the right accelerator or programme?"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Grants & Programs</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Discover accelerators, EU grants, and competitions scored by fit to your startup profile.</p>
+              <p className="text-sm font-medium text-muted-foreground mb-1">"How do I find the right resource to scale?"</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Venture Building Support</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">Discover accelerators, competitions, venture builders, and experts scored by fit to your startup profile.</p>
             </Card>
           </div>
         </div>
