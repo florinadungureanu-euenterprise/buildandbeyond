@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useStore } from '@/store';
+import { useScrapedTools } from '@/hooks/useScrapedTools';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { CheckCircle2, ExternalLink } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -15,7 +16,7 @@ const metricColors: Record<string, string> = {
 };
 
 export function ToolsList() {
-  const tools = useStore((state) => state.tools);
+  const { tools, loading } = useScrapedTools();
   const markToolSubscribed = useStore((state) => state.markToolSubscribed);
   const [selectedTool, setSelectedTool] = useState<typeof tools[0] | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -44,12 +45,21 @@ export function ToolsList() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">Loading tools...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Matches</h1>
-        <p className="text-sm text-gray-600">
-          Curated tools matched to your startup's needs
+        <h1 className="text-2xl font-bold text-foreground mb-2">Tool Matches</h1>
+        <p className="text-sm text-muted-foreground">
+          {tools.length} curated tools matched to your startup's needs
         </p>
       </div>
 

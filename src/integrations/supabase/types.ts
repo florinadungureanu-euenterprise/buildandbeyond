@@ -281,6 +281,60 @@ export type Database = {
         }
         Relationships: []
       }
+      scraped_tools: {
+        Row: {
+          category: string
+          cost_savings: string | null
+          created_at: string
+          description: string | null
+          efficiency_gain: string | null
+          features: string[] | null
+          id: string
+          name: string
+          pricing: string | null
+          relevant_stages: string[] | null
+          scraped_at: string
+          source: string | null
+          time_savings: string | null
+          url: string | null
+          use_cases: string[] | null
+        }
+        Insert: {
+          category?: string
+          cost_savings?: string | null
+          created_at?: string
+          description?: string | null
+          efficiency_gain?: string | null
+          features?: string[] | null
+          id?: string
+          name: string
+          pricing?: string | null
+          relevant_stages?: string[] | null
+          scraped_at?: string
+          source?: string | null
+          time_savings?: string | null
+          url?: string | null
+          use_cases?: string[] | null
+        }
+        Update: {
+          category?: string
+          cost_savings?: string | null
+          created_at?: string
+          description?: string | null
+          efficiency_gain?: string | null
+          features?: string[] | null
+          id?: string
+          name?: string
+          pricing?: string | null
+          relevant_stages?: string[] | null
+          scraped_at?: string
+          source?: string | null
+          time_savings?: string | null
+          url?: string | null
+          use_cases?: string[] | null
+        }
+        Relationships: []
+      }
       uploaded_documents: {
         Row: {
           content: string | null
