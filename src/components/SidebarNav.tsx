@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { path: '/whisperer', label: 'Your Entrepreneur Whisperer' },
-  { path: '/', label: 'Dashboard' },
+  { path: '/dashboard', label: 'Dashboard' },
   { path: '/roadmap', label: 'Roadmap' },
   { path: '/signals', label: 'Market Signals' },
   { path: '/passport', label: 'Passport' },
