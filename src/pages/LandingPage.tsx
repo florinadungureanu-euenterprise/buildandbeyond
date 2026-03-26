@@ -499,7 +499,7 @@ export default function LandingPage() {
             Stay ahead of Europe's innovation opportunities
           </h2>
           <p className="text-muted-foreground mb-6">
-            Get curated access to the latest EU funding calls, startup programmes, ecosystem insights, and partnership opportunities — directly in your inbox. Join founders, innovators, and ecosystem builders who are already navigating Europe smarter.
+            Get curated access to the latest EU funding calls, startup programmes, ecosystem insights, and partnership opportunities, directly in your inbox. Join founders, innovators, and ecosystem builders who are already navigating Europe smarter.
           </p>
           <form
             onSubmit={(e) => {
