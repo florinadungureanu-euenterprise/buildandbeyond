@@ -83,7 +83,7 @@ const router = createBrowserRouter(
         { path: '/fundraising', element: <FundraisingPage /> },
       ]
     },
-    { path: '/', element: <PublicRoute><LandingPage /></PublicRoute> },
+    { path: '/', element: <LandingPage /> },
     { path: '/login', element: <PublicRoute><LoginPage /></PublicRoute> },
     { path: '/signup', element: <PublicRoute><SignupPage /></PublicRoute> },
     { path: '/forgot-password', element: <ForgotPasswordPage /> },
