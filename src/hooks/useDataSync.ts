@@ -10,23 +10,25 @@ async function syncToDatabase(userId: string, stateData: Record<string, unknown>
   try {
     console.log('Syncing user data to database...');
 
+    const row = {
+      user_id: userId,
+      passport: stateData.passport as any,
+      user_inputs: stateData.userInputs as any,
+      validation: stateData.validation as any,
+      milestones: stateData.milestones as any,
+      applications: stateData.applications as any,
+      team_members: stateData.teamMembers as any,
+      funding_data: stateData.fundingData as any,
+      tool_activation_count: stateData.toolActivationCount as number,
+      subscribed_tools: stateData.subscribedTools as string[],
+      applied_applications: stateData.appliedApplications as string[],
+      applied_funding_routes: stateData.appliedFundingRoutes as string[],
+      updated_at: new Date().toISOString()
+    };
+
     const { error } = await supabase
-      .from('user_data')
-      .upsert({
-        user_id: userId,
-        passport: stateData.passport,
-        user_inputs: stateData.userInputs,
-        validation: stateData.validation,
-        milestones: stateData.milestones,
-        applications: stateData.applications,
-        team_members: stateData.teamMembers,
-        funding_data: stateData.fundingData,
-        tool_activation_count: stateData.toolActivationCount as number,
-        subscribed_tools: stateData.subscribedTools as string[],
-        applied_applications: stateData.appliedApplications as string[],
-        applied_funding_routes: stateData.appliedFundingRoutes as string[],
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id' });
+      .from('user_data' as any)
+      .upsert(row as any, { onConflict: 'user_id' });
 
     if (error) {
       console.error('Error syncing data to database:', error);
