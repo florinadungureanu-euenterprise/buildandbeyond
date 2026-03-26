@@ -13,10 +13,19 @@ import { ToolsPage } from '@/pages/ToolsPage';
 import { ApplicationsPage } from '@/pages/ApplicationsPage';
 import { TeamPage } from '@/pages/TeamPage';
 import { FundraisingPage } from '@/pages/FundraisingPage';
+import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
+
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="flex h-screen items-center justify-center bg-muted/30"><div className="text-muted-foreground">Loading...</div></div>;
+  if (user) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
+}
+
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
