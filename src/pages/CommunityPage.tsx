@@ -11,7 +11,8 @@ import { ScreenTour } from '@/components/tours/ScreenTour';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { MessageSquare, Plus, ThumbsUp, MessageCircle, Search, Send, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageSquare, Plus, ThumbsUp, MessageCircle, Search, Send, Trash2, ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { FounderMatching } from '@/components/matching/FounderMatching';
 
 type PostCategory = 'general' | 'hiring' | 'updates' | 'events' | 'resources' | 'feedback';
 
