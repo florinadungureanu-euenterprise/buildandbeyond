@@ -69,7 +69,7 @@ const router = createBrowserRouter(
     {
       element: <Layout />,
       children: [
-        { path: '/', element: <DashboardPage /> },
+        { path: '/dashboard', element: <DashboardPage /> },
         { path: '/whisperer', element: <OnboardingPage /> },
         { path: '/onboarding', element: <OnboardingPage /> },
         { path: '/passport', element: <PassportPage /> },
@@ -81,8 +81,9 @@ const router = createBrowserRouter(
         { path: '/fundraising', element: <FundraisingPage /> },
       ]
     },
-    { path: '/login', element: <LoginPage /> },
-    { path: '/signup', element: <SignupPage /> },
+    { path: '/', element: <PublicRoute><LandingPage /></PublicRoute> },
+    { path: '/login', element: <PublicRoute><LoginPage /></PublicRoute> },
+    { path: '/signup', element: <PublicRoute><SignupPage /></PublicRoute> },
     { path: '/forgot-password', element: <ForgotPasswordPage /> },
     { path: '/reset-password', element: <ResetPasswordPage /> },
     { path: '*', element: <Navigate to="/" replace /> }
