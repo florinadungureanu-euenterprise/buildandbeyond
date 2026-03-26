@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { OnboardingMessage, OnboardingQuestion, UploadedDocument, OnboardingProfile } from '@/types';
 import { useStore } from '@/store';
-import { useUserId } from './useUserId';
+import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
 // Generate a unique session ID
