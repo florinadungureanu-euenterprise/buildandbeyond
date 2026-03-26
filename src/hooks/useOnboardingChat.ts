@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { OnboardingMessage, OnboardingQuestion, UploadedDocument, OnboardingProfile } from '@/types';
 import { useStore } from '@/store';
-import { useUserId } from './useUserId';
+import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
 // Generate a unique session ID
@@ -366,7 +366,8 @@ export function useOnboardingChat() {
   });
   const [isInFoundationalPhase, setIsInFoundationalPhase] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
-  const userId = useUserId();
+  const { user } = useAuth();
+  const userId = user?.id || '';
   
   const validation = useStore((state) => state.validation);
   const tools = useStore((state) => state.tools);

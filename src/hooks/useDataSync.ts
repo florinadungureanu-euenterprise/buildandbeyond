@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useStore } from '@/store';
-import { getUserId } from './useUserId';
+import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
 // Debounce time in milliseconds
@@ -41,10 +41,10 @@ async function syncToDatabase(userId: string, stateData: Record<string, unknown>
 }
 
 export function useDataSync() {
+  const { user } = useAuth();
   const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSyncRef = useRef<string>('');
 
-  // Get all relevant state
   const passport = useStore((state) => state.passport);
   const userInputs = useStore((state) => state.userInputs);
   const validation = useStore((state) => state.validation);
@@ -56,40 +56,22 @@ export function useDataSync() {
   const tools = useStore((state) => state.tools);
 
   useEffect(() => {
-    const userId = getUserId();
-    if (!userId) return;
+    if (!user) return;
+    const userId = user.id;
 
-    // Create a hash of current state to detect changes
     const stateHash = JSON.stringify({
-      passport,
-      userInputs,
-      validation,
-      milestones,
-      applications,
-      teamMembers,
-      fundingData,
-      toolActivationCount
+      passport, userInputs, validation, milestones, applications, teamMembers, fundingData, toolActivationCount
     });
 
-    // Skip if no actual change
     if (stateHash === lastSyncRef.current) return;
 
-    // Clear any pending sync
     if (syncTimeoutRef.current) {
       clearTimeout(syncTimeoutRef.current);
     }
 
-    // Debounce the sync
     syncTimeoutRef.current = setTimeout(() => {
       syncToDatabase(userId, {
-        passport,
-        userInputs,
-        validation,
-        milestones,
-        applications,
-        teamMembers,
-        fundingData,
-        toolActivationCount,
+        passport, userInputs, validation, milestones, applications, teamMembers, fundingData, toolActivationCount,
         subscribedTools: tools.filter(t => t.subscribed).map(t => t.id),
         appliedApplications: applications.filter(a => a.applied).map(a => a.id),
         appliedFundingRoutes: fundingData.funding_routes.filter(r => r.applied).map(r => r.id)
@@ -102,24 +84,15 @@ export function useDataSync() {
         clearTimeout(syncTimeoutRef.current);
       }
     };
-  }, [passport, userInputs, validation, milestones, applications, teamMembers, fundingData, toolActivationCount, tools]);
+  }, [user, passport, userInputs, validation, milestones, applications, teamMembers, fundingData, toolActivationCount, tools]);
 
-  // Return a function to force immediate sync
   const forceSync = () => {
-    const userId = getUserId();
-    if (!userId) return;
-
+    if (!user) return;
     const state = useStore.getState();
-
-    syncToDatabase(userId, {
-      passport: state.passport,
-      userInputs: state.userInputs,
-      validation: state.validation,
-      milestones: state.twelveMonthMilestones,
-      applications: state.applications,
-      teamMembers: state.teamMembers,
-      fundingData: state.fundingData,
-      toolActivationCount: state.toolActivationCount,
+    syncToDatabase(user.id, {
+      passport: state.passport, userInputs: state.userInputs, validation: state.validation,
+      milestones: state.twelveMonthMilestones, applications: state.applications, teamMembers: state.teamMembers,
+      fundingData: state.fundingData, toolActivationCount: state.toolActivationCount,
       subscribedTools: state.tools.filter(t => t.subscribed).map(t => t.id),
       appliedApplications: state.applications.filter(a => a.applied).map(a => a.id),
       appliedFundingRoutes: state.fundingData.funding_routes.filter(r => r.applied).map(r => r.id)
