@@ -1,73 +1,89 @@
-# Welcome to your Lovable project
+# EU Enterprise
 
-## Project info
+> Building the infrastructure layer for navigating and scaling within the European startup ecosystem.
 
-**URL**: https://lovable.dev/projects/5a136ae0-25f5-4729-9243-a82cf675389d
+## 🌍 Overview
 
-## How can I edit this code?
+EU Enterprise is an MVP platform designed to help founders, startups, and ecosystem players discover and access opportunities across Europe — including funding, partners, programs, and talent.
 
-There are several ways of editing your application.
+With Europe becoming increasingly interconnected through initiatives like EU-wide innovation programs and cross-border collaboration frameworks, the opportunity is growing — but the ecosystem remains fragmented.
 
-**Use Lovable**
+EU Enterprise aims to simplify that.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5a136ae0-25f5-4729-9243-a82cf675389d) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## ⚡ Problem
 
-**Use your preferred IDE**
+Startups expanding into Europe face:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Fragmented access to **EU funding, grants, and investment opportunities**
+- Lack of visibility into **relevant accelerators, venture builders, and programs**
+- Difficulty finding **trusted partners and experts across countries**
+- Time lost navigating **complex and disconnected ecosystems**
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 💡 Solution
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+EU Enterprise provides:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- 🔎 Centralized discovery of **EU funding and startup opportunities**
+- 🤝 Matchmaking with **experts, partners, and ecosystem players**
+- 🌐 Access to **programs, accelerators, and innovation hubs across Europe**
+- 🧭 Personalized recommendations based on startup profile and goals
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 🛠️ MVP Scope
 
-**Edit a file directly in GitHub**
+This repository contains the initial MVP built to validate:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Core user flows (discovery, navigation, early matching concepts)
+- Landing page positioning and messaging
+- Integration of tools (Lovable + GitHub sync)
+- Early infrastructure for scaling into a full platform
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## ⚙️ Tech & Build Approach
 
-## What technologies are used for this project?
+- Built using **Lovable** for rapid prototyping and iteration
+- Synced with **GitHub** for version control and collaboration
+- Focused on **speed → validation → iteration**, not premature optimization
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📈 Vision
 
-## How can I deploy this project?
+EU Enterprise is evolving toward:
 
-Simply open [Lovable](https://lovable.dev/projects/5a136ae0-25f5-4729-9243-a82cf675389d) and click on Share -> Publish.
+- AI-powered **personalized ecosystem navigation**
+- Automated **opportunity matching (funding, partners, programs)**
+- A **collaborative platform layer** connecting founders, experts, and institutions
+- Infrastructure for **cross-border startup scaling in Europe**
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 👩‍💻 About the Builder
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Built by Florina Daniela Ungureanu  
+Focused on venture building, ecosystem development, and supporting early-stage founders across Europe.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## 🤝 Open to
+
+- Collaborations with **venture builders, accelerators, and ecosystem players**
+- Conversations with **founders navigating European expansion**
+- Partnerships around **data, distribution, and ecosystem access**
+
+---
+
+## 📬 Stay Updated
+
+A curated newsletter on:
+- EU funding opportunities
+- Startup programs and accelerators
+- Ecosystem insights across Europe
+
+👉 Coming soon
