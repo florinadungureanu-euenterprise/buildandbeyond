@@ -14,6 +14,7 @@ import { ApplicationsPage } from '@/pages/ApplicationsPage';
 import { EventsPage } from '@/pages/EventsPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { CommunityPage } from '@/pages/CommunityPage';
+import { AdminPage } from '@/pages/AdminPage';
 
 import { FundraisingPage } from '@/pages/FundraisingPage';
 import LandingPage from '@/pages/LandingPage';
@@ -84,6 +85,7 @@ const router = createBrowserRouter(
         { path: '/fundraising', element: <FundraisingPage /> },
         { path: '/settings', element: <SettingsPage /> },
         { path: '/community', element: <CommunityPage /> },
+        { path: '/admin', element: <AdminPage /> },
       ]
     },
     { path: '/', element: <LandingPage /> },

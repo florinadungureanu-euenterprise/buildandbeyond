@@ -61,6 +61,9 @@ export function SidebarNav() {
         <Link to="/settings" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
           Settings
         </Link>
+        <Link to="/admin" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
+          Admin
+        </Link>
         <button
           type="button"
           onClick={handleLogout}
