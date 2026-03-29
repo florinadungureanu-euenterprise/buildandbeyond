@@ -85,6 +85,7 @@ const router = createBrowserRouter(
         { path: '/fundraising', element: <FundraisingPage /> },
         { path: '/settings', element: <SettingsPage /> },
         { path: '/community', element: <CommunityPage /> },
+        { path: '/admin', element: <AdminPage /> },
       ]
     },
     { path: '/', element: <LandingPage /> },
