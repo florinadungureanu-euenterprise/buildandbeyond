@@ -335,7 +335,8 @@ export function ChatOnboarding() {
             </p>
           </div>
         ) : (
-          <div className="border-t border-border bg-card p-4">
+          <div className="border-t border-border bg-card p-4 space-y-4">
+            <ProposalOptIn variant="post-onboarding" />
             <Button onClick={() => navigate('/')} className="w-full" size="lg">
               View Your Dashboard
             </Button>
