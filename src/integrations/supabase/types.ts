@@ -281,6 +281,36 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_requests: {
+        Row: {
+          created_at: string
+          generated_modules: Json | null
+          id: string
+          notes: string | null
+          onboarding_answers: Json | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          generated_modules?: Json | null
+          id?: string
+          notes?: string | null
+          onboarding_answers?: Json | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          generated_modules?: Json | null
+          id?: string
+          notes?: string | null
+          onboarding_answers?: Json | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       scraped_tools: {
         Row: {
           category: string
