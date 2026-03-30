@@ -71,6 +71,7 @@ export function AdminPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [replies, setReplies] = useState<ForumReply[]>([]);
+  const [proposalRequests, setProposalRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
