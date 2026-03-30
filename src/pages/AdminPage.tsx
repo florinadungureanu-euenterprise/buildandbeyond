@@ -187,10 +187,15 @@ export function AdminPage() {
       {/* Tabs */}
       <Tabs defaultValue="partners" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="partners">Partner Submissions ({partners.length})</TabsTrigger>
-          <TabsTrigger value="users">Registered Users ({profiles.length})</TabsTrigger>
-          <TabsTrigger value="forum">Forum Activity ({posts.length} posts, {replies.length} replies)</TabsTrigger>
+          <TabsTrigger value="proposals">Proposals ({proposalRequests.length})</TabsTrigger>
+          <TabsTrigger value="partners">Partners ({partners.length})</TabsTrigger>
+          <TabsTrigger value="users">Users ({profiles.length})</TabsTrigger>
+          <TabsTrigger value="forum">Forum ({posts.length})</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="proposals">
+          <ProposalRequestsTab requests={proposalRequests} profiles={profiles} onRefresh={loadAllData} />
+        </TabsContent>
 
         <TabsContent value="partners">
           <Card>
