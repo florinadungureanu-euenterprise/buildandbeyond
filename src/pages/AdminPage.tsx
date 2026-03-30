@@ -80,17 +80,19 @@ export function AdminPage() {
 
   const loadAllData = async () => {
     setLoading(true);
-    const [partnersRes, profilesRes, postsRes, repliesRes] = await Promise.all([
+    const [partnersRes, profilesRes, postsRes, repliesRes, proposalsRes] = await Promise.all([
       supabase.from('partner_submissions' as any).select('*').order('created_at', { ascending: false }),
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_posts').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_replies').select('*').order('created_at', { ascending: false }),
+      supabase.from('proposal_requests' as any).select('*').order('created_at', { ascending: false }),
     ]);
 
     if (partnersRes.data) setPartners(partnersRes.data as any);
     if (profilesRes.data) setProfiles(profilesRes.data);
     if (postsRes.data) setPosts(postsRes.data);
     if (repliesRes.data) setReplies(repliesRes.data);
+    if (proposalsRes.data) setProposalRequests(proposalsRes.data as any);
     setLoading(false);
   };
 
