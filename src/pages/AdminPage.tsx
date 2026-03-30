@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, Handshake, MessageSquare, TrendingUp, Building2, Calendar } from 'lucide-react';
+import { Users, Handshake, MessageSquare, TrendingUp, Rocket } from 'lucide-react';
 import { format } from 'date-fns';
+import { ProposalRequestsTab } from '@/components/admin/ProposalRequestsTab';
 
 interface PartnerSubmission {
   id: string;
