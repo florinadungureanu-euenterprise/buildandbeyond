@@ -10,6 +10,7 @@ import { Send, Upload, X, FileText, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { TemplatePopover } from './TemplatePopover';
+import { ProposalOptIn } from './ProposalOptIn';
 
 // Simple markdown parser for chat messages
 const parseMarkdown = (text: string) => {
