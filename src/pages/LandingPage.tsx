@@ -366,7 +366,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Free */}
             <Card className="p-8 border-border">
               <div className="mb-6">
@@ -428,6 +428,36 @@ export default function LandingPage() {
               <Button className="w-full" onClick={() => navigate('/signup')}>
                 Try it free
                 <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Card>
+
+            {/* Enterprise */}
+            <Card className="p-8 border-border bg-muted/30">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-foreground">Enterprise</h3>
+                <div className="mt-2">
+                  <span className="text-4xl font-extrabold text-foreground">Custom</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">Tailored to your organization's needs</p>
+              </div>
+              <ul className="space-y-3 mb-8">
+                {[
+                  'Everything in Pro',
+                  'Custom integrations',
+                  'Dedicated account manager',
+                  'Custom reporting & analytics',
+                  'Team onboarding & training',
+                  'Priority support',
+                  'White-label options',
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
+                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Button variant="outline" className="w-full" onClick={() => window.location.href = 'mailto:hello@buildandbeyond.eu?subject=Enterprise Demo Request'}>
+                Request a demo
               </Button>
             </Card>
           </div>
