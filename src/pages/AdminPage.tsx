@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, Handshake, MessageSquare, TrendingUp, Building2, Calendar } from 'lucide-react';
+import { Users, Handshake, MessageSquare, TrendingUp, Rocket } from 'lucide-react';
 import { format } from 'date-fns';
+import { ProposalRequestsTab } from '@/components/admin/ProposalRequestsTab';
 
 interface PartnerSubmission {
   id: string;
@@ -70,6 +71,7 @@ export function AdminPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [replies, setReplies] = useState<ForumReply[]>([]);
+  const [proposalRequests, setProposalRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -78,17 +80,19 @@ export function AdminPage() {
 
   const loadAllData = async () => {
     setLoading(true);
-    const [partnersRes, profilesRes, postsRes, repliesRes] = await Promise.all([
+    const [partnersRes, profilesRes, postsRes, repliesRes, proposalsRes] = await Promise.all([
       supabase.from('partner_submissions' as any).select('*').order('created_at', { ascending: false }),
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_posts').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_replies').select('*').order('created_at', { ascending: false }),
+      supabase.from('proposal_requests' as any).select('*').order('created_at', { ascending: false }),
     ]);
 
     if (partnersRes.data) setPartners(partnersRes.data as any);
     if (profilesRes.data) setProfiles(profilesRes.data);
     if (postsRes.data) setPosts(postsRes.data);
     if (repliesRes.data) setReplies(repliesRes.data);
+    if (proposalsRes.data) setProposalRequests(proposalsRes.data as any);
     setLoading(false);
   };
 
@@ -112,7 +116,7 @@ export function AdminPage() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
@@ -135,6 +139,19 @@ export function AdminPage() {
               <div>
                 <p className="text-2xl font-bold">{partners.length}</p>
                 <p className="text-xs text-muted-foreground">Partner Applications</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-accent/20">
+                <Rocket className="w-5 h-5 text-accent-foreground" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{proposalRequests.length}</p>
+                <p className="text-xs text-muted-foreground">Proposal Requests</p>
               </div>
             </div>
           </CardContent>
@@ -168,12 +185,17 @@ export function AdminPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="partners" className="space-y-4">
+      <Tabs defaultValue="proposals" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="partners">Partner Submissions ({partners.length})</TabsTrigger>
-          <TabsTrigger value="users">Registered Users ({profiles.length})</TabsTrigger>
-          <TabsTrigger value="forum">Forum Activity ({posts.length} posts, {replies.length} replies)</TabsTrigger>
+          <TabsTrigger value="proposals">Proposals ({proposalRequests.length})</TabsTrigger>
+          <TabsTrigger value="partners">Partners ({partners.length})</TabsTrigger>
+          <TabsTrigger value="users">Users ({profiles.length})</TabsTrigger>
+          <TabsTrigger value="forum">Forum ({posts.length})</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="proposals">
+          <ProposalRequestsTab requests={proposalRequests} profiles={profiles} onRefresh={loadAllData} />
+        </TabsContent>
 
         <TabsContent value="partners">
           <Card>

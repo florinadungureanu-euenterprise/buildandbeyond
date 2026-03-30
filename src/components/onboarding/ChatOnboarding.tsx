@@ -10,6 +10,7 @@ import { Send, Upload, X, FileText, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { TemplatePopover } from './TemplatePopover';
+import { ProposalOptIn } from './ProposalOptIn';
 
 // Simple markdown parser for chat messages
 const parseMarkdown = (text: string) => {
@@ -335,7 +336,8 @@ export function ChatOnboarding() {
             </p>
           </div>
         ) : (
-          <div className="border-t border-border bg-card p-4">
+          <div className="border-t border-border bg-card p-4 space-y-4">
+            <ProposalOptIn variant="post-onboarding" />
             <Button onClick={() => navigate('/')} className="w-full" size="lg">
               View Your Dashboard
             </Button>
