@@ -185,7 +185,7 @@ export function AdminPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="partners" className="space-y-4">
+      <Tabs defaultValue="proposals" className="space-y-4">
         <TabsList>
           <TabsTrigger value="proposals">Proposals ({proposalRequests.length})</TabsTrigger>
           <TabsTrigger value="partners">Partners ({partners.length})</TabsTrigger>
