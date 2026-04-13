@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Shield, Lock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -66,7 +70,13 @@ const statusColors: Record<string, string> = {
   rejected: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
 };
 
+const ADMIN_PASSWORD_HASH_KEY = 'bb_admin_auth';
+
 export function AdminPage() {
+  const { user } = useAuth();
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [partners, setPartners] = useState<PartnerSubmission[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [posts, setPosts] = useState<ForumPost[]>([]);
@@ -74,9 +84,53 @@ export function AdminPage() {
   const [proposalRequests, setProposalRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadAllData();
+  // Check if user is the hardcoded admin
+  const isAdminUser = user?.id === '90cee2ce-d88e-417f-bfd7-d692d008b346';
+
+  // Verify admin access via server-side function
+  const verifyAdmin = useCallback(async () => {
+    const { data } = await supabase.rpc('is_admin');
+    return data === true;
   }, []);
+
+  useEffect(() => {
+    // Check session storage for existing auth
+    const stored = sessionStorage.getItem(ADMIN_PASSWORD_HASH_KEY);
+    if (stored === 'verified') {
+      verifyAdmin().then(ok => {
+        if (ok) setAuthenticated(true);
+        else sessionStorage.removeItem(ADMIN_PASSWORD_HASH_KEY);
+      });
+    }
+  }, [verifyAdmin]);
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!isAdminUser) {
+      setError('Access denied. You are not authorized.');
+      return;
+    }
+
+    // Simple password check — the real security is the is_admin() RLS function
+    if (password === 'BuildBeyond2025!') {
+      const ok = await verifyAdmin();
+      if (ok) {
+        setAuthenticated(true);
+        sessionStorage.setItem(ADMIN_PASSWORD_HASH_KEY, 'verified');
+      } else {
+        setError('Server-side admin verification failed.');
+      }
+    } else {
+      setError('Incorrect password.');
+    }
+    setPassword('');
+  };
+
+  useEffect(() => {
+    if (authenticated) loadAllData();
+  }, [authenticated]);
 
   const loadAllData = async () => {
     setLoading(true);
@@ -99,6 +153,46 @@ export function AdminPage() {
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const recentPartners = partners.filter(p => new Date(p.created_at) > weekAgo).length;
   const recentPosts = posts.filter(p => new Date(p.created_at) > weekAgo).length;
+
+  if (!authenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-muted/30">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-3 p-3 rounded-full bg-primary/10 w-fit">
+              <Lock className="w-6 h-6 text-primary" />
+            </div>
+            <CardTitle>Admin Access</CardTitle>
+            <p className="text-sm text-muted-foreground">Enter the admin password to continue</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handlePasswordSubmit} className="space-y-4">
+              <Input
+                type="password"
+                placeholder="Admin password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                autoFocus
+              />
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              <Button type="submit" className="w-full">Unlock Dashboard</Button>
+            </form>
+            <div className="mt-6 p-3 rounded-lg bg-muted/50 border">
+              <div className="flex items-center gap-2 mb-1">
+                <Shield className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs font-medium text-muted-foreground">GDPR Compliance</span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                This dashboard displays personal data (names, emails) under legitimate interest (Art. 6(1)(f) GDPR). 
+                Data is processed only for platform administration. Access is restricted to authorized personnel. 
+                Session expires when you close the browser tab.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
