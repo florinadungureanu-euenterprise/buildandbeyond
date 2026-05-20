@@ -84,8 +84,12 @@ export function AdminPage() {
   const [proposalRequests, setProposalRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is the hardcoded admin
-  const isAdminUser = user?.id === '90cee2ce-d88e-417f-bfd7-d692d008b346';
+  // Check if user is one of the hardcoded admin accounts
+  const ADMIN_USER_IDS = [
+    '90cee2ce-d88e-417f-bfd7-d692d008b346',
+    '734591d1-ea79-41b4-ab50-8724e983d41c',
+  ];
+  const isAdminUser = !!user?.id && ADMIN_USER_IDS.includes(user.id);
 
   // Verify admin access via server-side function
   const verifyAdmin = useCallback(async () => {
