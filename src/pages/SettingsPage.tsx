@@ -24,6 +24,9 @@ export function SettingsPage() {
     company_name: '',
     linkedin_url: '',
   });
+  const [digestFrequency, setDigestFrequency] = useState<string>('weekly');
+  const [webhookUrl, setWebhookUrl] = useState<string>('');
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
