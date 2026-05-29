@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -406,6 +407,21 @@ export function CommunityPage() {
                 </div>
               </Card>
             ))}
+          </div>
+          <div className="mt-6">
+            <Card className="p-6 bg-primary/5 border-primary/20">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-semibold text-foreground">Are you an expert?</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Apply to join the Scaleit team and help founders navigate their growth journey.
+                  </p>
+                </div>
+                <Button asChild>
+                  <Link to="/expert-profile">Apply to be a Scaleit expert</Link>
+                </Button>
+              </div>
+            </Card>
           </div>
         </div>
       )}
