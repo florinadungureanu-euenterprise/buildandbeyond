@@ -43,7 +43,10 @@ export function SettingsPage() {
             company_name: (data as any).company_name || '',
             linkedin_url: (data as any).linkedin_url || '',
           });
+          setDigestFrequency((data as any).digest_frequency || 'weekly');
+          setWebhookUrl((data as any).webhook_url || '');
         }
+
       });
   }, [user]);
 
