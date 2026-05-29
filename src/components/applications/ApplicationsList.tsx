@@ -48,7 +48,26 @@ export function ApplicationsList() {
   const expertRecommendations = useStore((state) => state.expertRecommendations);
   const [selectedApp, setSelectedApp] = useState<typeof applications[0] | null>(null);
   const [filterType, setFilterType] = useState<string>('all');
+  const [bookingUrlByExpertId, setBookingUrlByExpertId] = useState<Record<string, string>>({});
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (expertRecommendations.length === 0) return;
+    const ids = expertRecommendations.map((r) => r.expert_id).filter(Boolean);
+    if (ids.length === 0) return;
+    supabase
+      .from('experts')
+      .select('id, booking_url')
+      .in('id', ids)
+      .then(({ data }) => {
+        if (!data) return;
+        const map: Record<string, string> = {};
+        data.forEach((e: { id: string; booking_url: string | null }) => {
+          if (e.booking_url) map[e.id] = e.booking_url;
+        });
+        setBookingUrlByExpertId(map);
+      });
+  }, [expertRecommendations]);
 
   const types = ['all', ...Array.from(new Set(applications.map((a) => a.type)))];
 
