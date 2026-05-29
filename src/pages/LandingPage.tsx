@@ -566,6 +566,11 @@ export default function LandingPage() {
             <Rocket className="w-5 h-5 text-primary" />
             <span className="font-semibold text-foreground">Build&nbsp;&amp;&nbsp;Beyond</span>
           </div>
+          <div className="flex items-center gap-6">
+            <Link to="/expert-profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Apply to be a Scaleit expert
+            </Link>
+          </div>
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Build & Beyond. European Startup Intelligence.
           </p>
