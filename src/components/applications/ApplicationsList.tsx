@@ -136,7 +136,17 @@ export function ApplicationsList() {
                       <p className="font-semibold text-foreground truncate">{rec.expert_name}</p>
                       <p className="text-xs text-muted-foreground truncate">{getExpertTitle(rec.expert_name)}</p>
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => shareToSlack(`*${rec.expert_name}* — ${rec.why_recommended}`)}
+                      title="Share to Slack"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </Button>
                   </div>
+
                   {rec.scaleit_bucket && (
                     <Badge variant="secondary" className="w-fit text-xs">{rec.scaleit_bucket}</Badge>
                   )}
