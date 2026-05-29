@@ -60,6 +60,16 @@ export interface ValidationScores {
   solutionFit: number;
 }
 
+export interface ExpertRecommendation {
+  expert_name: string;
+  expert_id: string;
+  service_area: string;
+  scaleit_bucket: string;
+  why_recommended: string;
+  booking_cta: string;
+  match_score: number;
+}
+
 export interface Application {
   id: string;
   name: string;
