@@ -438,12 +438,15 @@ const universalQuestions: OnboardingQuestion[] = [
 
 export function useOnboardingChat() {
   const [messages, setMessages] = useState<OnboardingMessage[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1); // Start at -1 for stage detection
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-2); // -2: stakeholder, -1: stage
   const [hasSentToN8n, setHasSentToN8n] = useState(false);
   const [startupStage, setStartupStage] = useState<'early' | 'later' | null>(null);
+  const [stakeholderType, setStakeholderType] = useState<string>('');
+  const [isCorporateFlow, setIsCorporateFlow] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [onboardingProfile, setOnboardingProfile] = useState<Partial<OnboardingProfile>>({
-    document_insights: []
+    document_insights: [],
+    selected_priorities: [],
   });
   const [isInFoundationalPhase, setIsInFoundationalPhase] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
