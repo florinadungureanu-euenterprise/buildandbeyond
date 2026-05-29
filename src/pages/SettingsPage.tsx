@@ -9,7 +9,9 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { ScreenTour } from '@/components/tours/ScreenTour';
-import { Settings, User, Shield, Bell } from 'lucide-react';
+import { Settings, User, Shield, Bell, Plug } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 
 export function SettingsPage() {
   const { user, signOut } = useAuth();
