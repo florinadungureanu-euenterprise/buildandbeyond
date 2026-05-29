@@ -92,6 +92,7 @@ export function AdminPage() {
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [replies, setReplies] = useState<ForumReply[]>([]);
   const [proposalRequests, setProposalRequests] = useState<any[]>([]);
+  const [experts, setExperts] = useState<ExpertRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Check if user is one of the hardcoded admin accounts
