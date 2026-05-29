@@ -1055,6 +1055,8 @@ export function useOnboardingChat() {
       customer: profileData.customer,
       stage: profileData.stage_detected,
       fundraisingType: profileData.fundraising_type,
+      stakeholder_type: profileData.stakeholder_type,
+      selected_priorities: profileData.selected_priorities,
     };
 
     console.log('Triggering research agent with profile:', researchProfile);
