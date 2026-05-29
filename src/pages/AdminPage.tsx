@@ -51,6 +51,16 @@ interface Profile {
   linkedin_url: string | null;
 }
 
+interface ExpertRow {
+  id: string;
+  name: string;
+  title: string | null;
+  scaleit_buckets: string[] | null;
+  is_active: boolean | null;
+  booking_url: string | null;
+  created_at: string;
+}
+
 const partnerTypeLabels: Record<string, string> = {
   programme: 'Venture Building',
   investor: 'Investor',
