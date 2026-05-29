@@ -128,7 +128,7 @@ export function ApplicationsList() {
                   </div>
                   <Button
                     className="mt-2"
-                    onClick={() => window.open(rec['booking_url' as keyof typeof rec] as string || '#', '_blank', 'noopener,noreferrer')}
+                    onClick={() => window.open(bookingUrlByExpertId[rec.expert_id] || '#', '_blank', 'noopener,noreferrer')}
                   >
                     {rec.booking_cta || 'Book a session'}
                   </Button>
