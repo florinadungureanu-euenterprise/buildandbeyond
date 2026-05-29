@@ -254,6 +254,11 @@ export function FounderIntakeForm({ onBack }: { onBack: () => void }) {
         if (mapperResult.applications?.length) {
           store.addResearchApplications(mapperResult.applications);
         }
+
+        // Store expert recommendations
+        if (mapperResult.expert_recommendations?.length) {
+          store.setExpertRecommendations(mapperResult.expert_recommendations);
+        }
       }
 
       // Also trigger research agent for market data enrichment
