@@ -86,6 +86,60 @@ export type Database = {
         }
         Relationships: []
       }
+      experts: {
+        Row: {
+          bio: string | null
+          booking_url: string | null
+          created_at: string | null
+          expertise_keywords: string[] | null
+          id: string
+          is_active: boolean | null
+          linkedin_url: string | null
+          name: string
+          photo_url: string | null
+          scaleit_buckets: string[] | null
+          services: Json | null
+          stakeholder_types: string[] | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string | null
+          booking_url?: string | null
+          created_at?: string | null
+          expertise_keywords?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          linkedin_url?: string | null
+          name: string
+          photo_url?: string | null
+          scaleit_buckets?: string[] | null
+          services?: Json | null
+          stakeholder_types?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string | null
+          booking_url?: string | null
+          created_at?: string | null
+          expertise_keywords?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          linkedin_url?: string | null
+          name?: string
+          photo_url?: string | null
+          scaleit_buckets?: string[] | null
+          services?: Json | null
+          stakeholder_types?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       forum_likes: {
         Row: {
           created_at: string
