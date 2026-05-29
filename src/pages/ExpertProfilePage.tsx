@@ -182,14 +182,17 @@ export function ExpertProfilePage() {
           </div>
           <div className="flex gap-2 pt-2">
             <Input
-              placeholder="Add your own bucket (e.g. ESG Ready)"
+              placeholder="Add your own (comma-separated, or one at a time)"
               value={customBucket}
               onChange={(e) => setCustomBucket(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  const v = customBucket.trim();
-                  if (v && !buckets.includes(v)) setBuckets([...buckets, v]);
+                  const additions = customBucket
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter((s) => s && !buckets.includes(s));
+                  if (additions.length) setBuckets([...buckets, ...additions]);
                   setCustomBucket('');
                 }
               }}
@@ -198,8 +201,11 @@ export function ExpertProfilePage() {
               type="button"
               variant="outline"
               onClick={() => {
-                const v = customBucket.trim();
-                if (v && !buckets.includes(v)) setBuckets([...buckets, v]);
+                const additions = customBucket
+                  .split(',')
+                  .map((s) => s.trim())
+                  .filter((s) => s && !buckets.includes(s));
+                if (additions.length) setBuckets([...buckets, ...additions]);
                 setCustomBucket('');
               }}
             >
