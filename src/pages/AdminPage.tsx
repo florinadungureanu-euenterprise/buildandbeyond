@@ -313,6 +313,7 @@ export function AdminPage() {
           <TabsTrigger value="partners">Partners ({partners.length})</TabsTrigger>
           <TabsTrigger value="users">Users ({profiles.length})</TabsTrigger>
           <TabsTrigger value="forum">Forum ({posts.length})</TabsTrigger>
+          <TabsTrigger value="experts">Experts ({experts.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="proposals">
