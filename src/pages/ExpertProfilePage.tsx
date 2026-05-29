@@ -170,17 +170,48 @@ export function ExpertProfilePage() {
 
         <div className="space-y-2">
           <Label>Scaleit buckets</Label>
+          <p className="text-xs text-muted-foreground">Pick the areas you advise on. You can also add your own.</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {SCALEIT_BUCKETS.map((b) => (
+            {Array.from(new Set([...SCALEIT_BUCKETS, ...buckets])).map((b) => (
               <label key={b} className="flex items-center gap-2 text-sm cursor-pointer">
                 <Checkbox checked={buckets.includes(b)} onCheckedChange={() => toggleBucket(b)} />
                 <span>{b}</span>
               </label>
             ))}
           </div>
+          <div className="flex gap-2 pt-2">
+            <Input
+              placeholder="Add your own bucket (e.g. ESG Ready)"
+              value={customBucket}
+              onChange={(e) => setCustomBucket(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const v = customBucket.trim();
+                  if (v && !buckets.includes(v)) setBuckets([...buckets, v]);
+                  setCustomBucket('');
+                }
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                const v = customBucket.trim();
+                if (v && !buckets.includes(v)) setBuckets([...buckets, v]);
+                setCustomBucket('');
+              }}
+            >
+              Add
+            </Button>
+          </div>
           {buckets.length > 0 && (
-            <div className="flex flex-wrap gap-1 pt-1">
-              {buckets.map((b) => <Badge key={b} variant="secondary" className="text-xs">{b}</Badge>)}
+            <div className="flex flex-wrap gap-1 pt-2">
+              {buckets.map((b) => (
+                <Badge key={b} variant="secondary" className="text-xs cursor-pointer" onClick={() => toggleBucket(b)}>
+                  {b} ×
+                </Badge>
+              ))}
             </div>
           )}
         </div>
