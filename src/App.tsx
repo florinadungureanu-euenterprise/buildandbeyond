@@ -88,6 +88,7 @@ const router = createBrowserRouter(
         { path: '/settings', element: <SettingsPage /> },
         { path: '/community', element: <CommunityPage /> },
         { path: '/admin', element: <AdminPage /> },
+        { path: '/expert-profile', element: <ExpertProfilePage /> },
       ]
     },
     { path: '/', element: <LandingPage /> },
