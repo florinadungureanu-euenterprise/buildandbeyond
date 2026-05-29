@@ -15,6 +15,8 @@ import { EventsPage } from '@/pages/EventsPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { CommunityPage } from '@/pages/CommunityPage';
 import { AdminPage } from '@/pages/AdminPage';
+import { ExpertProfilePage } from '@/pages/ExpertProfilePage';
+
 
 import { FundraisingPage } from '@/pages/FundraisingPage';
 import LandingPage from '@/pages/LandingPage';
