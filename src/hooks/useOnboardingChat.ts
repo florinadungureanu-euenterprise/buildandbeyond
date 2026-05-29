@@ -464,15 +464,18 @@ export function useOnboardingChat() {
   // Determine which questions to show
   const getQuestionFlow = () => {
     if (!startupStage) return [];
-    
+
+    if (isCorporateFlow) {
+      return [...corporateFlowQuestions, selectedPrioritiesQuestion, ...universalQuestions];
+    }
+
     if (startupStage === 'early') {
-      return [...earlyStageQuestions, ...universalQuestions];
+      return [...earlyStageQuestions, selectedPrioritiesQuestion, ...universalQuestions];
     } else {
-      // Later stage: operational questions + condensed foundational + universal
       if (!isInFoundationalPhase) {
         return laterStageQuestions;
       } else {
-        return [...laterStageFoundationalQuestions, ...universalQuestions];
+        return [...laterStageFoundationalQuestions, selectedPrioritiesQuestion, ...universalQuestions];
       }
     }
   };
@@ -485,25 +488,28 @@ export function useOnboardingChat() {
       : null;
 
   const getTotalQuestions = () => {
-    if (!startupStage) return 1;
+    if (!startupStage) return 2;
+    if (isCorporateFlow) {
+      return corporateFlowQuestions.length + 1 + universalQuestions.length + 2;
+    }
     if (startupStage === 'early') {
-      return earlyStageQuestions.length + universalQuestions.length + 1; // +1 for stage
+      return earlyStageQuestions.length + 1 + universalQuestions.length + 2;
     } else {
-      return laterStageQuestions.length + laterStageFoundationalQuestions.length + universalQuestions.length + 1;
+      return laterStageQuestions.length + laterStageFoundationalQuestions.length + 1 + universalQuestions.length + 2;
     }
   };
 
   const getCurrentProgress = () => {
     if (!startupStage) return 0;
-    
     const userAnswers = messages.filter(m => m.role === 'user').length;
     const total = getTotalQuestions();
-    return (userAnswers / total) * 100;
+    return Math.min((userAnswers / total) * 100, 99);
   };
 
   const progress = getCurrentProgress();
-  const isComplete = startupStage !== null && currentQuestionIndex >= filteredQuestions.length && 
-                     (startupStage === 'early' || isInFoundationalPhase);
+  const isComplete = startupStage !== null && currentQuestionIndex >= filteredQuestions.length &&
+                     (isCorporateFlow || startupStage === 'early' || isInFoundationalPhase);
+
 
   // Initial stage detection message
   useEffect(() => {
