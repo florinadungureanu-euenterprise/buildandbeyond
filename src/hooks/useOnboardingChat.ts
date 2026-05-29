@@ -9,6 +9,87 @@ const generateSessionId = () => {
   return `session-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 };
 
+const STAKEHOLDER_OPTIONS = [
+  "I'm a founder or startup",
+  "I'm a corporate innovation team",
+  "I run an accelerator, government programme, or university",
+];
+
+const PRIORITY_OPTIONS = [
+  'Product-market fit',
+  'Sales & revenue growth',
+  'Brand & founder visibility',
+  'Fundraising',
+  'Enterprise & corporate partnerships',
+  'International / EU expansion',
+  'EU grants & public funding',
+  'Operational scaling',
+  'Financial planning & forecasting',
+];
+
+const corporateFlowQuestions: OnboardingQuestion[] = [
+  {
+    id: 1,
+    question: 'What is your organisation and what does it do? (name, sector, size)',
+    templates: [
+      '[Company name] is a [type] in [sector] with [~X] employees',
+      'We are the [department] of [company], focused on [mandate]',
+    ],
+    key: 'solution',
+    stage: 'early',
+  },
+  {
+    id: 2,
+    question: 'What is the core challenge or opportunity you are trying to address right now?',
+    templates: [
+      'We need to [achieve] because [reason], but we are blocked by [obstacle]',
+      'The opportunity is [description]. Our main constraint is [bottleneck]',
+    ],
+    key: 'problem',
+    stage: 'early',
+  },
+  {
+    id: 3,
+    question: 'Who are the internal or external stakeholders this initiative needs to serve?',
+    templates: [
+      'Internal: [team/division]. External: [partners/users/communities]',
+      'Primary: [stakeholder]. Secondary: [stakeholder]',
+    ],
+    key: 'customer',
+    stage: 'early',
+  },
+  {
+    id: 4,
+    question: 'What does success look like in 6-12 months? What metric or outcome matters most?',
+    templates: [
+      'Success = [outcome] measured by [KPI] within [timeframe]',
+      'Key result: [metric] at [target] by [date]',
+    ],
+    key: 'twelve_week_goal',
+    stage: 'early',
+  },
+  {
+    id: 5,
+    question: 'Do you have budget allocated, and are you exploring external funding (grants, public programmes)?',
+    templates: [
+      'Budget: [amount/stage]. Exploring: [grant types / open innovation programmes]',
+      'Internal budget approved. Also exploring [EU / national grants]',
+      'No external funding planned at this stage',
+    ],
+    key: 'fundraising_type',
+    stage: 'early',
+  },
+];
+
+const selectedPrioritiesQuestion: OnboardingQuestion = {
+  id: 98,
+  question: `Almost there! To make sure we connect you with the right experts and resources, pick up to 3 of your top priorities right now:\n\n${PRIORITY_OPTIONS.map((p, i) => `${i + 1}. ${p}`).join('\n')}\n\nJust reply with the numbers or names - e.g. "1, 4, 7"`,
+  templates: PRIORITY_OPTIONS.map((p) => p),
+  key: 'selected_priorities_raw',
+  stage: 'all',
+};
+
+
 // Early-stage flow questions (idea → MVP → early customers)
 const earlyStageQuestions: OnboardingQuestion[] = [
   {
