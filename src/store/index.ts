@@ -15,6 +15,7 @@ interface AppState {
   fundingData: FundingData;
   onboardingComplete: boolean;
   dataLoaded: boolean;
+  expertRecommendations: ExpertRecommendation[];
 
   // Actions
   toggleMilestone: (milestoneId: string) => void;
