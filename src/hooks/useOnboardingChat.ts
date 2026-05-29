@@ -676,8 +676,23 @@ export function useOnboardingChat() {
 
     // Store answer in profile
     if (currentQuestion) {
-      // Handle consolidated later-stage questions
-      if (currentQuestion.key === 'customer_and_problem') {
+      if (currentQuestion.key === 'selected_priorities_raw') {
+        const picked: string[] = [];
+        const numMatches = content.match(/\d+/g);
+        if (numMatches) {
+          numMatches.forEach(n => {
+            const idx = parseInt(n) - 1;
+            if (idx >= 0 && idx < PRIORITY_OPTIONS.length) picked.push(PRIORITY_OPTIONS[idx]);
+          });
+        }
+        if (picked.length === 0) {
+          PRIORITY_OPTIONS.forEach(p => {
+            if (content.toLowerCase().includes(p.toLowerCase())) picked.push(p);
+          });
+        }
+        const finalPriorities = picked.length > 0 ? picked.slice(0, 3) : [content];
+        setOnboardingProfile(prev => ({ ...prev, selected_priorities: finalPriorities }));
+      } else if (currentQuestion.key === 'customer_and_problem') {
         // Parse and split the combined answer
         setOnboardingProfile(prev => ({
           ...prev,
