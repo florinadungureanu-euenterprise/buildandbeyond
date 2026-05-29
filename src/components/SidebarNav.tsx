@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { LogOut } from 'lucide-react';
 
 const navItems = [
@@ -19,7 +21,18 @@ const navItems = [
 export function SidebarNav() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
+  const [isExpert, setIsExpert] = useState(false);
+
+  useEffect(() => {
+    if (!user?.id) { setIsExpert(false); return; }
+    supabase
+      .from('experts')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => setIsExpert(!!data));
+  }, [user?.id]);
 
   const handleLogout = async () => {
     await signOut();
@@ -61,6 +74,11 @@ export function SidebarNav() {
         <Link to="/settings" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
           Settings
         </Link>
+        {isExpert && (
+          <Link to="/expert-profile" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
+            Expert Profile
+          </Link>
+        )}
         <Link to="/admin" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
           Admin
         </Link>

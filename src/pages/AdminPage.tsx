@@ -51,6 +51,16 @@ interface Profile {
   linkedin_url: string | null;
 }
 
+interface ExpertRow {
+  id: string;
+  name: string;
+  title: string | null;
+  scaleit_buckets: string[] | null;
+  is_active: boolean | null;
+  booking_url: string | null;
+  created_at: string;
+}
+
 const partnerTypeLabels: Record<string, string> = {
   programme: 'Venture Building',
   investor: 'Investor',
@@ -82,6 +92,7 @@ export function AdminPage() {
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [replies, setReplies] = useState<ForumReply[]>([]);
   const [proposalRequests, setProposalRequests] = useState<any[]>([]);
+  const [experts, setExperts] = useState<ExpertRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Check if user is one of the hardcoded admin accounts
@@ -138,12 +149,13 @@ export function AdminPage() {
 
   const loadAllData = async () => {
     setLoading(true);
-    const [partnersRes, profilesRes, postsRes, repliesRes, proposalsRes] = await Promise.all([
+    const [partnersRes, profilesRes, postsRes, repliesRes, proposalsRes, expertsRes] = await Promise.all([
       supabase.from('partner_submissions' as any).select('*').order('created_at', { ascending: false }),
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_posts').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_replies').select('*').order('created_at', { ascending: false }),
       supabase.from('proposal_requests' as any).select('*').order('created_at', { ascending: false }),
+      supabase.from('experts').select('*').order('created_at', { ascending: true }),
     ]);
 
     if (partnersRes.data) setPartners(partnersRes.data as any);
@@ -151,7 +163,19 @@ export function AdminPage() {
     if (postsRes.data) setPosts(postsRes.data);
     if (repliesRes.data) setReplies(repliesRes.data);
     if (proposalsRes.data) setProposalRequests(proposalsRes.data as any);
+    if (expertsRes.data) setExperts(expertsRes.data as ExpertRow[]);
     setLoading(false);
+  };
+
+  const toggleExpertActive = async (id: string, current: boolean | null) => {
+    const { error } = await supabase.from('experts').update({ is_active: !current }).eq('id', id);
+    if (error) { return; }
+    setExperts((prev) => prev.map((e) => (e.id === id ? { ...e, is_active: !current } : e)));
+  };
+
+  const saveExpertBookingUrl = async (id: string, value: string) => {
+    await supabase.from('experts').update({ booking_url: value || null }).eq('id', id);
+    setExperts((prev) => prev.map((e) => (e.id === id ? { ...e, booking_url: value || null } : e)));
   };
 
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -289,6 +313,7 @@ export function AdminPage() {
           <TabsTrigger value="partners">Partners ({partners.length})</TabsTrigger>
           <TabsTrigger value="users">Users ({profiles.length})</TabsTrigger>
           <TabsTrigger value="forum">Forum ({posts.length})</TabsTrigger>
+          <TabsTrigger value="experts">Experts ({experts.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="proposals">
@@ -424,6 +449,77 @@ export function AdminPage() {
                           </TableRow>
                         );
                       })}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="experts">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="w-5 h-5" /> Experts
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {experts.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">No experts yet</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Scaleit Buckets</TableHead>
+                        <TableHead>Booking URL</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {experts.map((e) => (
+                        <TableRow key={e.id}>
+                          <TableCell className="font-medium">{e.name}</TableCell>
+                          <TableCell className="text-xs">{e.title || '-'}</TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-1 max-w-[260px]">
+                              {(e.scaleit_buckets || []).map((b) => (
+                                <Badge key={b} variant="outline" className="text-[10px]">{b}</Badge>
+                              ))}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              defaultValue={e.booking_url || ''}
+                              placeholder="https://…"
+                              className="text-xs h-8 min-w-[180px]"
+                              onBlur={(ev) => {
+                                if (ev.target.value !== (e.booking_url || '')) {
+                                  saveExpertBookingUrl(e.id, ev.target.value);
+                                }
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={e.is_active ? statusColors.approved : statusColors.new}>
+                              {e.is_active ? 'active' : 'pending'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              size="sm"
+                              variant={e.is_active ? 'outline' : 'default'}
+                              onClick={() => toggleExpertActive(e.id, e.is_active)}
+                            >
+                              {e.is_active ? 'Deactivate' : 'Approve'}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </div>
