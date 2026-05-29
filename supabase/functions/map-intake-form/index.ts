@@ -29,22 +29,19 @@ serve(async (req) => {
       .select('id, name, title, scaleit_buckets, expertise_keywords, services, stakeholder_types')
       .eq('is_active', true);
 
-    if (expertsError) {
-      console.error('Failed to fetch experts:', expertsError);
-    }
+    if (expertsError) console.error('Failed to fetch experts:', expertsError);
 
-    const expertsContext = experts && experts.length > 0
+    const expertsContext = experts?.length
       ? `\n\nAVAILABLE EXPERTS FOR ROUTING:\n${JSON.stringify(experts, null, 2)}`
       : '';
 
     const formSummary = `
-FOUNDER INTAKE FORM DATA:
+INTAKE FORM DATA:
 - Name: ${formData.fullName}
 - Company: ${formData.companyName}
 - Industry: ${formData.industry}
 - Stage: ${formData.currentStage}
 - Location: ${formData.companyLocation}
-- Website: ${formData.website || 'N/A'}
 - Stakeholder type: ${formData.stakeholder_type || 'founder'}
 - Selected priorities: ${(formData.selected_priorities || []).join(', ') || 'N/A'}
 - Venture: ${formData.ventureOneSentence}
@@ -57,7 +54,6 @@ FOUNDER INTAKE FORM DATA:
 - Impact: ${formData.impact}
 - 6-month deadline: ${formData.deadline}
 - Who builds: ${formData.whoBuilds}
-- Looking for co-founder: ${formData.lookingForCofounder} ${formData.cofounderRoles || ''}
 - Tech stack: ${formData.techStack}
 - Has product: ${formData.hasProduct}
 - Traction: ${formData.traction}
@@ -67,48 +63,38 @@ FOUNDER INTAKE FORM DATA:
 - Funding types: ${(formData.fundingTypes || []).join(', ')}
 - Funding use: ${formData.fundingUse}
 - Runway: ${formData.currentRunway}
-- Ideal investor: ${formData.idealInvestor}
-- Steps taken: ${formData.fundraisingStepsTaken}
-- Investor feedback: ${formData.investorFeedback}
 - Build priorities: ${(formData.buildPriorities || []).join(', ')}
 - GTM priorities: ${(formData.gtmPriorities || []).join(', ')}
-- Fundraising priorities: ${(formData.fundraisingPriorities || []).join(', ')}
-- Team priorities: ${(formData.teamPriorities || []).join(', ')}
 - Biggest blockers: ${formData.biggestBlockers}
 - Desired outcome: ${formData.desiredOutcome}
-- Introductions needed: ${(formData.introductions || []).join(', ')}
-- Introduction details: ${formData.introductionDetails}
 - Strategic questions: ${formData.strategicQuestions}
 `;
 
-    const systemPrompt = `You are a startup advisor AI for Scaleit, a consulting collective of four experts. Given a founder's intake form data, generate structured platform data including a startup passport, personalized signals/recommendations, matched opportunities, and expert recommendations.
+    const systemPrompt = `You are a startup advisor AI for Scaleit, a consulting collective of four experts. Given an intake form, generate structured platform data: passport, signals, applications, milestones, and expert recommendations.
 
-Be specific, actionable, and grounded in the actual data provided. Do not hallucinate information not present in the form.
+Be specific and grounded in the actual data provided. Do not hallucinate.
 
 EXPERT ROUTING INSTRUCTIONS:
-- Review the founder's selected_priorities, stage, biggest blockers, fundraising status, and stakeholder_type
-- Recommend 1-3 experts from the list below who are the strongest match
-- In why_recommended: write exactly one sentence that references something specific from THIS founder's data (e.g. their stage, their blocker, their priority)
-- match_score should reflect how closely the expert's domain aligns with the founder's top priorities (0-100)
-- booking_cta should be a short action phrase e.g. "Book a 30-min EU grant strategy call"${expertsContext}`;
+- Review selected_priorities, stage, biggest blockers, fundraising status, and stakeholder_type
+- Recommend 1–3 experts from the list who are the strongest match
+- why_recommended: one sentence referencing something specific from THIS person's data
+- match_score: 0–100 alignment with their top priorities
+- booking_cta: short action phrase e.g. "Book a 30-min EU grant strategy call"${expertsContext}`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: formSummary + '\n\nGenerate the platform data for this founder.' }
+          { role: 'user', content: formSummary + '\n\nGenerate the platform data.' }
         ],
         tools: [{
           type: 'function',
           function: {
             name: 'generate_platform_data',
-            description: 'Generate structured platform data from founder intake form',
+            description: 'Generate structured platform data from intake form',
             parameters: {
               type: 'object',
               properties: {
@@ -117,13 +103,13 @@ EXPERT ROUTING INSTRUCTIONS:
                   properties: {
                     startupName: { type: 'string' },
                     tagline: { type: 'string' },
-                    summary: { type: 'string', description: '2-3 sentence summary of the venture based on form data' },
-                    validationSummary: { type: 'string', description: 'Assessment of validation status based on traction and proof points' },
-                    competitorSnapshot: { type: 'array', items: { type: 'string' }, description: 'Key competitor insights' },
-                    marketData: { type: 'array', items: { type: 'string' }, description: 'Market size, growth, and positioning data points' },
-                    roadmapSnapshot: { type: 'string', description: '6-month roadmap summary based on priorities and deadlines' },
+                    summary: { type: 'string' },
+                    validationSummary: { type: 'string' },
+                    competitorSnapshot: { type: 'array', items: { type: 'string' } },
+                    marketData: { type: 'array', items: { type: 'string' } },
+                    roadmapSnapshot: { type: 'string' },
                     industry: { type: 'string' },
-                    trl: { type: 'number', description: 'Technology Readiness Level 1-9 based on stage' },
+                    trl: { type: 'number' },
                   },
                   required: ['startupName', 'tagline', 'summary', 'validationSummary', 'competitorSnapshot', 'marketData', 'roadmapSnapshot']
                 },
@@ -139,8 +125,7 @@ EXPERT ROUTING INSTRUCTIONS:
                       priority: { type: 'string', enum: ['high', 'medium', 'low'] },
                     },
                     required: ['type', 'title', 'message', 'suggestedAction', 'priority']
-                  },
-                  description: '3-5 personalized signals/recommendations based on their priorities and blockers'
+                  }
                 },
                 applications: {
                   type: 'array',
@@ -155,8 +140,7 @@ EXPERT ROUTING INSTRUCTIONS:
                       matchScore: { type: 'number' },
                     },
                     required: ['name', 'type', 'description', 'benefits', 'matchScore']
-                  },
-                  description: 'Relevant programs/grants matched to their stage, industry, and location'
+                  }
                 },
                 milestones: {
                   type: 'array',
@@ -165,29 +149,28 @@ EXPERT ROUTING INSTRUCTIONS:
                     properties: {
                       title: { type: 'string' },
                       description: { type: 'string' },
-                      targetDate: { type: 'string', description: 'ISO date string' },
+                      targetDate: { type: 'string' },
                       category: { type: 'string', enum: ['product', 'market', 'team', 'funding'] },
                     },
                     required: ['title', 'description', 'targetDate', 'category']
-                  },
-                  description: '6-8 concrete milestones for the next 6-12 months based on their priorities and deadlines'
+                  }
                 },
                 expert_recommendations: {
                   type: 'array',
+                  description: '1-3 expert recommendations ranked by match score',
                   items: {
                     type: 'object',
                     properties: {
                       expert_name: { type: 'string' },
-                      expert_id: { type: 'string', description: 'UUID from the experts list provided' },
-                      service_area: { type: 'string', description: 'The specific service that matches this founder' },
-                      scaleit_bucket: { type: 'string', description: 'The most relevant Scaleit bucket for this founder' },
-                      why_recommended: { type: 'string', description: "One sentence referencing something specific from this founder's data" },
-                      booking_cta: { type: 'string', description: 'Short action phrase e.g. Book a 30-min EU grant strategy call' },
-                      match_score: { type: 'number', description: 'Match score 0-100 based on alignment with founder priorities' },
+                      expert_id: { type: 'string', description: 'UUID from the experts list' },
+                      service_area: { type: 'string' },
+                      scaleit_bucket: { type: 'string' },
+                      why_recommended: { type: 'string', description: 'One sentence specific to this person' },
+                      booking_cta: { type: 'string' },
+                      match_score: { type: 'number' },
                     },
                     required: ['expert_name', 'expert_id', 'service_area', 'scaleit_bucket', 'why_recommended', 'booking_cta', 'match_score']
-                  },
-                  description: '1-3 expert recommendations ranked by match score, most relevant first'
+                  }
                 },
               },
               required: ['passport', 'signals', 'applications', 'milestones', 'expert_recommendations']
@@ -200,16 +183,8 @@ EXPERT ROUTING INSTRUCTIONS:
     });
 
     if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: 'Rate limited. Please try again shortly.' }), {
-          status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted.' }), {
-          status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
+      if (response.status === 429) return new Response(JSON.stringify({ error: 'Rate limited. Please try again shortly.' }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      if (response.status === 402) return new Response(JSON.stringify({ error: 'AI credits exhausted.' }), { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       const errorText = await response.text();
       console.error('AI gateway error:', response.status, errorText);
       throw new Error('AI service unavailable');
@@ -217,42 +192,22 @@ EXPERT ROUTING INSTRUCTIONS:
 
     const aiResponse = await response.json();
     const toolCall = aiResponse.choices?.[0]?.message?.tool_calls?.[0];
-
-    if (!toolCall?.function?.arguments) {
-      throw new Error('No structured output from AI');
-    }
+    if (!toolCall?.function?.arguments) throw new Error('No structured output from AI');
 
     const platformData = JSON.parse(toolCall.function.arguments);
     console.log('Generated platform data:', JSON.stringify(platformData).slice(0, 500));
 
     if (userId && platformData.expert_recommendations?.length) {
-      const { data: existing } = await supabaseAdmin
-        .from('user_data')
-        .select('applications')
-        .eq('user_id', userId)
-        .single();
-
+      const { data: existing } = await supabaseAdmin.from('user_data').select('applications').eq('user_id', userId).single();
       const currentApps = (existing?.applications as Record<string, unknown>) || {};
-      const { error: updateError } = await supabaseAdmin
-        .from('user_data')
-        .update({
-          applications: {
-            ...currentApps,
-            expert_recommendations: platformData.expert_recommendations,
-          },
-          updated_at: new Date().toISOString(),
-        })
-        .eq('user_id', userId);
-
-      if (updateError) {
-        console.error('Failed to persist expert_recommendations to user_data:', updateError);
-      }
+      const { error: updateError } = await supabaseAdmin.from('user_data').update({
+        applications: { ...currentApps, expert_recommendations: platformData.expert_recommendations },
+        updated_at: new Date().toISOString(),
+      }).eq('user_id', userId);
+      if (updateError) console.error('Failed to persist expert_recommendations:', updateError);
     }
 
-    return new Response(JSON.stringify({
-      success: true,
-      ...platformData,
-    }), {
+    return new Response(JSON.stringify({ success: true, ...platformData }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
