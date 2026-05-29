@@ -48,6 +48,7 @@ export function ExpertProfilePage() {
   const [bookingUrl, setBookingUrl] = useState('');
   const [buckets, setBuckets] = useState<string[]>([]);
   const [keywordsRaw, setKeywordsRaw] = useState('');
+  const [customBucket, setCustomBucket] = useState('');
 
   useEffect(() => {
     if (!user?.id) return;
