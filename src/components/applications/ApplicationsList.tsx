@@ -7,10 +7,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Calendar, Award, TrendingUp, CheckCircle2, ExternalLink, Star, BookOpen } from 'lucide-react';
+import { Calendar, Award, TrendingUp, CheckCircle2, ExternalLink, Star, BookOpen, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { shareToSlack } from '@/lib/shareToSlack';
+
 
 const typeColors: Record<string, string> = {
   accelerator: 'bg-blue-100 text-blue-700 border-blue-200',
