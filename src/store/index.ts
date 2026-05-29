@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Tool, Milestone, Signal, ValidationScores, PassportData, Application, TeamMember, FundingData } from '@/types';
+import { Tool, Milestone, Signal, ValidationScores, PassportData, Application, TeamMember, FundingData, ExpertRecommendation } from '@/types';
 
 interface AppState {
   validation: ValidationScores;
