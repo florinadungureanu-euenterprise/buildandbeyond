@@ -193,9 +193,25 @@ serve(async (req) => {
   }
 
   try {
-    const { action, profile, userId } = await req.json();
+    const body = await req.json();
+    const { action, profile, userId, linkedinUrl } = body;
 
     console.log('Research agent action:', action, 'for user:', userId);
+
+    // ACTION: scrape-linkedin-founder — Apify LinkedIn profile scrape
+    if (action === 'scrape-linkedin-founder') {
+      if (!linkedinUrl) {
+        return new Response(JSON.stringify({ error: 'linkedinUrl required' }), {
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      const profileData = await apifyLinkedInScrape(linkedinUrl);
+      return new Response(JSON.stringify({ success: true, profile: profileData }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+
 
     // ACTION: research-market — Searches the web for market signals based on user profile
     if (action === 'research-market') {
