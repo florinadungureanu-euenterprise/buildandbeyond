@@ -915,7 +915,9 @@ export function useOnboardingChat() {
             later_stage_vision: onboardingProfile.later_stage_vision || '',
             industry: onboardingProfile.industry || '',
             region: onboardingProfile.region || '',
-            document_insights: onboardingProfile.document_insights || []
+            document_insights: onboardingProfile.document_insights || [],
+            stakeholder_type: onboardingProfile.stakeholder_type || 'founder',
+            selected_priorities: onboardingProfile.selected_priorities || [],
           };
 
           // Save onboarding profile to user_data table
