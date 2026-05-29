@@ -68,6 +68,56 @@ async function firecrawlScrape(url: string): Promise<string> {
   }
 }
 
+// Helper: scrape a LinkedIn profile via Apify (best-effort, returns {} if unavailable)
+async function apifyLinkedInScrape(linkedinUrl: string): Promise<Record<string, unknown>> {
+  const APIFY_API_KEY = Deno.env.get('APIFY_API_KEY');
+  if (!APIFY_API_KEY) {
+    console.log('APIFY_API_KEY not set, skipping LinkedIn scrape');
+    return {};
+  }
+  try {
+    const runRes = await fetch(
+      'https://api.apify.com/v2/acts/apify~linkedin-profile-scraper/runs?token=' + APIFY_API_KEY,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ startUrls: [{ url: linkedinUrl }], proxy: { useApifyProxy: true } }),
+      }
+    );
+    if (!runRes.ok) {
+      console.error('Apify run start failed', runRes.status);
+      return {};
+    }
+    const runData = await runRes.json();
+    const runId = runData?.data?.id;
+    if (!runId) return {};
+
+    for (let i = 0; i < 10; i++) {
+      await new Promise((r) => setTimeout(r, 3000));
+      const statusRes = await fetch(
+        `https://api.apify.com/v2/actor-runs/${runId}?token=${APIFY_API_KEY}`
+      );
+      const statusData = await statusRes.json();
+      if (statusData?.data?.status === 'SUCCEEDED') break;
+      if (['FAILED', 'ABORTED', 'TIMED-OUT'].includes(statusData?.data?.status)) {
+        console.error('Apify run failed with status', statusData?.data?.status);
+        return {};
+      }
+    }
+
+    const datasetRes = await fetch(
+      `https://api.apify.com/v2/actor-runs/${runId}/dataset/items?token=${APIFY_API_KEY}`
+    );
+    const items = await datasetRes.json();
+    return (Array.isArray(items) && items[0]) ? items[0] : {};
+  } catch (e) {
+    console.error('Apify LinkedIn scrape error', e);
+    return {};
+  }
+}
+
+
+
 // Helper: call Lovable AI for analysis
 async function analyzeWithAI(systemPrompt: string, userPrompt: string): Promise<string> {
   const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -143,9 +193,25 @@ serve(async (req) => {
   }
 
   try {
-    const { action, profile, userId } = await req.json();
+    const body = await req.json();
+    const { action, profile, userId, linkedinUrl } = body;
 
     console.log('Research agent action:', action, 'for user:', userId);
+
+    // ACTION: scrape-linkedin-founder — Apify LinkedIn profile scrape
+    if (action === 'scrape-linkedin-founder') {
+      if (!linkedinUrl) {
+        return new Response(JSON.stringify({ error: 'linkedinUrl required' }), {
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      const profileData = await apifyLinkedInScrape(linkedinUrl);
+      return new Response(JSON.stringify({ success: true, profile: profileData }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+
 
     // ACTION: research-market — Searches the web for market signals based on user profile
     if (action === 'research-market') {

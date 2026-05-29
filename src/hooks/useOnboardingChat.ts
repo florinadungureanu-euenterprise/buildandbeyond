@@ -1061,6 +1061,19 @@ export function useOnboardingChat() {
 
     console.log('Triggering research agent with profile:', researchProfile);
 
+    // Fire-and-forget: scrape founder LinkedIn via Apify (only if URL present)
+    const linkedinUrl =
+      profileData.founder_linkedin || profileData.founderLinkedIn || profileData.linkedin;
+    if (linkedinUrl && typeof linkedinUrl === 'string' && linkedinUrl.includes('linkedin.com')) {
+      supabase.functions
+        .invoke('research-agent', {
+          body: { action: 'scrape-linkedin-founder', linkedinUrl },
+        })
+        .catch((e) => console.error('LinkedIn scrape invoke error', e));
+    }
+
+
+
     // Run all 3 research actions in parallel
     const [marketResult, passportResult, opportunitiesResult] = await Promise.allSettled([
       researchAgent.researchMarket(researchProfile, userId),
