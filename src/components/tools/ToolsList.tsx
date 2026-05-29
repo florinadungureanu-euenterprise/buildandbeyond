@@ -115,18 +115,33 @@ export function ToolsList() {
               
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-gray-700">{tool.pricing}</span>
-                {tool.url && (
+                <div className="flex items-center gap-1">
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={(e) => handleVisitWebsite(tool.url!, e)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      shareToSlack(`*${tool.name}* (${tool.category})\n${tool.description}`);
+                    }}
                     className="h-7 px-2 text-xs"
+                    title="Share to Slack"
                   >
-                    <ExternalLink className="w-3 h-3 mr-1" />
-                    Visit
+                    <Share2 className="w-3 h-3" />
                   </Button>
-                )}
+                  {tool.url && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => handleVisitWebsite(tool.url!, e)}
+                      className="h-7 px-2 text-xs"
+                    >
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Visit
+                    </Button>
+                  )}
+                </div>
               </div>
+
             </Card>
           );
         })}
