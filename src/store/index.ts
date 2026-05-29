@@ -396,6 +396,7 @@ export const useStore = create<AppState>((set) => ({
   fundingData: exampleFundingData,
   onboardingComplete: false,
   dataLoaded: false,
+  expertRecommendations: [],
 
   toggleMilestone: (milestoneId) =>
     set((state) => ({
