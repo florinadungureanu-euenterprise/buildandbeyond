@@ -137,6 +137,8 @@ export interface EmpathyMap {
 }
 
 export interface OnboardingProfile {
+  stakeholder_type: string;
+  selected_priorities: string[];
   stage_detected: string;
   customer: string;
   empathy_map: EmpathyMap;
