@@ -9,7 +9,9 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { ScreenTour } from '@/components/tours/ScreenTour';
-import { Settings, User, Shield, Bell } from 'lucide-react';
+import { Settings, User, Shield, Bell, Plug } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 
 export function SettingsPage() {
   const { user, signOut } = useAuth();
@@ -22,6 +24,9 @@ export function SettingsPage() {
     company_name: '',
     linkedin_url: '',
   });
+  const [digestFrequency, setDigestFrequency] = useState<string>('weekly');
+  const [webhookUrl, setWebhookUrl] = useState<string>('');
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -38,7 +43,10 @@ export function SettingsPage() {
             company_name: (data as any).company_name || '',
             linkedin_url: (data as any).linkedin_url || '',
           });
+          setDigestFrequency((data as any).digest_frequency || 'weekly');
+          setWebhookUrl((data as any).webhook_url || '');
         }
+
       });
   }, [user]);
 
@@ -133,8 +141,75 @@ export function SettingsPage() {
           <Bell className="w-5 h-5 text-primary" />
           <h2 className="text-lg font-semibold text-foreground">Notifications</h2>
         </div>
-        <p className="text-sm text-muted-foreground">Notification preferences coming soon.</p>
+        <div className="space-y-2 max-w-xs">
+          <Label htmlFor="digest_frequency">Digest Frequency</Label>
+          <Select
+            value={digestFrequency}
+            onValueChange={async (value) => {
+              setDigestFrequency(value);
+              if (!user) return;
+              const { error } = await supabase
+                .from('profiles')
+                .update({ digest_frequency: value } as any)
+                .eq('id', user.id);
+              if (error) {
+                toast({ title: 'Error', description: error.message, variant: 'destructive' });
+              } else {
+                toast({ title: 'Digest frequency updated' });
+              }
+            }}
+          >
+            <SelectTrigger id="digest_frequency">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="weekly">Weekly</SelectItem>
+              <SelectItem value="biweekly">Biweekly</SelectItem>
+              <SelectItem value="off">Off</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </Card>
+
+      {/* Integrations */}
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Plug className="w-5 h-5 text-primary" />
+          <h2 className="text-lg font-semibold text-foreground">Integrations</h2>
+        </div>
+        <div className="space-y-3">
+          <div>
+            <Label htmlFor="webhook_url">Webhook URL</Label>
+            <Input
+              id="webhook_url"
+              value={webhookUrl}
+              onChange={(e) => setWebhookUrl(e.target.value)}
+              placeholder="https://hooks.slack.com/services/..."
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Used for Slack share buttons and outbound event notifications.
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              if (!user) return;
+              const { error } = await supabase
+                .from('profiles')
+                .update({ webhook_url: webhookUrl } as any)
+                .eq('id', user.id);
+              if (error) {
+                toast({ title: 'Error', description: error.message, variant: 'destructive' });
+              } else {
+                toast({ title: 'Webhook URL saved' });
+              }
+            }}
+          >
+            Save Webhook
+          </Button>
+        </div>
+      </Card>
+
 
       {/* Security */}
       <Card className="p-6">

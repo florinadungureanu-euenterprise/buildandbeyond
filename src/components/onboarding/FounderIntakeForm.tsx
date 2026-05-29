@@ -258,8 +258,36 @@ export function FounderIntakeForm({ onBack }: { onBack: () => void }) {
         // Store expert recommendations
         if (mapperResult.expert_recommendations?.length) {
           store.setExpertRecommendations(mapperResult.expert_recommendations);
+
+          // Fire-and-forget webhook notification
+          try {
+            const { supabase } = await import('@/integrations/supabase/client');
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('webhook_url')
+              .eq('id', user.id)
+              .maybeSingle();
+            const webhookUrl = (profile as any)?.webhook_url;
+            if (webhookUrl) {
+              fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                mode: 'no-cors',
+                body: JSON.stringify({
+                  type: 'expert_recommendations',
+                  title: 'New expert recommendations',
+                  description: 'Your Scaleit expert matches are ready',
+                  bucket: 'expert_routing',
+                  created_at: new Date().toISOString(),
+                }),
+              }).catch((e) => console.error('Webhook POST failed', e));
+            }
+          } catch (e) {
+            console.error('Webhook lookup failed', e);
+          }
         }
       }
+
 
       // Also trigger research agent for market data enrichment
       try {

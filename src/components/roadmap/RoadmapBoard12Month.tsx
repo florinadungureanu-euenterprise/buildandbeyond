@@ -1,9 +1,12 @@
 import { useStore } from '@/store';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, Circle } from 'lucide-react';
+import { CheckCircle2, Circle, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { shareToSlack } from '@/lib/shareToSlack';
+
 
 const categoryColors: Record<string, string> = {
   product: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -98,12 +101,27 @@ export function RoadmapBoard12Month() {
                         >
                           {milestone.title}
                         </h3>
-                        <Badge className={cn('text-xs font-medium capitalize flex-shrink-0', categoryColors[milestone.category])}>
-                          {milestone.category}
-                        </Badge>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <Badge className={cn('text-xs font-medium capitalize', categoryColors[milestone.category])}>
+                            {milestone.category}
+                          </Badge>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              shareToSlack(`*${milestone.title}*\n${milestone.description}`);
+                            }}
+                            title="Share to Slack"
+                          >
+                            <Share2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">{milestone.description}</p>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
+
                         <span>Target: {new Date(milestone.targetDate).toLocaleDateString()}</span>
                         {milestone.completed && <span className="text-green-600 font-medium">✓ Completed</span>}
                       </div>

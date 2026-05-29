@@ -5,9 +5,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { CheckCircle2, ExternalLink, Loader2 } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Loader2, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { shareToSlack } from '@/lib/shareToSlack';
+
 
 const metricColors: Record<string, string> = {
   cost_savings: 'bg-green-500 hover:bg-green-600',
@@ -113,18 +115,33 @@ export function ToolsList() {
               
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-gray-700">{tool.pricing}</span>
-                {tool.url && (
+                <div className="flex items-center gap-1">
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={(e) => handleVisitWebsite(tool.url!, e)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      shareToSlack(`*${tool.name}* (${tool.category})\n${tool.description}`);
+                    }}
                     className="h-7 px-2 text-xs"
+                    title="Share to Slack"
                   >
-                    <ExternalLink className="w-3 h-3 mr-1" />
-                    Visit
+                    <Share2 className="w-3 h-3" />
                   </Button>
-                )}
+                  {tool.url && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => handleVisitWebsite(tool.url!, e)}
+                      className="h-7 px-2 text-xs"
+                    >
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Visit
+                    </Button>
+                  )}
+                </div>
               </div>
+
             </Card>
           );
         })}
