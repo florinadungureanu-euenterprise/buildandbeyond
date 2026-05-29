@@ -517,6 +517,17 @@ export default function LandingPage() {
               Become a partner
               <Building2 className="w-5 h-5 ml-2" />
             </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="text-lg px-8 py-6 rounded-xl"
+            >
+              <Link to="/expert-profile">
+                Apply as a Scaleit expert
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
