@@ -16,6 +16,11 @@ import { SettingsPage } from '@/pages/SettingsPage';
 import { CommunityPage } from '@/pages/CommunityPage';
 import { AdminPage } from '@/pages/AdminPage';
 import { ExpertProfilePage } from '@/pages/ExpertProfilePage';
+import { MyProposalsPage } from '@/pages/MyProposalsPage';
+import { EngagementsPage } from '@/pages/EngagementsPage';
+import { EngagementWorkspacePage } from '@/pages/EngagementWorkspacePage';
+import { IntegrationsPage } from '@/pages/IntegrationsPage';
+
 
 
 import { FundraisingPage } from '@/pages/FundraisingPage';
@@ -89,6 +94,10 @@ const router = createBrowserRouter(
         { path: '/community', element: <CommunityPage /> },
         { path: '/admin', element: <AdminPage /> },
         { path: '/expert-profile', element: <ExpertProfilePage /> },
+        { path: '/my-proposals', element: <MyProposalsPage /> },
+        { path: '/engagements', element: <EngagementsPage /> },
+        { path: '/engagements/:id', element: <EngagementWorkspacePage /> },
+        { path: '/integrations', element: <IntegrationsPage /> },
       ]
     },
     { path: '/', element: <LandingPage /> },

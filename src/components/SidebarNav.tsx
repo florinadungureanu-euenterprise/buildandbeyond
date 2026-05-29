@@ -13,9 +13,12 @@ const navItems = [
   { path: '/passport', label: 'Passport' },
   { path: '/tools', label: 'Tools' },
   { path: '/applications', label: 'Applications' },
+  { path: '/my-proposals', label: 'My Proposals' },
+  { path: '/engagements', label: 'Engagements' },
   { path: '/events', label: 'Events' },
   { path: '/fundraising', label: 'Fundraising' },
-  { path: '/community', label: 'Community' }
+  { path: '/community', label: 'Community' },
+  { path: '/integrations', label: 'Integrations' }
 ];
 
 export function SidebarNav() {
