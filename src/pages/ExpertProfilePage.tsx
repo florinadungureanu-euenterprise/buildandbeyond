@@ -11,8 +11,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 
 const SCALEIT_BUCKETS = [
-  'Navigate Ready', 'Expansion Ready', 'Raise Ready', 'Finance Ready',
-  'Product Ready', 'Sales Ready', 'Brand Ready', 'Enterprise Ready', 'Scale Ready',
+  'Navigate Ready', 'Expansion Ready', 'Raise Ready',
+  'Finance Ready', 'Product Ready', 'Sales Ready',
+  'Brand Ready', 'Enterprise Ready', 'Scale Ready',
+  'Go-to-Market Ready', 'Hiring Ready', 'Ops Ready',
+  'Legal Ready', 'Regulation Ready', 'AI Ready',
+  'Data Ready', 'Partnerships Ready', 'Exit Ready',
+  'Community Ready', 'PR & Comms Ready',
 ];
 
 interface ExpertRow {
