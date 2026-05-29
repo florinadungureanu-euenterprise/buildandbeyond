@@ -563,16 +563,61 @@ export function useOnboardingChat() {
       // Continue without guidance if it fails
     }
 
-    // Handle stage detection (first response)
+    // Step -2: Stakeholder type detection
+    if (currentQuestionIndex === -2) {
+      const lc = content.toLowerCase();
+      let detected = STAKEHOLDER_OPTIONS[0];
+
+      if (lc.includes('2') || lc.includes('corporate') || lc.includes('innovation team')) {
+        detected = STAKEHOLDER_OPTIONS[1];
+      } else if (lc.includes('3') || lc.includes('accelerator') || lc.includes('university') || lc.includes('government') || lc.includes('programme')) {
+        detected = STAKEHOLDER_OPTIONS[2];
+      }
+
+      setStakeholderType(detected);
+      setOnboardingProfile(prev => ({ ...prev, stakeholder_type: detected }));
+
+      const isCorp = detected !== STAKEHOLDER_OPTIONS[0];
+      setIsCorporateFlow(isCorp);
+
+      if (isCorp) {
+        setStartupStage('early');
+        setOnboardingProfile(prev => ({ ...prev, stage_detected: detected }));
+        setCurrentQuestionIndex(0);
+        setTimeout(() => {
+          const intro: OnboardingMessage = {
+            id: (Date.now() + 1).toString(),
+            role: 'system',
+            content: `Great - welcome! I've tailored the diagnostic for your context. I'll ask you 5 focused questions to understand your situation and match you with the right expertise.\n\n${corporateFlowQuestions[0].question}`,
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, intro]);
+        }, 300);
+      } else {
+        setCurrentQuestionIndex(-1);
+        setTimeout(() => {
+          const stageQ: OnboardingMessage = {
+            id: (Date.now() + 1).toString(),
+            role: 'system',
+            content: "Great! Now, **which stage are you at?**\n\n- Idea stage – \"I have a concept, but nothing built yet\"\n- Prototype – \"I've made a rough version to test the concept\"\n- MVP – \"I have a working product, ready for real users\"\n- Early Customers – \"I have my first customers using my product\"\n- Growing Startup – \"We're scaling and things are working\"\n- Scale-up – \"We're in fast growth mode\"\n- Established – \"We're a mature company launching something new\"\n\n🤔 Not sure? Just describe what you've done so far and I'll figure it out.",
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, stageQ]);
+        }, 300);
+      }
+      return;
+    }
+
+    // Step -1: Stage detection (founder flow only)
     if (currentQuestionIndex === -1) {
       const stageLower = content.toLowerCase();
       let detectedStage: 'early' | 'later';
       let stageLabel: string;
 
-      if (stageLower.includes('idea') || stageLower.includes('prototype') || 
+      if (stageLower.includes('idea') || stageLower.includes('prototype') ||
           stageLower.includes('mvp') || stageLower.includes('early customer')) {
         detectedStage = 'early';
-        stageLabel = stageLower.includes('idea') ? 'Idea' : 
+        stageLabel = stageLower.includes('idea') ? 'Idea' :
                      stageLower.includes('prototype') ? 'Prototype' :
                      stageLower.includes('mvp') ? 'MVP' : 'Early Customers';
       } else {
@@ -584,20 +629,16 @@ export function useOnboardingChat() {
       setStartupStage(detectedStage);
       setOnboardingProfile(prev => ({ ...prev, stage_detected: stageLabel }));
 
-      // For later stage, encourage document upload first
       if (detectedStage === 'later') {
-        // Check if documents are already uploaded
         let laterStageContent = "Great! Since you're at a growth stage, I'll focus on your current operations and strategic challenges.\n\n";
-        
+
         if (uploadedDocuments.length > 0) {
-          // Documents already uploaded - acknowledge and summarize
           const docNames = uploadedDocuments.map(d => d.name).join(', ');
-          laterStageContent += `I see you've already uploaded: **${docNames}**\n\nI'll analyze these documents to extract your foundational information (customer, problem, solution, value proposition, etc.) so we can focus on what matters most for your growth stage.\n\nLet's start with the operational questions:`;
+          laterStageContent += `I see you've already uploaded: **${docNames}**\n\nI'll analyze these to extract your foundational information so we can focus on what matters most.\n\nLet's start with the operational questions:`;
         } else {
-          // No documents yet - encourage upload
-          laterStageContent += "**Before we start:** If you have a pitch deck, business plan, or company overview document, please upload it now using the upload button below. This will help me automatically extract your foundational information (customer, problem, solution, etc.) so we can focus the questions on what matters most.\n\n(Or we can proceed directly to the questions if you prefer.)";
+          laterStageContent += "**Before we start:** If you have a pitch deck, business plan, or company overview, please upload it using the button below. This lets me skip the basics and focus on growth-stage questions.\n\n(Or proceed directly to the questions if you prefer.)";
         }
-        
+
         const laterStageIntro: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
@@ -605,8 +646,7 @@ export function useOnboardingChat() {
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, laterStageIntro]);
-        
-        // Wait a moment then start with first operational question
+
         setTimeout(() => {
           setCurrentQuestionIndex(0);
           const firstQuestion: OnboardingMessage = {
@@ -620,7 +660,6 @@ export function useOnboardingChat() {
         return;
       }
 
-      // For early stage, proceed normally
       setCurrentQuestionIndex(0);
       setTimeout(() => {
         const firstQuestion: OnboardingMessage = {
@@ -633,6 +672,7 @@ export function useOnboardingChat() {
       }, 300);
       return;
     }
+
 
     // Store answer in profile
     if (currentQuestion) {
