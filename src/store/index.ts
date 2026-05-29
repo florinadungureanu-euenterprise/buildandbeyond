@@ -493,6 +493,7 @@ export const useStore = create<AppState>((set) => ({
   setTools: (t) => set({ tools: t }),
   setTeamMembers: (t) => set({ teamMembers: t }),
   setFundingData: (f) => set({ fundingData: f }),
+  setExpertRecommendations: (recs) => set({ expertRecommendations: recs }),
 
   hydrateState: (data) =>
     set((state) => ({
