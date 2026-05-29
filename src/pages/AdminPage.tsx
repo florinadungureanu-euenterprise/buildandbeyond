@@ -456,6 +456,77 @@ export function AdminPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="experts">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="w-5 h-5" /> Experts
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {experts.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">No experts yet</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Scaleit Buckets</TableHead>
+                        <TableHead>Booking URL</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {experts.map((e) => (
+                        <TableRow key={e.id}>
+                          <TableCell className="font-medium">{e.name}</TableCell>
+                          <TableCell className="text-xs">{e.title || '-'}</TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-1 max-w-[260px]">
+                              {(e.scaleit_buckets || []).map((b) => (
+                                <Badge key={b} variant="outline" className="text-[10px]">{b}</Badge>
+                              ))}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              defaultValue={e.booking_url || ''}
+                              placeholder="https://…"
+                              className="text-xs h-8 min-w-[180px]"
+                              onBlur={(ev) => {
+                                if (ev.target.value !== (e.booking_url || '')) {
+                                  saveExpertBookingUrl(e.id, ev.target.value);
+                                }
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={e.is_active ? statusColors.approved : statusColors.new}>
+                              {e.is_active ? 'active' : 'pending'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              size="sm"
+                              variant={e.is_active ? 'outline' : 'default'}
+                              onClick={() => toggleExpertActive(e.id, e.is_active)}
+                            >
+                              {e.is_active ? 'Deactivate' : 'Approve'}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </div>
   );
