@@ -1,0 +1,1 @@
+ALTER TABLE public.proposal_requests ADD COLUMN IF NOT EXISTS sent_at timestamptz;
