@@ -373,6 +373,43 @@ export function CommunityPage() {
         </div>
       </div>
 
+      {experts.length > 0 && (
+        <div className="mb-2">
+          <h2 className="text-xl font-bold mb-1">Meet the Scaleit Team</h2>
+          <p className="text-sm text-muted-foreground mb-4">Our experts match to your priorities and get to work.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {experts.map((expert) => (
+              <Card key={expert.id} className="p-5 flex flex-col gap-3">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
+                  {expert.name.split(' ').map((n) => n[0]).join('')}
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">{expert.name}</p>
+                  <p className="text-xs text-muted-foreground">{expert.title}</p>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {(expert.scaleit_buckets || []).map((b) => (
+                    <Badge key={b} variant="secondary" className="text-xs">{b}</Badge>
+                  ))}
+                </div>
+                <div className="flex gap-2 mt-auto">
+                  {expert.linkedin_url && (
+                    <Button size="sm" variant="outline" className="flex-1 text-xs" asChild>
+                      <a href={expert.linkedin_url} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    </Button>
+                  )}
+                  {expert.booking_url && (
+                    <Button size="sm" className="flex-1 text-xs" asChild>
+                      <a href={expert.booking_url} target="_blank" rel="noopener noreferrer">Book</a>
+                    </Button>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
       <Tabs defaultValue="forum" className="w-full">
         <TabsList>
           <TabsTrigger value="forum" className="gap-1.5"><MessageSquare className="w-4 h-4" /> Forum</TabsTrigger>
