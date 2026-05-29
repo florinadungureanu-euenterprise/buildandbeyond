@@ -1,9 +1,12 @@
 import { useStore } from '@/store';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, Circle } from 'lucide-react';
+import { CheckCircle2, Circle, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { shareToSlack } from '@/lib/shareToSlack';
+
 
 const categoryColors: Record<string, string> = {
   product: 'bg-blue-100 text-blue-700 border-blue-200',
