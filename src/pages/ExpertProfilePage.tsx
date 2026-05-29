@@ -135,6 +135,12 @@ export function ExpertProfilePage() {
         </p>
       </div>
 
+      <p className="text-sm text-muted-foreground leading-relaxed">
+        As a Scaleit expert, your profile helps founders discover you based on the areas you advise on.
+        Once approved, you will be able to review client needs, craft proposals, track delivery progress,
+        and suggest additional support — all within your dedicated engagement workspace.
+      </p>
+
       <Card className="p-6 space-y-5">
         {!expert && (
           <>
