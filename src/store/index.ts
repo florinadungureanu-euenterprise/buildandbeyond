@@ -37,7 +37,6 @@ interface AppState {
   setTools: (t: Tool[]) => void;
   setTeamMembers: (t: TeamMember[]) => void;
   setFundingData: (f: FundingData) => void;
-  setFundingData: (f: FundingData) => void;
   setExpertRecommendations: (recs: ExpertRecommendation[]) => void;
   hydrateState: (data: Partial<AppState>) => void;
 }
