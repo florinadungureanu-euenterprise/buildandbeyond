@@ -41,6 +41,142 @@ export type Database = {
         }
         Relationships: []
       }
+      connector_waitlist: {
+        Row: {
+          connector_name: string
+          created_at: string | null
+          email: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          connector_name: string
+          created_at?: string | null
+          email: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          connector_name?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      digest_events: {
+        Row: {
+          consumed_at: string | null
+          created_at: string | null
+          event_type: string
+          id: string
+          payload: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          consumed_at?: string | null
+          created_at?: string | null
+          event_type: string
+          id?: string
+          payload?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          consumed_at?: string | null
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      engagement_updates: {
+        Row: {
+          attachments: Json | null
+          author_id: string | null
+          author_role: string | null
+          content: string
+          created_at: string | null
+          engagement_id: string | null
+          id: string
+          type: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          author_id?: string | null
+          author_role?: string | null
+          content: string
+          created_at?: string | null
+          engagement_id?: string | null
+          id?: string
+          type?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          author_id?: string | null
+          author_role?: string | null
+          content?: string
+          created_at?: string | null
+          engagement_id?: string | null
+          id?: string
+          type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "engagement_updates_engagement_id_fkey"
+            columns: ["engagement_id"]
+            isOneToOne: false
+            referencedRelation: "engagements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      engagements: {
+        Row: {
+          created_at: string | null
+          current_milestone: string | null
+          expert_id: string | null
+          founder_id: string | null
+          id: string
+          proposal_id: string | null
+          scaleit_bucket: string | null
+          started_at: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_milestone?: string | null
+          expert_id?: string | null
+          founder_id?: string | null
+          id?: string
+          proposal_id?: string | null
+          scaleit_bucket?: string | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_milestone?: string | null
+          expert_id?: string | null
+          founder_id?: string | null
+          id?: string
+          proposal_id?: string | null
+          scaleit_bucket?: string | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "engagements_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_submissions: {
         Row: {
           created_at: string
@@ -310,28 +446,34 @@ export type Database = {
           avatar_url: string | null
           company_name: string | null
           created_at: string
+          digest_frequency: string | null
           full_name: string | null
           id: string
           linkedin_url: string | null
           updated_at: string
+          webhook_url: string | null
         }
         Insert: {
           avatar_url?: string | null
           company_name?: string | null
           created_at?: string
+          digest_frequency?: string | null
           full_name?: string | null
           id: string
           linkedin_url?: string | null
           updated_at?: string
+          webhook_url?: string | null
         }
         Update: {
           avatar_url?: string | null
           company_name?: string | null
           created_at?: string
+          digest_frequency?: string | null
           full_name?: string | null
           id?: string
           linkedin_url?: string | null
           updated_at?: string
+          webhook_url?: string | null
         }
         Relationships: []
       }
@@ -342,6 +484,7 @@ export type Database = {
           id: string
           notes: string | null
           onboarding_answers: Json | null
+          sent_at: string | null
           status: string
           user_id: string
         }
@@ -351,6 +494,7 @@ export type Database = {
           id?: string
           notes?: string | null
           onboarding_answers?: Json | null
+          sent_at?: string | null
           status?: string
           user_id: string
         }
@@ -360,6 +504,7 @@ export type Database = {
           id?: string
           notes?: string | null
           onboarding_answers?: Json | null
+          sent_at?: string | null
           status?: string
           user_id?: string
         }
