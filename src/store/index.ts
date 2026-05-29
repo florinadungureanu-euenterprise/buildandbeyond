@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Tool, Milestone, Signal, ValidationScores, PassportData, Application, TeamMember, FundingData } from '@/types';
+import { Tool, Milestone, Signal, ValidationScores, PassportData, Application, TeamMember, FundingData, ExpertRecommendation } from '@/types';
 
 interface AppState {
   validation: ValidationScores;
@@ -15,6 +15,7 @@ interface AppState {
   fundingData: FundingData;
   onboardingComplete: boolean;
   dataLoaded: boolean;
+  expertRecommendations: ExpertRecommendation[];
 
   // Actions
   toggleMilestone: (milestoneId: string) => void;
@@ -36,6 +37,7 @@ interface AppState {
   setTools: (t: Tool[]) => void;
   setTeamMembers: (t: TeamMember[]) => void;
   setFundingData: (f: FundingData) => void;
+  setExpertRecommendations: (recs: ExpertRecommendation[]) => void;
   hydrateState: (data: Partial<AppState>) => void;
 }
 
@@ -394,6 +396,7 @@ export const useStore = create<AppState>((set) => ({
   fundingData: exampleFundingData,
   onboardingComplete: false,
   dataLoaded: false,
+  expertRecommendations: [],
 
   toggleMilestone: (milestoneId) =>
     set((state) => ({
@@ -490,6 +493,7 @@ export const useStore = create<AppState>((set) => ({
   setTools: (t) => set({ tools: t }),
   setTeamMembers: (t) => set({ teamMembers: t }),
   setFundingData: (f) => set({ fundingData: f }),
+  setExpertRecommendations: (recs) => set({ expertRecommendations: recs }),
 
   hydrateState: (data) =>
     set((state) => ({

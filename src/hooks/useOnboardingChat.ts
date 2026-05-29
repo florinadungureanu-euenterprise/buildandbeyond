@@ -9,6 +9,87 @@ const generateSessionId = () => {
   return `session-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 };
 
+const STAKEHOLDER_OPTIONS = [
+  "I'm a founder or startup",
+  "I'm a corporate innovation team",
+  "I run an accelerator, government programme, or university",
+];
+
+const PRIORITY_OPTIONS = [
+  'Product-market fit',
+  'Sales & revenue growth',
+  'Brand & founder visibility',
+  'Fundraising',
+  'Enterprise & corporate partnerships',
+  'International / EU expansion',
+  'EU grants & public funding',
+  'Operational scaling',
+  'Financial planning & forecasting',
+];
+
+const corporateFlowQuestions: OnboardingQuestion[] = [
+  {
+    id: 1,
+    question: 'What is your organisation and what does it do? (name, sector, size)',
+    templates: [
+      '[Company name] is a [type] in [sector] with [~X] employees',
+      'We are the [department] of [company], focused on [mandate]',
+    ],
+    key: 'solution',
+    stage: 'early',
+  },
+  {
+    id: 2,
+    question: 'What is the core challenge or opportunity you are trying to address right now?',
+    templates: [
+      'We need to [achieve] because [reason], but we are blocked by [obstacle]',
+      'The opportunity is [description]. Our main constraint is [bottleneck]',
+    ],
+    key: 'problem',
+    stage: 'early',
+  },
+  {
+    id: 3,
+    question: 'Who are the internal or external stakeholders this initiative needs to serve?',
+    templates: [
+      'Internal: [team/division]. External: [partners/users/communities]',
+      'Primary: [stakeholder]. Secondary: [stakeholder]',
+    ],
+    key: 'customer',
+    stage: 'early',
+  },
+  {
+    id: 4,
+    question: 'What does success look like in 6-12 months? What metric or outcome matters most?',
+    templates: [
+      'Success = [outcome] measured by [KPI] within [timeframe]',
+      'Key result: [metric] at [target] by [date]',
+    ],
+    key: 'twelve_week_goal',
+    stage: 'early',
+  },
+  {
+    id: 5,
+    question: 'Do you have budget allocated, and are you exploring external funding (grants, public programmes)?',
+    templates: [
+      'Budget: [amount/stage]. Exploring: [grant types / open innovation programmes]',
+      'Internal budget approved. Also exploring [EU / national grants]',
+      'No external funding planned at this stage',
+    ],
+    key: 'fundraising_type',
+    stage: 'early',
+  },
+];
+
+const selectedPrioritiesQuestion: OnboardingQuestion = {
+  id: 98,
+  question: `Almost there! To make sure we connect you with the right experts and resources, pick up to 3 of your top priorities right now:\n\n${PRIORITY_OPTIONS.map((p, i) => `${i + 1}. ${p}`).join('\n')}\n\nJust reply with the numbers or names - e.g. "1, 4, 7"`,
+  templates: PRIORITY_OPTIONS.map((p) => p),
+  key: 'selected_priorities_raw',
+  stage: 'all',
+};
+
+
 // Early-stage flow questions (idea → MVP → early customers)
 const earlyStageQuestions: OnboardingQuestion[] = [
   {
@@ -357,12 +438,15 @@ const universalQuestions: OnboardingQuestion[] = [
 
 export function useOnboardingChat() {
   const [messages, setMessages] = useState<OnboardingMessage[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1); // Start at -1 for stage detection
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-2); // -2: stakeholder, -1: stage
   const [hasSentToN8n, setHasSentToN8n] = useState(false);
   const [startupStage, setStartupStage] = useState<'early' | 'later' | null>(null);
+  const [stakeholderType, setStakeholderType] = useState<string>('');
+  const [isCorporateFlow, setIsCorporateFlow] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [onboardingProfile, setOnboardingProfile] = useState<Partial<OnboardingProfile>>({
-    document_insights: []
+    document_insights: [],
+    selected_priorities: [],
   });
   const [isInFoundationalPhase, setIsInFoundationalPhase] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
@@ -380,15 +464,18 @@ export function useOnboardingChat() {
   // Determine which questions to show
   const getQuestionFlow = () => {
     if (!startupStage) return [];
-    
+
+    if (isCorporateFlow) {
+      return [...corporateFlowQuestions, selectedPrioritiesQuestion, ...universalQuestions];
+    }
+
     if (startupStage === 'early') {
-      return [...earlyStageQuestions, ...universalQuestions];
+      return [...earlyStageQuestions, selectedPrioritiesQuestion, ...universalQuestions];
     } else {
-      // Later stage: operational questions + condensed foundational + universal
       if (!isInFoundationalPhase) {
         return laterStageQuestions;
       } else {
-        return [...laterStageFoundationalQuestions, ...universalQuestions];
+        return [...laterStageFoundationalQuestions, selectedPrioritiesQuestion, ...universalQuestions];
       }
     }
   };
@@ -401,38 +488,41 @@ export function useOnboardingChat() {
       : null;
 
   const getTotalQuestions = () => {
-    if (!startupStage) return 1;
+    if (!startupStage) return 2;
+    if (isCorporateFlow) {
+      return corporateFlowQuestions.length + 1 + universalQuestions.length + 2;
+    }
     if (startupStage === 'early') {
-      return earlyStageQuestions.length + universalQuestions.length + 1; // +1 for stage
+      return earlyStageQuestions.length + 1 + universalQuestions.length + 2;
     } else {
-      return laterStageQuestions.length + laterStageFoundationalQuestions.length + universalQuestions.length + 1;
+      return laterStageQuestions.length + laterStageFoundationalQuestions.length + 1 + universalQuestions.length + 2;
     }
   };
 
   const getCurrentProgress = () => {
     if (!startupStage) return 0;
-    
     const userAnswers = messages.filter(m => m.role === 'user').length;
     const total = getTotalQuestions();
-    return (userAnswers / total) * 100;
+    return Math.min((userAnswers / total) * 100, 99);
   };
 
   const progress = getCurrentProgress();
-  const isComplete = startupStage !== null && currentQuestionIndex >= filteredQuestions.length && 
-                     (startupStage === 'early' || isInFoundationalPhase);
+  const isComplete = startupStage !== null && currentQuestionIndex >= filteredQuestions.length &&
+                     (isCorporateFlow || startupStage === 'early' || isInFoundationalPhase);
 
-  // Initial stage detection message
+
   useEffect(() => {
     if (messages.length === 0) {
       const welcomeMessage: OnboardingMessage = {
         id: Date.now().toString(),
         role: 'system',
-        content: "Hey there! 👋 Welcome to Build & Beyond, where we take you from idea to unicorn and beyond. I'm going to help you build a clear, actionable roadmap – no matter where you're starting from.\n\nBut first, let me understand where you are right now.\n\nWhich stage sounds most like you?\n\n- Idea stage – \"I have a concept, but nothing built yet\"\n- Prototype – \"I've made a rough version to test the concept\"\n- MVP – \"I have a working product, ready for real users\"\n- Early Customers – \"I have my first customers using my product\"\n- Growing Startup – \"We're scaling and things are working\"\n- Scale-up – \"We're in fast growth mode\"\n- Established – \"We're a mature company launching something new\"\n\n🤔 Not quite sure? That's totally normal! Just describe what you've done so far (even if it's just an idea in your head), and I'll help you figure out exactly where you are – and what your next steps should be.",
+        content: `Hey there! 👋 Welcome to Build & Beyond - the consulting collective that takes you from where you are to where you need to be.\n\nBefore anything else: **who are you?**\n\n1. ${STAKEHOLDER_OPTIONS[0]}\n2. ${STAKEHOLDER_OPTIONS[1]}\n3. ${STAKEHOLDER_OPTIONS[2]}\n\nJust reply with the number or describe yourself in your own words.`,
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
     }
   }, []);
+
 
   const sendMessage = async (content: string) => {
     // Add user message
@@ -473,16 +563,61 @@ export function useOnboardingChat() {
       // Continue without guidance if it fails
     }
 
-    // Handle stage detection (first response)
+    // Step -2: Stakeholder type detection
+    if (currentQuestionIndex === -2) {
+      const lc = content.toLowerCase();
+      let detected = STAKEHOLDER_OPTIONS[0];
+
+      if (lc.includes('2') || lc.includes('corporate') || lc.includes('innovation team')) {
+        detected = STAKEHOLDER_OPTIONS[1];
+      } else if (lc.includes('3') || lc.includes('accelerator') || lc.includes('university') || lc.includes('government') || lc.includes('programme')) {
+        detected = STAKEHOLDER_OPTIONS[2];
+      }
+
+      setStakeholderType(detected);
+      setOnboardingProfile(prev => ({ ...prev, stakeholder_type: detected }));
+
+      const isCorp = detected !== STAKEHOLDER_OPTIONS[0];
+      setIsCorporateFlow(isCorp);
+
+      if (isCorp) {
+        setStartupStage('early');
+        setOnboardingProfile(prev => ({ ...prev, stage_detected: detected }));
+        setCurrentQuestionIndex(0);
+        setTimeout(() => {
+          const intro: OnboardingMessage = {
+            id: (Date.now() + 1).toString(),
+            role: 'system',
+            content: `Great - welcome! I've tailored the diagnostic for your context. I'll ask you 5 focused questions to understand your situation and match you with the right expertise.\n\n${corporateFlowQuestions[0].question}`,
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, intro]);
+        }, 300);
+      } else {
+        setCurrentQuestionIndex(-1);
+        setTimeout(() => {
+          const stageQ: OnboardingMessage = {
+            id: (Date.now() + 1).toString(),
+            role: 'system',
+            content: "Great! Now, **which stage are you at?**\n\n- Idea stage – \"I have a concept, but nothing built yet\"\n- Prototype – \"I've made a rough version to test the concept\"\n- MVP – \"I have a working product, ready for real users\"\n- Early Customers – \"I have my first customers using my product\"\n- Growing Startup – \"We're scaling and things are working\"\n- Scale-up – \"We're in fast growth mode\"\n- Established – \"We're a mature company launching something new\"\n\n🤔 Not sure? Just describe what you've done so far and I'll figure it out.",
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, stageQ]);
+        }, 300);
+      }
+      return;
+    }
+
+    // Step -1: Stage detection (founder flow only)
     if (currentQuestionIndex === -1) {
       const stageLower = content.toLowerCase();
       let detectedStage: 'early' | 'later';
       let stageLabel: string;
 
-      if (stageLower.includes('idea') || stageLower.includes('prototype') || 
+      if (stageLower.includes('idea') || stageLower.includes('prototype') ||
           stageLower.includes('mvp') || stageLower.includes('early customer')) {
         detectedStage = 'early';
-        stageLabel = stageLower.includes('idea') ? 'Idea' : 
+        stageLabel = stageLower.includes('idea') ? 'Idea' :
                      stageLower.includes('prototype') ? 'Prototype' :
                      stageLower.includes('mvp') ? 'MVP' : 'Early Customers';
       } else {
@@ -494,20 +629,16 @@ export function useOnboardingChat() {
       setStartupStage(detectedStage);
       setOnboardingProfile(prev => ({ ...prev, stage_detected: stageLabel }));
 
-      // For later stage, encourage document upload first
       if (detectedStage === 'later') {
-        // Check if documents are already uploaded
         let laterStageContent = "Great! Since you're at a growth stage, I'll focus on your current operations and strategic challenges.\n\n";
-        
+
         if (uploadedDocuments.length > 0) {
-          // Documents already uploaded - acknowledge and summarize
           const docNames = uploadedDocuments.map(d => d.name).join(', ');
-          laterStageContent += `I see you've already uploaded: **${docNames}**\n\nI'll analyze these documents to extract your foundational information (customer, problem, solution, value proposition, etc.) so we can focus on what matters most for your growth stage.\n\nLet's start with the operational questions:`;
+          laterStageContent += `I see you've already uploaded: **${docNames}**\n\nI'll analyze these to extract your foundational information so we can focus on what matters most.\n\nLet's start with the operational questions:`;
         } else {
-          // No documents yet - encourage upload
-          laterStageContent += "**Before we start:** If you have a pitch deck, business plan, or company overview document, please upload it now using the upload button below. This will help me automatically extract your foundational information (customer, problem, solution, etc.) so we can focus the questions on what matters most.\n\n(Or we can proceed directly to the questions if you prefer.)";
+          laterStageContent += "**Before we start:** If you have a pitch deck, business plan, or company overview, please upload it using the button below. This lets me skip the basics and focus on growth-stage questions.\n\n(Or proceed directly to the questions if you prefer.)";
         }
-        
+
         const laterStageIntro: OnboardingMessage = {
           id: (Date.now() + 1).toString(),
           role: 'system',
@@ -515,8 +646,7 @@ export function useOnboardingChat() {
           timestamp: new Date()
         };
         setMessages((prev) => [...prev, laterStageIntro]);
-        
-        // Wait a moment then start with first operational question
+
         setTimeout(() => {
           setCurrentQuestionIndex(0);
           const firstQuestion: OnboardingMessage = {
@@ -530,7 +660,6 @@ export function useOnboardingChat() {
         return;
       }
 
-      // For early stage, proceed normally
       setCurrentQuestionIndex(0);
       setTimeout(() => {
         const firstQuestion: OnboardingMessage = {
@@ -544,10 +673,26 @@ export function useOnboardingChat() {
       return;
     }
 
+
     // Store answer in profile
     if (currentQuestion) {
-      // Handle consolidated later-stage questions
-      if (currentQuestion.key === 'customer_and_problem') {
+      if (currentQuestion.key === 'selected_priorities_raw') {
+        const picked: string[] = [];
+        const numMatches = content.match(/\d+/g);
+        if (numMatches) {
+          numMatches.forEach(n => {
+            const idx = parseInt(n) - 1;
+            if (idx >= 0 && idx < PRIORITY_OPTIONS.length) picked.push(PRIORITY_OPTIONS[idx]);
+          });
+        }
+        if (picked.length === 0) {
+          PRIORITY_OPTIONS.forEach(p => {
+            if (content.toLowerCase().includes(p.toLowerCase())) picked.push(p);
+          });
+        }
+        const finalPriorities = picked.length > 0 ? picked.slice(0, 3) : [content];
+        setOnboardingProfile(prev => ({ ...prev, selected_priorities: finalPriorities }));
+      } else if (currentQuestion.key === 'customer_and_problem') {
         // Parse and split the combined answer
         setOnboardingProfile(prev => ({
           ...prev,
@@ -770,7 +915,9 @@ export function useOnboardingChat() {
             later_stage_vision: onboardingProfile.later_stage_vision || '',
             industry: onboardingProfile.industry || '',
             region: onboardingProfile.region || '',
-            document_insights: onboardingProfile.document_insights || []
+            document_insights: onboardingProfile.document_insights || [],
+            stakeholder_type: onboardingProfile.stakeholder_type || 'founder',
+            selected_priorities: onboardingProfile.selected_priorities || [],
           };
 
           // Save onboarding profile to user_data table
@@ -908,6 +1055,8 @@ export function useOnboardingChat() {
       customer: profileData.customer,
       stage: profileData.stage_detected,
       fundraisingType: profileData.fundraising_type,
+      stakeholder_type: profileData.stakeholder_type,
+      selected_priorities: profileData.selected_priorities,
     };
 
     console.log('Triggering research agent with profile:', researchProfile);

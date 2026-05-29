@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,14 +15,28 @@ serve(async (req) => {
   try {
     const { formData, userId } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
-    }
+    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) throw new Error('Supabase env vars not configured');
 
     console.log('Mapping intake form for user:', userId);
 
-    // Build a comprehensive prompt from the form data
+    const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const { data: experts, error: expertsError } = await supabaseAdmin
+      .from('experts')
+      .select('id, name, title, scaleit_buckets, expertise_keywords, services, stakeholder_types')
+      .eq('is_active', true);
+
+    if (expertsError) {
+      console.error('Failed to fetch experts:', expertsError);
+    }
+
+    const expertsContext = experts && experts.length > 0
+      ? `\n\nAVAILABLE EXPERTS FOR ROUTING:\n${JSON.stringify(experts, null, 2)}`
+      : '';
+
     const formSummary = `
 FOUNDER INTAKE FORM DATA:
 - Name: ${formData.fullName}
@@ -30,6 +45,8 @@ FOUNDER INTAKE FORM DATA:
 - Stage: ${formData.currentStage}
 - Location: ${formData.companyLocation}
 - Website: ${formData.website || 'N/A'}
+- Stakeholder type: ${formData.stakeholder_type || 'founder'}
+- Selected priorities: ${(formData.selected_priorities || []).join(', ') || 'N/A'}
 - Venture: ${formData.ventureOneSentence}
 - Why this idea: ${formData.whyThisIdea}
 - Why now: ${formData.whyNow}
@@ -64,7 +81,17 @@ FOUNDER INTAKE FORM DATA:
 - Strategic questions: ${formData.strategicQuestions}
 `;
 
-    // Use tool calling to get structured output
+    const systemPrompt = `You are a startup advisor AI for Scaleit, a consulting collective of four experts. Given a founder's intake form data, generate structured platform data including a startup passport, personalized signals/recommendations, matched opportunities, and expert recommendations.
+
+Be specific, actionable, and grounded in the actual data provided. Do not hallucinate information not present in the form.
+
+EXPERT ROUTING INSTRUCTIONS:
+- Review the founder's selected_priorities, stage, biggest blockers, fundraising status, and stakeholder_type
+- Recommend 1-3 experts from the list below who are the strongest match
+- In why_recommended: write exactly one sentence that references something specific from THIS founder's data (e.g. their stage, their blocker, their priority)
+- match_score should reflect how closely the expert's domain aligns with the founder's top priorities (0-100)
+- booking_cta should be a short action phrase e.g. "Book a 30-min EU grant strategy call"${expertsContext}`;
+
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -74,14 +101,8 @@ FOUNDER INTAKE FORM DATA:
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [
-          {
-            role: 'system',
-            content: `You are a startup advisor AI. Given a founder's intake form data, generate structured platform data including a startup passport, personalized signals/recommendations, and matched opportunities. Be specific, actionable, and grounded in the actual data provided. Do not hallucinate information not present in the form.`
-          },
-          {
-            role: 'user',
-            content: formSummary + '\n\nGenerate the platform data for this founder.'
-          }
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: formSummary + '\n\nGenerate the platform data for this founder.' }
         ],
         tools: [{
           type: 'function',
@@ -151,8 +172,25 @@ FOUNDER INTAKE FORM DATA:
                   },
                   description: '6-8 concrete milestones for the next 6-12 months based on their priorities and deadlines'
                 },
+                expert_recommendations: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      expert_name: { type: 'string' },
+                      expert_id: { type: 'string', description: 'UUID from the experts list provided' },
+                      service_area: { type: 'string', description: 'The specific service that matches this founder' },
+                      scaleit_bucket: { type: 'string', description: 'The most relevant Scaleit bucket for this founder' },
+                      why_recommended: { type: 'string', description: "One sentence referencing something specific from this founder's data" },
+                      booking_cta: { type: 'string', description: 'Short action phrase e.g. Book a 30-min EU grant strategy call' },
+                      match_score: { type: 'number', description: 'Match score 0-100 based on alignment with founder priorities' },
+                    },
+                    required: ['expert_name', 'expert_id', 'service_area', 'scaleit_bucket', 'why_recommended', 'booking_cta', 'match_score']
+                  },
+                  description: '1-3 expert recommendations ranked by match score, most relevant first'
+                },
               },
-              required: ['passport', 'signals', 'applications', 'milestones']
+              required: ['passport', 'signals', 'applications', 'milestones', 'expert_recommendations']
             }
           }
         }],
@@ -177,8 +215,8 @@ FOUNDER INTAKE FORM DATA:
       throw new Error('AI service unavailable');
     }
 
-    const data = await response.json();
-    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
+    const aiResponse = await response.json();
+    const toolCall = aiResponse.choices?.[0]?.message?.tool_calls?.[0];
 
     if (!toolCall?.function?.arguments) {
       throw new Error('No structured output from AI');
@@ -186,6 +224,30 @@ FOUNDER INTAKE FORM DATA:
 
     const platformData = JSON.parse(toolCall.function.arguments);
     console.log('Generated platform data:', JSON.stringify(platformData).slice(0, 500));
+
+    if (userId && platformData.expert_recommendations?.length) {
+      const { data: existing } = await supabaseAdmin
+        .from('user_data')
+        .select('applications')
+        .eq('user_id', userId)
+        .single();
+
+      const currentApps = (existing?.applications as Record<string, unknown>) || {};
+      const { error: updateError } = await supabaseAdmin
+        .from('user_data')
+        .update({
+          applications: {
+            ...currentApps,
+            expert_recommendations: platformData.expert_recommendations,
+          },
+          updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', userId);
+
+      if (updateError) {
+        console.error('Failed to persist expert_recommendations to user_data:', updateError);
+      }
+    }
 
     return new Response(JSON.stringify({
       success: true,

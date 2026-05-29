@@ -60,6 +60,16 @@ export interface ValidationScores {
   solutionFit: number;
 }
 
+export interface ExpertRecommendation {
+  expert_name: string;
+  expert_id: string;
+  service_area: string;
+  scaleit_bucket: string;
+  why_recommended: string;
+  booking_cta: string;
+  match_score: number;
+}
+
 export interface Application {
   id: string;
   name: string;
@@ -127,6 +137,8 @@ export interface EmpathyMap {
 }
 
 export interface OnboardingProfile {
+  stakeholder_type: string;
+  selected_priorities: string[];
   stage_detected: string;
   customer: string;
   empathy_map: EmpathyMap;
