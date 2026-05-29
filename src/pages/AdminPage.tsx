@@ -149,12 +149,13 @@ export function AdminPage() {
 
   const loadAllData = async () => {
     setLoading(true);
-    const [partnersRes, profilesRes, postsRes, repliesRes, proposalsRes] = await Promise.all([
+    const [partnersRes, profilesRes, postsRes, repliesRes, proposalsRes, expertsRes] = await Promise.all([
       supabase.from('partner_submissions' as any).select('*').order('created_at', { ascending: false }),
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_posts').select('*').order('created_at', { ascending: false }),
       supabase.from('forum_replies').select('*').order('created_at', { ascending: false }),
       supabase.from('proposal_requests' as any).select('*').order('created_at', { ascending: false }),
+      supabase.from('experts').select('*').order('created_at', { ascending: true }),
     ]);
 
     if (partnersRes.data) setPartners(partnersRes.data as any);
@@ -162,7 +163,19 @@ export function AdminPage() {
     if (postsRes.data) setPosts(postsRes.data);
     if (repliesRes.data) setReplies(repliesRes.data);
     if (proposalsRes.data) setProposalRequests(proposalsRes.data as any);
+    if (expertsRes.data) setExperts(expertsRes.data as ExpertRow[]);
     setLoading(false);
+  };
+
+  const toggleExpertActive = async (id: string, current: boolean | null) => {
+    const { error } = await supabase.from('experts').update({ is_active: !current }).eq('id', id);
+    if (error) { return; }
+    setExperts((prev) => prev.map((e) => (e.id === id ? { ...e, is_active: !current } : e)));
+  };
+
+  const saveExpertBookingUrl = async (id: string, value: string) => {
+    await supabase.from('experts').update({ booking_url: value || null }).eq('id', id);
+    setExperts((prev) => prev.map((e) => (e.id === id ? { ...e, booking_url: value || null } : e)));
   };
 
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
