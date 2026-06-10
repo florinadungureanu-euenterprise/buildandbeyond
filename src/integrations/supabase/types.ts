@@ -224,14 +224,17 @@ export type Database = {
       }
       experts: {
         Row: {
+          achievements: string | null
           bio: string | null
           booking_url: string | null
+          companies: string | null
           created_at: string | null
           expertise_keywords: string[] | null
           id: string
           is_active: boolean | null
           linkedin_url: string | null
           name: string
+          notable_projects: string | null
           photo_url: string | null
           scaleit_buckets: string[] | null
           services: Json | null
@@ -239,16 +242,20 @@ export type Database = {
           title: string | null
           updated_at: string | null
           user_id: string | null
+          what_makes_you_happy: string | null
         }
         Insert: {
+          achievements?: string | null
           bio?: string | null
           booking_url?: string | null
+          companies?: string | null
           created_at?: string | null
           expertise_keywords?: string[] | null
           id?: string
           is_active?: boolean | null
           linkedin_url?: string | null
           name: string
+          notable_projects?: string | null
           photo_url?: string | null
           scaleit_buckets?: string[] | null
           services?: Json | null
@@ -256,16 +263,20 @@ export type Database = {
           title?: string | null
           updated_at?: string | null
           user_id?: string | null
+          what_makes_you_happy?: string | null
         }
         Update: {
+          achievements?: string | null
           bio?: string | null
           booking_url?: string | null
+          companies?: string | null
           created_at?: string | null
           expertise_keywords?: string[] | null
           id?: string
           is_active?: boolean | null
           linkedin_url?: string | null
           name?: string
+          notable_projects?: string | null
           photo_url?: string | null
           scaleit_buckets?: string[] | null
           services?: Json | null
@@ -273,6 +284,7 @@ export type Database = {
           title?: string | null
           updated_at?: string | null
           user_id?: string | null
+          what_makes_you_happy?: string | null
         }
         Relationships: []
       }
