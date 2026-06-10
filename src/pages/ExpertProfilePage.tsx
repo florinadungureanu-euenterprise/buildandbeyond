@@ -101,6 +101,10 @@ export function ExpertProfilePage() {
       booking_url: bookingUrl || null,
       scaleit_buckets: buckets,
       expertise_keywords: keywords,
+      notable_projects: notableProjects || null,
+      achievements: achievements || null,
+      companies: companies || null,
+      what_makes_you_happy: whatMakesYouHappy || null,
       updated_at: new Date().toISOString(),
     };
 
