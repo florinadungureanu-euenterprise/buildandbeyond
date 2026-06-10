@@ -102,6 +102,7 @@ const router = createBrowserRouter(
       ]
     },
     { path: '/', element: <LandingPage /> },
+    { path: '/experts', element: <ExpertsPage /> },
     { path: '/login', element: <PublicRoute><LoginPage /></PublicRoute> },
     { path: '/signup', element: <PublicRoute><SignupPage /></PublicRoute> },
     { path: '/forgot-password', element: <ForgotPasswordPage /> },
