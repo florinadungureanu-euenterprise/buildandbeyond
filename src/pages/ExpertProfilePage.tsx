@@ -53,6 +53,10 @@ export function ExpertProfilePage() {
   const [buckets, setBuckets] = useState<string[]>([]);
   const [keywordsRaw, setKeywordsRaw] = useState('');
   const [customBucket, setCustomBucket] = useState('');
+  const [notableProjects, setNotableProjects] = useState('');
+  const [achievements, setAchievements] = useState('');
+  const [companies, setCompanies] = useState('');
+  const [whatMakesYouHappy, setWhatMakesYouHappy] = useState('');
 
   useEffect(() => {
     if (!user?.id) return;
