@@ -247,17 +247,24 @@ export default function ExpertsPage() {
       <section className="px-6 py-16 bg-white border-t border-border">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-            Running an accelerator or incubator?
+            Don't see the right fit?
           </h2>
           <p className="text-muted-foreground mb-6">
-            We also run group workshops for programmes, cohorts, and innovation teams.
+            Tell us what you're trying to solve — a specific challenge, a stage you're stuck at, or a market you want to enter — and we'll match you with the right expert, or bring in someone new from our wider network.
           </p>
-          <Button asChild size="lg">
-            <a href="mailto:contact@scale-it.co">
-              Get in touch
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </a>
-          </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Button asChild size="lg">
+              <a href="mailto:contact@scale-it.co?subject=Looking%20for%20an%20expert">
+                Tell us what you need
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/expert-profile">
+                Apply to join the team
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>

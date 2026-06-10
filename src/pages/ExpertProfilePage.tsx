@@ -32,6 +32,10 @@ interface ExpertRow {
   scaleit_buckets: string[] | null;
   expertise_keywords: string[] | null;
   is_active: boolean | null;
+  notable_projects: string | null;
+  achievements: string | null;
+  companies: string | null;
+  what_makes_you_happy: string | null;
 }
 
 export function ExpertProfilePage() {
@@ -49,6 +53,10 @@ export function ExpertProfilePage() {
   const [buckets, setBuckets] = useState<string[]>([]);
   const [keywordsRaw, setKeywordsRaw] = useState('');
   const [customBucket, setCustomBucket] = useState('');
+  const [notableProjects, setNotableProjects] = useState('');
+  const [achievements, setAchievements] = useState('');
+  const [companies, setCompanies] = useState('');
+  const [whatMakesYouHappy, setWhatMakesYouHappy] = useState('');
 
   useEffect(() => {
     if (!user?.id) return;
@@ -69,6 +77,10 @@ export function ExpertProfilePage() {
           setBookingUrl(e.booking_url || '');
           setBuckets(e.scaleit_buckets || []);
           setKeywordsRaw((e.expertise_keywords || []).join(', '));
+          setNotableProjects(e.notable_projects || '');
+          setAchievements(e.achievements || '');
+          setCompanies(e.companies || '');
+          setWhatMakesYouHappy(e.what_makes_you_happy || '');
         }
         setLoading(false);
       });
@@ -89,6 +101,10 @@ export function ExpertProfilePage() {
       booking_url: bookingUrl || null,
       scaleit_buckets: buckets,
       expertise_keywords: keywords,
+      notable_projects: notableProjects || null,
+      achievements: achievements || null,
+      companies: companies || null,
+      what_makes_you_happy: whatMakesYouHappy || null,
       updated_at: new Date().toISOString(),
     };
 
@@ -158,6 +174,54 @@ export function ExpertProfilePage() {
         <div className="space-y-1.5">
           <Label htmlFor="bio">Bio</Label>
           <Textarea id="bio" rows={4} value={bio} onChange={(e) => setBio(e.target.value)} />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="companies">Companies you've worked for or with</Label>
+          <Textarea
+            id="companies"
+            rows={3}
+            value={companies}
+            onChange={(e) => setCompanies(e.target.value)}
+            placeholder="e.g. Startupbootcamp, TNW, Heineken, Kraft Heinz, AI4ALL Amsterdam"
+          />
+          <p className="text-xs text-muted-foreground">Roles, employers, or notable corporate/programme collaborations.</p>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="projects">Notable projects you've worked on</Label>
+          <Textarea
+            id="projects"
+            rows={4}
+            value={notableProjects}
+            onChange={(e) => setNotableProjects(e.target.value)}
+            placeholder="e.g. Led AMS Startup Booster programme (NPS 9.8); ran FUTRXPO with 3,000+ attendees; supported 300+ startups through Startupbootcamp."
+          />
+          <p className="text-xs text-muted-foreground">Programmes you've built or led, founders you've supported, ventures you've taken to the next stage.</p>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="achievements">Achievements</Label>
+          <Textarea
+            id="achievements"
+            rows={3}
+            value={achievements}
+            onChange={(e) => setAchievements(e.target.value)}
+            placeholder="e.g. MSc Digital Business at UvA; Oxford Saïd Private Market Investments; closed €X in non-dilutive funding for portfolio companies."
+          />
+          <p className="text-xs text-muted-foreground">Credentials, awards, deals closed, outcomes you're proud of.</p>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="happy">What makes you happy about what you do?</Label>
+          <Textarea
+            id="happy"
+            rows={3}
+            value={whatMakesYouHappy}
+            onChange={(e) => setWhatMakesYouHappy(e.target.value)}
+            placeholder="What gives you energy when you sit down to work with founders?"
+          />
+          <p className="text-xs text-muted-foreground">Helps us match you to founders whose challenges actually light you up.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
