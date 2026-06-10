@@ -77,6 +77,10 @@ export function ExpertProfilePage() {
           setBookingUrl(e.booking_url || '');
           setBuckets(e.scaleit_buckets || []);
           setKeywordsRaw((e.expertise_keywords || []).join(', '));
+          setNotableProjects(e.notable_projects || '');
+          setAchievements(e.achievements || '');
+          setCompanies(e.companies || '');
+          setWhatMakesYouHappy(e.what_makes_you_happy || '');
         }
         setLoading(false);
       });
