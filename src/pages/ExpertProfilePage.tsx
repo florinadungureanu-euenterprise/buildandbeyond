@@ -32,6 +32,10 @@ interface ExpertRow {
   scaleit_buckets: string[] | null;
   expertise_keywords: string[] | null;
   is_active: boolean | null;
+  notable_projects: string | null;
+  achievements: string | null;
+  companies: string | null;
+  what_makes_you_happy: string | null;
 }
 
 export function ExpertProfilePage() {
