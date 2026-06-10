@@ -491,6 +491,71 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Meet the Team preview */}
+      <section className="py-24 px-6 bg-[#FAFAFA] border-t border-border">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
+              <Users className="w-3.5 h-3.5 mr-1.5" />
+              Meet the Team
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Senior operators, matched to your moment
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              No generalist advice. Just the right expert at the right stage.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            {[
+              { name: 'Florina Ungureanu', title: 'Ecosystem Builder & EU Funding Lead', buckets: ['Navigate Ready', 'Expansion Ready'] },
+              { name: 'Giulia Falcone', title: 'Venture Capital & Innovation Specialist', buckets: ['Product Ready', 'Raise Ready', 'Finance Ready'] },
+              { name: 'Sabina Basariyeva', title: 'Venture Coach & Startup Matchmaker', buckets: ['Sales Ready', 'Brand Ready'] },
+              { name: 'Ruperto Calatrava', title: 'Open Innovation & Corporate Partnership Advisor', buckets: ['Enterprise Ready', 'Scale Ready'] },
+            ].map((p) => {
+              const colors: Record<string, string> = {
+                'Navigate Ready': 'bg-blue-50 text-blue-700 border-blue-200',
+                'Expansion Ready': 'bg-teal-50 text-teal-700 border-teal-200',
+                'Product Ready': 'bg-violet-50 text-violet-700 border-violet-200',
+                'Raise Ready': 'bg-green-50 text-green-700 border-green-200',
+                'Finance Ready': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                'Sales Ready': 'bg-orange-50 text-orange-700 border-orange-200',
+                'Brand Ready': 'bg-pink-50 text-pink-700 border-pink-200',
+                'Enterprise Ready': 'bg-indigo-50 text-indigo-700 border-indigo-200',
+                'Scale Ready': 'bg-amber-50 text-amber-700 border-amber-200',
+              };
+              const init = p.name.split(' ').map((x) => x[0]).slice(0, 2).join('');
+              return (
+                <Card key={p.name} className="p-5 bg-white border-border flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
+                    {init}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-foreground">{p.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-2">{p.title}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {p.buckets.map((b) => (
+                        <span key={b} className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${colors[b]}`}>
+                          {b}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+
+          <div className="text-center">
+            <Link to="/experts" className="inline-flex items-center text-primary font-medium hover:underline">
+              Meet the full team
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="py-24 px-6 bg-primary/5">
         <div className="max-w-3xl mx-auto text-center">
