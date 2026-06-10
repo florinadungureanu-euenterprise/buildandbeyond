@@ -26,6 +26,9 @@ export default function LandingPage() {
             <span className="text-lg font-bold text-foreground">Build&nbsp;&amp;&nbsp;Beyond</span>
           </div>
           <div className="flex items-center gap-3">
+            <Link to="/experts" className="text-sm font-medium text-foreground/80 hover:text-foreground">
+              Experts
+            </Link>
             <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
               Log in
             </Button>
