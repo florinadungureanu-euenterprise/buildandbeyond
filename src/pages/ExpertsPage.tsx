@@ -230,10 +230,19 @@ export default function ExpertsPage({ embedded = false }: { embedded?: boolean }
         const savedRows = [...(activeResult.data || []), ...(ownResult.data ? [ownResult.data] : [])];
         const merged = new Map(FALLBACK_EXPERTS.map((expert) => [expert.name, expert]));
 
+        const firstName = (s: string) => (s || '').trim().split(/\s+/)[0]?.toLowerCase() || '';
+
         savedRows.forEach((row: any) => {
-          if (row.is_active || row.user_id === user?.id || merged.has(row.name)) {
-            merged.set(row.name, mapExpertRow(row));
+          if (!(row.is_active || row.user_id === user?.id || merged.has(row.name))) return;
+          // If a fallback has the same first name (e.g. "Florina Ungureanu" vs "Florina Daniela Ungureanu"),
+          // treat the saved row as the source of truth and remove the fallback duplicate.
+          const rowFirst = firstName(row.name);
+          for (const key of Array.from(merged.keys())) {
+            if (key !== row.name && firstName(key) === rowFirst) {
+              merged.delete(key);
+            }
           }
+          merged.set(row.name, mapExpertRow(row));
         });
 
         setExperts(Array.from(merged.values()).sort((a, b) => a.name.localeCompare(b.name)));
