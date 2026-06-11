@@ -160,6 +160,14 @@ export function AdminPage() {
   const recentPartners = partners.filter(p => new Date(p.created_at) > weekAgo).length;
   const recentPosts = posts.filter(p => new Date(p.created_at) > weekAgo).length;
 
+  if (checking || authLoading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <p className="text-muted-foreground">Verifying admin access...</p>
+      </div>
+    );
+  }
+
   if (!authenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-muted/30">
@@ -169,29 +177,20 @@ export function AdminPage() {
               <Lock className="w-6 h-6 text-primary" />
             </div>
             <CardTitle>Admin Access</CardTitle>
-            <p className="text-sm text-muted-foreground">Enter the admin password to continue</p>
+            <p className="text-sm text-muted-foreground">
+              {user ? 'Your account does not have admin permissions.' : 'Sign in with an admin account to continue.'}
+            </p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handlePasswordSubmit} className="space-y-4">
-              <Input
-                type="password"
-                placeholder="Admin password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                autoFocus
-              />
-              {error && <p className="text-sm text-destructive">{error}</p>}
-              <Button type="submit" className="w-full">Unlock Dashboard</Button>
-            </form>
-            <div className="mt-6 p-3 rounded-lg bg-muted/50 border">
+            {error && <p className="text-sm text-destructive mb-4">{error}</p>}
+            <div className="p-3 rounded-lg bg-muted/50 border">
               <div className="flex items-center gap-2 mb-1">
                 <Shield className="w-4 h-4 text-muted-foreground" />
                 <span className="text-xs font-medium text-muted-foreground">GDPR Compliance</span>
               </div>
               <p className="text-xs text-muted-foreground">
-                This dashboard displays personal data (names, emails) under legitimate interest (Art. 6(1)(f) GDPR). 
-                Data is processed only for platform administration. Access is restricted to authorized personnel. 
-                Session expires when you close the browser tab.
+                This dashboard displays personal data (names, emails) under legitimate interest (Art. 6(1)(f) GDPR).
+                Data is processed only for platform administration. Access is restricted to authorized personnel.
               </p>
             </div>
           </CardContent>
@@ -199,6 +198,7 @@ export function AdminPage() {
       </div>
     );
   }
+
 
   if (loading) {
     return (
