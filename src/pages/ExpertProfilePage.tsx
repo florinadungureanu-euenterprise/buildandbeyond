@@ -258,16 +258,59 @@ export function ExpertProfilePage() {
           <p className="text-xs text-muted-foreground">Helps us match you to founders whose challenges actually light you up.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="photo">Photo URL</Label>
-            <Input id="photo" value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} />
+        <div className="space-y-1.5">
+          <Label>Profile photo</Label>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-20 w-20 border border-border">
+              {photoUrl ? <AvatarImage src={photoUrl} alt="Profile" /> : null}
+              <AvatarFallback className="text-lg font-semibold">
+                {(name || 'Y').split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-1.5">
+              <input
+                id="photo-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handlePhotoUpload(file);
+                  e.target.value = '';
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={uploadingPhoto}
+                onClick={() => document.getElementById('photo-upload')?.click()}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                {uploadingPhoto ? 'Uploading…' : photoUrl ? 'Replace photo' : 'Upload photo'}
+              </Button>
+              {photoUrl && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="ml-2 text-muted-foreground"
+                  onClick={() => setPhotoUrl('')}
+                >
+                  Remove
+                </Button>
+              )}
+              <p className="text-xs text-muted-foreground">PNG or JPG, up to 5MB.</p>
+            </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <Label htmlFor="linkedin">LinkedIn URL</Label>
             <Input id="linkedin" value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} />
           </div>
-          <div className="space-y-1.5 md:col-span-2">
+          <div className="space-y-1.5">
             <Label htmlFor="booking">Booking URL</Label>
             <Input id="booking" value={bookingUrl} onChange={(e) => setBookingUrl(e.target.value)} placeholder="https://cal.com/…" />
           </div>
