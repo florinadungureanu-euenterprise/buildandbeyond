@@ -363,7 +363,7 @@ export function ExpertProfilePage() {
             <div className="flex flex-wrap gap-1 pt-2">
               {buckets.map((b) => (
                 <Badge key={b} variant="secondary" className="text-xs cursor-pointer" onClick={() => toggleBucket(b)}>
-                  {b} ×
+                  {displayBucket(b)} ×
                 </Badge>
               ))}
             </div>
