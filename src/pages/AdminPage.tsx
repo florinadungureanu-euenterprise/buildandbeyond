@@ -80,12 +80,12 @@ const statusColors: Record<string, string> = {
   rejected: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
 };
 
-const ADMIN_PASSWORD_HASH_KEY = 'bb_admin_auth';
+const ADMIN_AUTH_KEY = 'bb_admin_auth';
 
 export function AdminPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [authenticated, setAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
+  const [checking, setChecking] = useState(true);
   const [error, setError] = useState('');
   const [partners, setPartners] = useState<PartnerSubmission[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -95,53 +95,31 @@ export function AdminPage() {
   const [experts, setExperts] = useState<ExpertRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is one of the hardcoded admin accounts
-  const ADMIN_USER_IDS = [
-    '90cee2ce-d88e-417f-bfd7-d692d008b346',
-    '734591d1-ea79-41b4-ab50-8724e983d41c',
-  ];
-  const isAdminUser = !!user?.id && ADMIN_USER_IDS.includes(user.id);
-
-  // Verify admin access via server-side function
+  // Verify admin access via server-side function (is_admin RPC backed by user_roles + RLS)
   const verifyAdmin = useCallback(async () => {
     const { data } = await supabase.rpc('is_admin');
     return data === true;
   }, []);
 
   useEffect(() => {
-    // Check session storage for existing auth
-    const stored = sessionStorage.getItem(ADMIN_PASSWORD_HASH_KEY);
-    if (stored === 'verified') {
-      verifyAdmin().then(ok => {
-        if (ok) setAuthenticated(true);
-        else sessionStorage.removeItem(ADMIN_PASSWORD_HASH_KEY);
-      });
-    }
-  }, [verifyAdmin]);
-
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (!isAdminUser) {
-      setError('Access denied. You are not authorized.');
+    if (authLoading) return;
+    if (!user) {
+      setChecking(false);
+      setError('You must be signed in to access the admin dashboard.');
       return;
     }
-
-    // Simple password check — the real security is the is_admin() RLS function
-    if (password === 'BuildBeyond2025!') {
-      const ok = await verifyAdmin();
+    verifyAdmin().then((ok) => {
       if (ok) {
         setAuthenticated(true);
-        sessionStorage.setItem(ADMIN_PASSWORD_HASH_KEY, 'verified');
+        sessionStorage.setItem(ADMIN_AUTH_KEY, 'verified');
       } else {
-        setError('Server-side admin verification failed.');
+        sessionStorage.removeItem(ADMIN_AUTH_KEY);
+        setError('Access denied. You are not authorized.');
       }
-    } else {
-      setError('Incorrect password.');
-    }
-    setPassword('');
-  };
+      setChecking(false);
+    });
+  }, [user, authLoading, verifyAdmin]);
+
 
   useEffect(() => {
     if (authenticated) loadAllData();
