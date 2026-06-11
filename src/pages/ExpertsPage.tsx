@@ -385,10 +385,10 @@ export default function ExpertsPage({ embedded = false }: { embedded?: boolean }
               </div>
 
               <div className="px-6 md:px-8 py-4 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-                <Button asChild variant="outline" className="flex-1 bg-white">
-                  <a href="mailto:contact@scale-it.co?subject=Looking%20for%20an%20expert">
-                    Tell us what you need
-                  </a>
+                <Button asChild variant="outline" className="flex-1 bg-white" disabled={!exp.id}>
+                  <Link to={exp.id ? `/request-expert/${exp.id}` : '/login'}>
+                    Tell me what I can help you with
+                  </Link>
                 </Button>
                 {exp.booking_url && (
                   <Button asChild className="flex-1 bg-blue-600 hover:bg-blue-700">
