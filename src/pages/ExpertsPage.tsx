@@ -170,7 +170,7 @@ const AVATAR_BG = [
   'bg-purple-100 text-purple-700',
 ];
 
-export default function ExpertsPage() {
+export default function ExpertsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const [experts, setExperts] = useState<Expert[]>(FALLBACK_EXPERTS);
   const [filter, setFilter] = useState<string>('all');
 
