@@ -63,6 +63,34 @@ export function ExpertProfilePage() {
   const [achievements, setAchievements] = useState('');
   const [companies, setCompanies] = useState('');
   const [whatMakesYouHappy, setWhatMakesYouHappy] = useState('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+  const handlePhotoUpload = async (file: File) => {
+    if (!user?.id) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please choose an image file');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be under 5MB');
+      return;
+    }
+    setUploadingPhoto(true);
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const path = `${user.id}/photo-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from('expert-photos')
+      .upload(path, file, { cacheControl: '3600', upsert: true });
+    if (upErr) {
+      setUploadingPhoto(false);
+      toast.error('Upload failed: ' + upErr.message);
+      return;
+    }
+    const { data: pub } = supabase.storage.from('expert-photos').getPublicUrl(path);
+    setPhotoUrl(pub.publicUrl);
+    setUploadingPhoto(false);
+    toast.success('Photo uploaded. Remember to save changes.');
+  };
 
   useEffect(() => {
     if (!user?.id) return;
