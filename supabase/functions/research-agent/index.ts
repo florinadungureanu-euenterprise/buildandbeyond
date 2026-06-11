@@ -194,6 +194,11 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const auth = await requireUser(req, corsHeaders);
+  if (!auth.ok) return auth.response!;
+
+
+
   try {
     const body = await req.json();
     const { action, profile, userId, linkedinUrl } = body;
