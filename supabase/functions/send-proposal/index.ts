@@ -80,6 +80,9 @@ function buildHtml(name: string, proposal: Proposal): string {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  const auth = await requireAdmin(req, corsHeaders);
+  if (!auth.ok) return auth.response!;
+
   try {
     const { proposal_request_id } = await req.json();
     if (!proposal_request_id) throw new Error("proposal_request_id required");
