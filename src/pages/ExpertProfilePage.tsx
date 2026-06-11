@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { Upload } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const SCALEIT_BUCKETS = [
   'Navigate Ready', 'Expansion Ready', 'Raise Ready',
@@ -19,6 +21,10 @@ const SCALEIT_BUCKETS = [
   'Data Ready', 'Partnerships Ready', 'Exit Ready',
   'Community Ready', 'PR & Comms Ready',
 ];
+
+// Display helper: strip " Ready" suffix while keeping stored values intact for compatibility
+export const displayBucket = (b: string) => b.replace(/\s*Ready$/i, '').trim();
+
 
 interface ExpertRow {
   id: string;
@@ -57,6 +63,34 @@ export function ExpertProfilePage() {
   const [achievements, setAchievements] = useState('');
   const [companies, setCompanies] = useState('');
   const [whatMakesYouHappy, setWhatMakesYouHappy] = useState('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+  const handlePhotoUpload = async (file: File) => {
+    if (!user?.id) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please choose an image file');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be under 5MB');
+      return;
+    }
+    setUploadingPhoto(true);
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const path = `${user.id}/photo-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from('expert-photos')
+      .upload(path, file, { cacheControl: '3600', upsert: true });
+    if (upErr) {
+      setUploadingPhoto(false);
+      toast.error('Upload failed: ' + upErr.message);
+      return;
+    }
+    const { data: pub } = supabase.storage.from('expert-photos').getPublicUrl(path);
+    setPhotoUrl(pub.publicUrl);
+    setUploadingPhoto(false);
+    toast.success('Photo uploaded. Remember to save changes.');
+  };
 
   useEffect(() => {
     if (!user?.id) return;
@@ -224,16 +258,59 @@ export function ExpertProfilePage() {
           <p className="text-xs text-muted-foreground">Helps us match you to founders whose challenges actually light you up.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="photo">Photo URL</Label>
-            <Input id="photo" value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} />
+        <div className="space-y-1.5">
+          <Label>Profile photo</Label>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-20 w-20 border border-border">
+              {photoUrl ? <AvatarImage src={photoUrl} alt="Profile" /> : null}
+              <AvatarFallback className="text-lg font-semibold">
+                {(name || 'Y').split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-1.5">
+              <input
+                id="photo-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handlePhotoUpload(file);
+                  e.target.value = '';
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={uploadingPhoto}
+                onClick={() => document.getElementById('photo-upload')?.click()}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                {uploadingPhoto ? 'Uploading…' : photoUrl ? 'Replace photo' : 'Upload photo'}
+              </Button>
+              {photoUrl && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="ml-2 text-muted-foreground"
+                  onClick={() => setPhotoUrl('')}
+                >
+                  Remove
+                </Button>
+              )}
+              <p className="text-xs text-muted-foreground">PNG or JPG, up to 5MB.</p>
+            </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <Label htmlFor="linkedin">LinkedIn URL</Label>
             <Input id="linkedin" value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} />
           </div>
-          <div className="space-y-1.5 md:col-span-2">
+          <div className="space-y-1.5">
             <Label htmlFor="booking">Booking URL</Label>
             <Input id="booking" value={bookingUrl} onChange={(e) => setBookingUrl(e.target.value)} placeholder="https://cal.com/…" />
           </div>
@@ -246,7 +323,7 @@ export function ExpertProfilePage() {
             {Array.from(new Set([...SCALEIT_BUCKETS, ...buckets])).map((b) => (
               <label key={b} className="flex items-center gap-2 text-sm cursor-pointer">
                 <Checkbox checked={buckets.includes(b)} onCheckedChange={() => toggleBucket(b)} />
-                <span>{b}</span>
+                <span>{displayBucket(b)}</span>
               </label>
             ))}
           </div>
@@ -286,7 +363,7 @@ export function ExpertProfilePage() {
             <div className="flex flex-wrap gap-1 pt-2">
               {buckets.map((b) => (
                 <Badge key={b} variant="secondary" className="text-xs cursor-pointer" onClick={() => toggleBucket(b)}>
-                  {b} ×
+                  {displayBucket(b)} ×
                 </Badge>
               ))}
             </div>

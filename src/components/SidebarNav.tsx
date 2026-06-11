@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { LogOut } from 'lucide-react';
 
-const navItems = [
+const baseNavItems = [
   { path: '/whisperer', label: 'Your Entrepreneur Whisperer' },
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/roadmap', label: 'Roadmap' },
@@ -19,29 +19,33 @@ const navItems = [
   { path: '/fundraising', label: 'Fundraising' },
   { path: '/community', label: 'Community' },
   { path: '/integrations', label: 'Integrations' },
-  { path: '/expert-profile', label: 'Expert Profile' }
+  { path: '/team', label: 'Experts' },
 ];
 
 export function SidebarNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const [isExpert, setIsExpert] = useState(false);
+  const [isApprovedExpert, setIsApprovedExpert] = useState(false);
 
   useEffect(() => {
-    if (!user?.id) { setIsExpert(false); return; }
+    if (!user?.id) { setIsApprovedExpert(false); return; }
     supabase
       .from('experts')
-      .select('id')
+      .select('is_active')
       .eq('user_id', user.id)
       .maybeSingle()
-      .then(({ data }) => setIsExpert(!!data));
+      .then(({ data }) => setIsApprovedExpert(!!(data && (data as any).is_active)));
   }, [user?.id]);
 
   const handleLogout = async () => {
     await signOut();
     navigate('/');
   };
+
+  const navItems = isApprovedExpert
+    ? [...baseNavItems, { path: '/expert-profile', label: 'Expert Profile' }]
+    : baseNavItems;
 
   return (
     <nav className="w-64 bg-white border-r border-gray-200 p-6 flex flex-col">
@@ -78,7 +82,11 @@ export function SidebarNav() {
         <Link to="/settings" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
           Settings
         </Link>
-        {isExpert && null}
+        {!isApprovedExpert && user && (
+          <Link to="/expert-profile" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
+            Apply as expert
+          </Link>
+        )}
         <Link to="/admin" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">
           Admin
         </Link>
