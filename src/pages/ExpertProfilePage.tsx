@@ -194,6 +194,83 @@ export function ExpertProfilePage() {
         </p>
       </div>
 
+      {lastSavedAt && (
+        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span>
+            Changes saved at {lastSavedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.
+            {mode === 'preview' ? ' Here is how your profile looks to founders.' : ''}
+          </span>
+        </div>
+      )}
+
+      {mode === 'preview' && expert ? (
+        <>
+          <div className="flex items-center justify-between">
+            <div className="text-xs font-bold uppercase tracking-widest text-slate-400">Live preview</div>
+            <Button variant="outline" size="sm" onClick={() => setMode('edit')}>
+              <Pencil className="w-4 h-4 mr-2" /> Edit profile
+            </Button>
+          </div>
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="p-6 md:p-8">
+              <div className="flex items-start justify-between mb-6 gap-3">
+                <div className="flex gap-4 min-w-0">
+                  <Avatar className="h-16 w-16 border-2 border-white shadow-sm shrink-0">
+                    {photoUrl ? <AvatarImage src={photoUrl} alt={name} /> : null}
+                    <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xl">
+                      {(name || 'Y').split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-bold text-slate-900 leading-tight">{name || expert.name}</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">{title || expert.title}</p>
+                    <div className="flex flex-wrap gap-1.5 mt-2.5">
+                      {buckets.map((b) => <BucketTag key={b} bucket={b} />)}
+                    </div>
+                  </div>
+                </div>
+                {linkedinUrl && (
+                  <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 shrink-0">
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                )}
+              </div>
+              {bio && <p className="text-sm text-slate-600 leading-relaxed mb-4 whitespace-pre-line">{bio}</p>}
+              {companies && (
+                <div className="mb-4">
+                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Companies</h4>
+                  <p className="text-sm text-slate-700">{companies}</p>
+                </div>
+              )}
+              {notableProjects && (
+                <div className="mb-4">
+                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Notable projects</h4>
+                  <p className="text-sm text-slate-600 whitespace-pre-line">{notableProjects}</p>
+                </div>
+              )}
+              {achievements && (
+                <div className="mb-4">
+                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Achievements</h4>
+                  <p className="text-sm text-slate-600 whitespace-pre-line">{achievements}</p>
+                </div>
+              )}
+              {whatMakesYouHappy && (
+                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                  <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1">Passionate about</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">{whatMakesYouHappy}</p>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button onClick={() => setMode('edit')} variant="outline">
+              <Pencil className="w-4 h-4 mr-2" /> Make changes
+            </Button>
+          </div>
+        </>
+      ) : (
+      <>
       <p className="text-sm text-muted-foreground leading-relaxed">
         As a Scaleit expert, your profile helps founders discover you based on the areas you advise on.
         Once approved, you will be able to review client needs, craft proposals, track delivery progress,
