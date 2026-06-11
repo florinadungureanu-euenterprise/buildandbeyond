@@ -155,9 +155,10 @@ function initials(name: string) {
 
 export function BucketTag({ bucket }: { bucket: string }) {
   const cls = BUCKET_COLORS[bucket] || 'bg-gray-50 text-gray-700 border-gray-200';
+  const label = bucket.replace(/\s*Ready$/i, '').trim();
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${cls}`}>
-      {bucket}
+      {label}
     </span>
   );
 }
