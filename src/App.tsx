@@ -99,6 +99,7 @@ const router = createBrowserRouter(
         { path: '/engagements', element: <EngagementsPage /> },
         { path: '/engagements/:id', element: <EngagementWorkspacePage /> },
         { path: '/integrations', element: <IntegrationsPage /> },
+        { path: '/team', element: <ExpertsPage embedded /> },
       ]
     },
     { path: '/', element: <LandingPage /> },
