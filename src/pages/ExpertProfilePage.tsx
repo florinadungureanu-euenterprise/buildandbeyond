@@ -323,7 +323,7 @@ export function ExpertProfilePage() {
             {Array.from(new Set([...SCALEIT_BUCKETS, ...buckets])).map((b) => (
               <label key={b} className="flex items-center gap-2 text-sm cursor-pointer">
                 <Checkbox checked={buckets.includes(b)} onCheckedChange={() => toggleBucket(b)} />
-                <span>{b}</span>
+                <span>{displayBucket(b)}</span>
               </label>
             ))}
           </div>
