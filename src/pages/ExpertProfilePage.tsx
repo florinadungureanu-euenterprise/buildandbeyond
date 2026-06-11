@@ -9,8 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Upload } from 'lucide-react';
+import { Upload, CheckCircle2, Pencil, Linkedin } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { BucketTag } from '@/pages/ExpertsPage';
 
 const SCALEIT_BUCKETS = [
   'Navigate Ready', 'Expansion Ready', 'Raise Ready',
