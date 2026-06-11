@@ -287,13 +287,8 @@ export function CommunityPage() {
   const [showNewPost, setShowNewPost] = useState(false);
   const [newPost, setNewPost] = useState({ title: '', content: '', category: 'general' as PostCategory, industry: 'Technology' });
   const [submitting, setSubmitting] = useState(false);
-  const [experts, setExperts] = useState<Array<{ id: string; name: string; title: string | null; scaleit_buckets: string[] | null; linkedin_url: string | null; booking_url: string | null }>>([]);
 
-  useEffect(() => {
-    supabase.from('experts').select('*').eq('is_active', true).then(({ data }) => {
-      if (data) setExperts(data as never);
-    });
-  }, []);
+
 
   const loadPosts = useCallback(async () => {
     if (!userId) return;
