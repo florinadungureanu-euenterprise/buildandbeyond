@@ -65,6 +65,8 @@ export function ExpertProfilePage() {
   const [companies, setCompanies] = useState('');
   const [whatMakesYouHappy, setWhatMakesYouHappy] = useState('');
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [mode, setMode] = useState<'edit' | 'preview'>('edit');
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
 
   const handlePhotoUpload = async (file: File) => {
     if (!user?.id) return;
