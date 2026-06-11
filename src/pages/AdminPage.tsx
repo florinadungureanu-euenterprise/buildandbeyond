@@ -80,12 +80,12 @@ const statusColors: Record<string, string> = {
   rejected: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
 };
 
-const ADMIN_PASSWORD_HASH_KEY = 'bb_admin_auth';
+const ADMIN_AUTH_KEY = 'bb_admin_auth';
 
 export function AdminPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [authenticated, setAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
+  const [checking, setChecking] = useState(true);
   const [error, setError] = useState('');
   const [partners, setPartners] = useState<PartnerSubmission[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -95,53 +95,31 @@ export function AdminPage() {
   const [experts, setExperts] = useState<ExpertRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is one of the hardcoded admin accounts
-  const ADMIN_USER_IDS = [
-    '90cee2ce-d88e-417f-bfd7-d692d008b346',
-    '734591d1-ea79-41b4-ab50-8724e983d41c',
-  ];
-  const isAdminUser = !!user?.id && ADMIN_USER_IDS.includes(user.id);
-
-  // Verify admin access via server-side function
+  // Verify admin access via server-side function (is_admin RPC backed by user_roles + RLS)
   const verifyAdmin = useCallback(async () => {
     const { data } = await supabase.rpc('is_admin');
     return data === true;
   }, []);
 
   useEffect(() => {
-    // Check session storage for existing auth
-    const stored = sessionStorage.getItem(ADMIN_PASSWORD_HASH_KEY);
-    if (stored === 'verified') {
-      verifyAdmin().then(ok => {
-        if (ok) setAuthenticated(true);
-        else sessionStorage.removeItem(ADMIN_PASSWORD_HASH_KEY);
-      });
-    }
-  }, [verifyAdmin]);
-
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (!isAdminUser) {
-      setError('Access denied. You are not authorized.');
+    if (authLoading) return;
+    if (!user) {
+      setChecking(false);
+      setError('You must be signed in to access the admin dashboard.');
       return;
     }
-
-    // Simple password check — the real security is the is_admin() RLS function
-    if (password === 'BuildBeyond2025!') {
-      const ok = await verifyAdmin();
+    verifyAdmin().then((ok) => {
       if (ok) {
         setAuthenticated(true);
-        sessionStorage.setItem(ADMIN_PASSWORD_HASH_KEY, 'verified');
+        sessionStorage.setItem(ADMIN_AUTH_KEY, 'verified');
       } else {
-        setError('Server-side admin verification failed.');
+        sessionStorage.removeItem(ADMIN_AUTH_KEY);
+        setError('Access denied. You are not authorized.');
       }
-    } else {
-      setError('Incorrect password.');
-    }
-    setPassword('');
-  };
+      setChecking(false);
+    });
+  }, [user, authLoading, verifyAdmin]);
+
 
   useEffect(() => {
     if (authenticated) loadAllData();
@@ -182,6 +160,14 @@ export function AdminPage() {
   const recentPartners = partners.filter(p => new Date(p.created_at) > weekAgo).length;
   const recentPosts = posts.filter(p => new Date(p.created_at) > weekAgo).length;
 
+  if (checking || authLoading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <p className="text-muted-foreground">Verifying admin access...</p>
+      </div>
+    );
+  }
+
   if (!authenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-muted/30">
@@ -191,29 +177,20 @@ export function AdminPage() {
               <Lock className="w-6 h-6 text-primary" />
             </div>
             <CardTitle>Admin Access</CardTitle>
-            <p className="text-sm text-muted-foreground">Enter the admin password to continue</p>
+            <p className="text-sm text-muted-foreground">
+              {user ? 'Your account does not have admin permissions.' : 'Sign in with an admin account to continue.'}
+            </p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handlePasswordSubmit} className="space-y-4">
-              <Input
-                type="password"
-                placeholder="Admin password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                autoFocus
-              />
-              {error && <p className="text-sm text-destructive">{error}</p>}
-              <Button type="submit" className="w-full">Unlock Dashboard</Button>
-            </form>
-            <div className="mt-6 p-3 rounded-lg bg-muted/50 border">
+            {error && <p className="text-sm text-destructive mb-4">{error}</p>}
+            <div className="p-3 rounded-lg bg-muted/50 border">
               <div className="flex items-center gap-2 mb-1">
                 <Shield className="w-4 h-4 text-muted-foreground" />
                 <span className="text-xs font-medium text-muted-foreground">GDPR Compliance</span>
               </div>
               <p className="text-xs text-muted-foreground">
-                This dashboard displays personal data (names, emails) under legitimate interest (Art. 6(1)(f) GDPR). 
-                Data is processed only for platform administration. Access is restricted to authorized personnel. 
-                Session expires when you close the browser tab.
+                This dashboard displays personal data (names, emails) under legitimate interest (Art. 6(1)(f) GDPR).
+                Data is processed only for platform administration. Access is restricted to authorized personnel.
               </p>
             </div>
           </CardContent>
@@ -221,6 +198,7 @@ export function AdminPage() {
       </div>
     );
   }
+
 
   if (loading) {
     return (

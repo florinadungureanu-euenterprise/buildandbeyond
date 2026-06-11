@@ -44,6 +44,14 @@ export function ShareablePassport() {
   const handleExportPDF = async () => {
     setGenerating(true);
     try {
+      const esc = (s: unknown): string =>
+        String(s ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+
       // Build a printable HTML document and use browser print
       const printWindow = window.open('', '_blank');
       if (!printWindow) {
@@ -55,7 +63,7 @@ export function ShareablePassport() {
         <!DOCTYPE html>
         <html>
         <head>
-          <title>${passport.startupName} - Startup Passport</title>
+          <title>${esc(passport.startupName)} - Startup Passport</title>
           <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px; color: #1a1a2e; max-width: 800px; margin: 0 auto; }
@@ -88,7 +96,7 @@ export function ShareablePassport() {
             <div class="eu-badge">&#9733;&#9733;&#9733;</div>
             <div>
               <h1>European Startup Passport</h1>
-              <div class="subtitle">Build & Beyond</div>
+              <div class="subtitle">Build &amp; Beyond</div>
               <div class="badges">
                 <span class="badge">Regulation-Ready</span>
                 <span class="badge">AI-Summarized</span>
@@ -98,41 +106,41 @@ export function ShareablePassport() {
           </div>
 
           <div class="section">
-            <div class="startup-name">${passport.startupName}</div>
-            <div class="tagline">${passport.tagline}</div>
-            <p><strong>Founder:</strong> ${passport.founderName}</p>
-            ${passport.summary ? `<p style="margin-top: 8px;">${passport.summary}</p>` : ''}
+            <div class="startup-name">${esc(passport.startupName)}</div>
+            <div class="tagline">${esc(passport.tagline)}</div>
+            <p><strong>Founder:</strong> ${esc(passport.founderName)}</p>
+            ${passport.summary ? `<p style="margin-top: 8px;">${esc(passport.summary)}</p>` : ''}
           </div>
 
           ${passport.validationSummary ? `
           <div class="section">
             <div class="section-title">Validation Summary</div>
-            <p>${passport.validationSummary}</p>
+            <p>${esc(passport.validationSummary)}</p>
           </div>` : ''}
 
           ${passport.competitorSnapshot.length > 0 ? `
           <div class="section">
             <div class="section-title">Competitor Landscape</div>
-            <ul>${passport.competitorSnapshot.map(c => `<li>${c}</li>`).join('')}</ul>
+            <ul>${passport.competitorSnapshot.map(c => `<li>${esc(c)}</li>`).join('')}</ul>
           </div>` : ''}
 
           ${passport.marketData.length > 0 ? `
           <div class="section">
             <div class="section-title">Market Data</div>
-            <ul>${passport.marketData.map(m => `<li>${m}</li>`).join('')}</ul>
+            <ul>${passport.marketData.map(m => `<li>${esc(m)}</li>`).join('')}</ul>
           </div>` : ''}
 
           ${passport.roadmapSnapshot ? `
           <div class="section">
             <div class="section-title">Roadmap Snapshot</div>
-            <p>${passport.roadmapSnapshot}</p>
+            <p>${esc(passport.roadmapSnapshot)}</p>
           </div>` : ''}
 
           <div class="grid">
             ${passport.complianceFlags.length > 0 ? `
             <div class="card">
               <div class="section-title">Compliance</div>
-              <ul>${passport.complianceFlags.map(f => `<li>${f}</li>`).join('')}</ul>
+              <ul>${passport.complianceFlags.map(f => `<li>${esc(f)}</li>`).join('')}</ul>
             </div>` : ''}
 
             ${passport.fundingReadiness.length > 0 ? `
@@ -140,19 +148,20 @@ export function ShareablePassport() {
               <div class="section-title">Funding Readiness</div>
               ${passport.fundingReadiness.map(f => `
                 <div class="readiness-item">
-                  <span>${f.item}</span>
-                  <span class="status status-${f.status}">${f.status}</span>
+                  <span>${esc(f.item)}</span>
+                  <span class="status status-${esc(f.status)}">${esc(f.status)}</span>
                 </div>
               `).join('')}
             </div>` : ''}
           </div>
 
           <div class="footer">
-            Generated on ${formatDate(new Date())} &bull; European Startup Passport Initiative &bull; Build & Beyond
+            Generated on ${esc(formatDate(new Date()))} &bull; European Startup Passport Initiative &bull; Build &amp; Beyond
           </div>
         </body>
         </html>
       `;
+
 
       printWindow.document.write(html);
       printWindow.document.close();

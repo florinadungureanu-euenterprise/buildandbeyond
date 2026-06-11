@@ -1,14 +1,26 @@
+import { requireUser } from "../_shared/auth.ts";
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/slack/api';
+const ALLOWED_CHANNELS = new Set([
+  'partner-submissions',
+  'proposal-requests',
+  'notifications',
+  'general',
+]);
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const auth = await requireUser(req, corsHeaders);
+  if (!auth.ok) return auth.response!;
+
 
   try {
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -29,6 +41,14 @@ Deno.serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    if (!ALLOWED_CHANNELS.has(String(channel))) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'channel not allowed' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
 
     const response = await fetch(`${GATEWAY_URL}/chat.postMessage`, {
       method: 'POST',
