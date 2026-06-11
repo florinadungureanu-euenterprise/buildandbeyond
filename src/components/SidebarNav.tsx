@@ -19,7 +19,7 @@ const navItems = [
   { path: '/fundraising', label: 'Fundraising' },
   { path: '/community', label: 'Community' },
   { path: '/integrations', label: 'Integrations' },
-  { path: '/experts', label: 'Experts' }
+  { path: '/expert-profile', label: 'Expert Profile' }
 ];
 
 export function SidebarNav() {
