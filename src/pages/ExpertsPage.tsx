@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Rocket, ArrowRight, Linkedin, CheckCircle2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Expert {
   id?: string;
@@ -153,6 +154,44 @@ function initials(name: string) {
     .toUpperCase();
 }
 
+function listFromText(value?: string | null) {
+  return (value || '')
+    .split(/\n|;|,/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function listFromArray(value: unknown) {
+  return Array.isArray(value)
+    ? value.map((item) => String(item).trim()).filter(Boolean)
+    : [];
+}
+
+function mapExpertRow(e: any): Expert {
+  const fb = FALLBACK_EXPERTS.find((f) => f.name === e.name);
+  const companies = listFromText(e.companies);
+  const projects = listFromText(e.notable_projects);
+  const achievements = listFromText(e.achievements);
+  const buckets = listFromArray(e.scaleit_buckets || e.service_buckets);
+  const bullets = listFromArray(e.bullets || e.specialties || e.expertise_keywords);
+
+  return {
+    id: e.is_active ? e.id : fb?.id,
+    name: e.name,
+    title: e.title || e.role || fb?.title || '',
+    photo_url: e.photo_url,
+    linkedin_url: e.linkedin_url || fb?.linkedin_url,
+    booking_url: e.booking_url || e.calendly_url || fb?.booking_url,
+    scaleit_buckets: buckets.length ? buckets : (fb?.scaleit_buckets || []),
+    bio: e.bio || fb?.bio || '',
+    bullets: bullets.length ? bullets : (fb?.bullets || []),
+    provenAt: companies.length ? companies : (fb?.provenAt || []),
+    signatureOutcomes: projects.length ? projects : achievements.length ? achievements : (fb?.signatureOutcomes || []),
+    bestFor: fb?.bestFor || '',
+    passionateAbout: e.what_makes_you_happy || fb?.passionateAbout || '',
+  };
+}
+
 export function BucketTag({ bucket }: { bucket: string }) {
   const cls = BUCKET_COLORS[bucket] || 'bg-gray-50 text-gray-700 border-gray-200';
   const label = bucket.replace(/\s*Ready$/i, '').trim();
@@ -171,48 +210,38 @@ const AVATAR_BG = [
 ];
 
 export default function ExpertsPage({ embedded = false }: { embedded?: boolean } = {}) {
+  const { user } = useAuth();
   const [experts, setExperts] = useState<Expert[]>(FALLBACK_EXPERTS);
   const [filter, setFilter] = useState<string>('all');
 
   useEffect(() => {
     (async () => {
       try {
-        const { data, error } = await supabase
-          .from('experts')
-          .select('*')
-          .eq('is_active', true)
-          .order('name');
-        if (error) throw error;
-        if (data && data.length > 0) {
-          const mapped: Expert[] = data.map((e: any) => {
-            const fb = FALLBACK_EXPERTS.find((f) => f.name === e.name);
-            return {
-              id: e.id,
-              name: e.name,
-              title: e.title || e.role || fb?.title || '',
-              photo_url: e.photo_url,
-              linkedin_url: e.linkedin_url || fb?.linkedin_url,
-              booking_url: e.booking_url || e.calendly_url || fb?.booking_url,
-              scaleit_buckets: (e.scaleit_buckets || e.service_buckets || []).length
-                ? (e.scaleit_buckets || e.service_buckets)
-                : (fb?.scaleit_buckets || []),
-              bio: e.bio || fb?.bio || '',
-              bullets: (e.bullets || e.specialties || []).length
-                ? (e.bullets || e.specialties)
-                : (fb?.bullets || []),
-              provenAt: fb?.provenAt || [],
-              signatureOutcomes: fb?.signatureOutcomes || [],
-              bestFor: fb?.bestFor || '',
-              passionateAbout: fb?.passionateAbout || '',
-            };
-          });
-          setExperts(mapped);
-        }
+        const [activeResult, ownResult] = await Promise.all([
+          supabase.from('experts').select('*').eq('is_active', true).order('name'),
+          user?.id
+            ? supabase.from('experts').select('*').eq('user_id', user.id).maybeSingle()
+            : Promise.resolve({ data: null, error: null }),
+        ]);
+
+        if (activeResult.error) throw activeResult.error;
+        if (ownResult.error) throw ownResult.error;
+
+        const savedRows = [...(activeResult.data || []), ...(ownResult.data ? [ownResult.data] : [])];
+        const merged = new Map(FALLBACK_EXPERTS.map((expert) => [expert.name, expert]));
+
+        savedRows.forEach((row: any) => {
+          if (row.is_active || row.user_id === user?.id || merged.has(row.name)) {
+            merged.set(row.name, mapExpertRow(row));
+          }
+        });
+
+        setExperts(Array.from(merged.values()).sort((a, b) => a.name.localeCompare(b.name)));
       } catch {
         // keep fallback
       }
     })();
-  }, []);
+  }, [user?.id]);
 
   const visible = useMemo(() => {
     const f = ICP_FILTERS.find((x) => x.key === filter);
