@@ -221,21 +221,22 @@ export default function ExpertsPage({ embedded = false }: { embedded?: boolean }
   }, [experts, filter]);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
-      {/* Public nav */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <Rocket className="w-6 h-6 text-primary" />
-            <span className="text-lg font-bold text-foreground">Build&nbsp;&amp;&nbsp;Beyond</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link to="/experts" className="text-sm font-medium text-foreground">Experts</Link>
-            <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
-            <Button size="sm" asChild><Link to="/signup">Try it free</Link></Button>
+    <div className={embedded ? 'min-h-full bg-[#FAFAFA]' : 'min-h-screen bg-[#FAFAFA]'}>
+      {!embedded && (
+        <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
+          <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-2">
+              <Rocket className="w-6 h-6 text-primary" />
+              <span className="text-lg font-bold text-foreground">Build&nbsp;&amp;&nbsp;Beyond</span>
+            </Link>
+            <div className="flex items-center gap-3">
+              <Link to="/experts" className="text-sm font-medium text-foreground">Experts</Link>
+              <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
+              <Button size="sm" asChild><Link to="/signup">Try it free</Link></Button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      )}
 
       {/* Header + ICP selector */}
       <section className="px-4 pt-16 pb-10 max-w-5xl mx-auto text-center">
