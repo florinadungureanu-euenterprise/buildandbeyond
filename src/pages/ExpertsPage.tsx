@@ -73,31 +73,6 @@ const FALLBACK_EXPERTS: Expert[] = [
       'Bringing institutional finance rigour into early-stage decisions so founders raise on their own terms.',
   },
   {
-    name: 'Sabina Basariyeva',
-    title: 'Venture Coach & Startup Matchmaker',
-    photo_url: null,
-    linkedin_url: 'https://linkedin.com/in/sabina-bsv',
-    booking_url: 'https://calendly.com/sabina-basariyeva',
-    scaleit_buckets: ['Sales Ready', 'Brand Ready'],
-    bio: "Sabina has been building companies since she was 17. After leading global relations and growth at Startupbootcamp curating 60+ ecosystem events including FUTRXPO with 3,000+ attendees she now brings ecosystem intelligence to Dealroom, the world's leading startup data platform. She coaches founders on sales, personal brand, and visibility from both sides of the table.",
-    bullets: [
-      'ICP definition, sales funnel design and AI-powered outreach systems',
-      'Founder and company positioning, LinkedIn strategy and messaging',
-      'Startup scouting and ecosystem intelligence via Dealroom',
-      'Business development through GTM, partnerships and sponsorships',
-      'Keynote speaking preparation and thought leadership roadmap',
-    ],
-    provenAt: ['Dealroom', 'Startupbootcamp', 'FUTRXPO'],
-    signatureOutcomes: [
-      'Curated 60+ ecosystem events including FUTRXPO with 3,000+ attendees',
-      'Built AI-powered outreach systems used to scale founder pipelines',
-    ],
-    bestFor:
-      'Founders building authority from zero, GTM leads designing outbound, and investors scouting through Dealroom.',
-    passionateAbout:
-      'Helping founders find their voice and turning data into defensible sales and brand systems.',
-  },
-  {
     name: 'Ruperto Calatrava',
     title: 'Open Innovation & Corporate Partnership Advisor',
     photo_url: null,
@@ -121,6 +96,31 @@ const FALLBACK_EXPERTS: Expert[] = [
       'Corporates building open innovation engines and scaleups entering enterprise sales and procurement.',
     passionateAbout:
       'Bridging the gap between legacy corporate processes and agile startup innovation cycles.',
+  },
+  {
+    name: 'Sabina Basariyeva',
+    title: 'Venture Coach & Startup Matchmaker',
+    photo_url: null,
+    linkedin_url: 'https://linkedin.com/in/sabina-bsv',
+    booking_url: 'https://calendly.com/sabina-basariyeva',
+    scaleit_buckets: ['Sales Ready', 'Brand Ready'],
+    bio: "Sabina has been building companies since she was 17. After leading global relations and growth at Startupbootcamp curating 60+ ecosystem events including FUTRXPO with 3,000+ attendees she now brings ecosystem intelligence to Dealroom, the world's leading startup data platform. She coaches founders on sales, personal brand, and visibility from both sides of the table.",
+    bullets: [
+      'ICP definition, sales funnel design and AI-powered outreach systems',
+      'Founder and company positioning, LinkedIn strategy and messaging',
+      'Startup scouting and ecosystem intelligence via Dealroom',
+      'Business development through GTM, partnerships and sponsorships',
+      'Keynote speaking preparation and thought leadership roadmap',
+    ],
+    provenAt: ['Dealroom', 'Startupbootcamp', 'FUTRXPO'],
+    signatureOutcomes: [
+      'Curated 60+ ecosystem events including FUTRXPO with 3,000+ attendees',
+      'Built AI-powered outreach systems used to scale founder pipelines',
+    ],
+    bestFor:
+      'Founders building authority from zero, GTM leads designing outbound, and investors scouting through Dealroom.',
+    passionateAbout:
+      'Helping founders find their voice and turning data into defensible sales and brand systems.',
   },
 ];
 
