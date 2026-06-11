@@ -29,7 +29,7 @@ const FALLBACK_EXPERTS: Expert[] = [
     linkedin_url: 'https://linkedin.com/in/florina-ungureanu',
     booking_url: 'https://calendly.com/florina-eu-enterprise',
     scaleit_buckets: ['Navigate Ready', 'Expansion Ready'],
-    bio: "Florina builds bridges between startups, public institutions, and the EU ecosystem. She has led the AMS Startup Booster programme (NPS 9.8), currently drives inclusive AI innovation at AI4ALL Amsterdam, and is completing an MSc in Digital Business at UvA. Romanian-Dutch, with deep roots in both the Netherlands and CEE startup landscapes.",
+    bio: "Florina builds bridges between startups, public institutions, and the EU ecosystem. She has co-founded Tulip to help commercialize academic research in Amsterdam, led the AMS Startup Booster programme at AMS Institute, currently drives inclusive AI innovation at AI4ALL Amsterdam, and is helping public and private organizations scale within Europe or penetrate the European market. Has deep roots in the EU startup landscape and fosters partnerships in CEE for The Flywheel, focusing on venture building startups at the intersection between AI and energy, defence and manufacturing.",
     bullets: [
       'EU grant identification, consortium building & application coordination',
       'Ecosystem positioning and stakeholder mapping across Europe',
