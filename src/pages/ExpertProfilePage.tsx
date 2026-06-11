@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { Upload } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const SCALEIT_BUCKETS = [
   'Navigate Ready', 'Expansion Ready', 'Raise Ready',
@@ -19,6 +21,10 @@ const SCALEIT_BUCKETS = [
   'Data Ready', 'Partnerships Ready', 'Exit Ready',
   'Community Ready', 'PR & Comms Ready',
 ];
+
+// Display helper: strip " Ready" suffix while keeping stored values intact for compatibility
+export const displayBucket = (b: string) => b.replace(/\s*Ready$/i, '').trim();
+
 
 interface ExpertRow {
   id: string;
