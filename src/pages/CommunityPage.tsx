@@ -287,13 +287,8 @@ export function CommunityPage() {
   const [showNewPost, setShowNewPost] = useState(false);
   const [newPost, setNewPost] = useState({ title: '', content: '', category: 'general' as PostCategory, industry: 'Technology' });
   const [submitting, setSubmitting] = useState(false);
-  const [experts, setExperts] = useState<Array<{ id: string; name: string; title: string | null; scaleit_buckets: string[] | null; linkedin_url: string | null; booking_url: string | null }>>([]);
 
-  useEffect(() => {
-    supabase.from('experts').select('*').eq('is_active', true).then(({ data }) => {
-      if (data) setExperts(data as never);
-    });
-  }, []);
+
 
   const loadPosts = useCallback(async () => {
     if (!userId) return;
@@ -374,57 +369,8 @@ export function CommunityPage() {
         </div>
       </div>
 
-      {experts.length > 0 && (
-        <div className="mb-2">
-          <h2 className="text-xl font-bold mb-1">Meet the Scaleit Team</h2>
-          <p className="text-sm text-muted-foreground mb-4">Our experts match to your priorities and get to work.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {experts.map((expert) => (
-              <Card key={expert.id} className="p-5 flex flex-col gap-3">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-                  {expert.name.split(' ').map((n) => n[0]).join('')}
-                </div>
-                <div>
-                  <p className="font-semibold text-sm">{expert.name}</p>
-                  <p className="text-xs text-muted-foreground">{expert.title}</p>
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {(expert.scaleit_buckets || []).map((b) => (
-                    <Badge key={b} variant="secondary" className="text-xs">{b}</Badge>
-                  ))}
-                </div>
-                <div className="flex gap-2 mt-auto">
-                  {expert.linkedin_url && (
-                    <Button size="sm" variant="outline" className="flex-1 text-xs" asChild>
-                      <a href={expert.linkedin_url} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                    </Button>
-                  )}
-                  {expert.booking_url && (
-                    <Button size="sm" className="flex-1 text-xs" asChild>
-                      <a href={expert.booking_url} target="_blank" rel="noopener noreferrer">Book</a>
-                    </Button>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-6">
-            <Card className="p-6 bg-primary/5 border-primary/20">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <h3 className="font-semibold text-foreground">Are you an expert?</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Apply to join the Scaleit team and help founders navigate their growth journey.
-                  </p>
-                </div>
-                <Button asChild>
-                  <Link to="/expert-profile">Apply to be a Scaleit expert</Link>
-                </Button>
-              </div>
-            </Card>
-          </div>
-        </div>
-      )}
+
+
 
       <Tabs defaultValue="forum" className="w-full">
         <TabsList>

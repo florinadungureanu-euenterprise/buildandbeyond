@@ -70,7 +70,7 @@ export function EngagementsPage() {
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">Engagements</h1>
+        <h1 className="text-2xl font-bold">Consulting projects</h1>
         <p className="text-sm text-muted-foreground">Collaborations with Scaleit experts and your clients.</p>
       </div>
 

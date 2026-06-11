@@ -14,7 +14,7 @@ const navItems = [
   { path: '/tools', label: 'Tools' },
   { path: '/applications', label: 'Applications' },
   { path: '/my-proposals', label: 'My Proposals' },
-  { path: '/engagements', label: 'Engagements' },
+  { path: '/engagements', label: 'Consulting projects' },
   { path: '/events', label: 'Events' },
   { path: '/fundraising', label: 'Fundraising' },
   { path: '/community', label: 'Community' },
