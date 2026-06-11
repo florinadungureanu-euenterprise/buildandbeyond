@@ -149,7 +149,10 @@ export function ExpertProfilePage() {
       const { error } = await supabase.from('experts').update(payload).eq('id', expert.id);
       setSaving(false);
       if (error) { toast.error('Failed to save'); return; }
-      toast.success('Profile updated');
+      toast.success('Profile updated — here is how it looks on the site');
+      setLastSavedAt(new Date());
+      setMode('preview');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       const { data, error } = await supabase
         .from('experts')
@@ -166,6 +169,9 @@ export function ExpertProfilePage() {
       if (error) { toast.error('Failed to apply'); return; }
       setExpert(data as ExpertRow);
       toast.success('Application submitted. Awaiting approval.');
+      setLastSavedAt(new Date());
+      setMode('preview');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
