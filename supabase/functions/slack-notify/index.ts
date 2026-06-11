@@ -42,6 +42,14 @@ Deno.serve(async (req) => {
       );
     }
 
+    if (!ALLOWED_CHANNELS.has(String(channel))) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'channel not allowed' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+
     const response = await fetch(`${GATEWAY_URL}/chat.postMessage`, {
       method: 'POST',
       headers: {
