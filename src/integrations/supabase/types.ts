@@ -491,36 +491,71 @@ export type Database = {
       }
       proposal_requests: {
         Row: {
+          budget_hint: string | null
           created_at: string
+          expert_id: string | null
+          expert_response_note: string | null
+          founder_email: string | null
+          founder_message: string | null
+          founder_name: string | null
           generated_modules: Json | null
           id: string
           notes: string | null
           onboarding_answers: Json | null
+          responded_at: string | null
+          selected_milestones: Json | null
           sent_at: string | null
           status: string
+          timeframe: string | null
           user_id: string
         }
         Insert: {
+          budget_hint?: string | null
           created_at?: string
+          expert_id?: string | null
+          expert_response_note?: string | null
+          founder_email?: string | null
+          founder_message?: string | null
+          founder_name?: string | null
           generated_modules?: Json | null
           id?: string
           notes?: string | null
           onboarding_answers?: Json | null
+          responded_at?: string | null
+          selected_milestones?: Json | null
           sent_at?: string | null
           status?: string
+          timeframe?: string | null
           user_id: string
         }
         Update: {
+          budget_hint?: string | null
           created_at?: string
+          expert_id?: string | null
+          expert_response_note?: string | null
+          founder_email?: string | null
+          founder_message?: string | null
+          founder_name?: string | null
           generated_modules?: Json | null
           id?: string
           notes?: string | null
           onboarding_answers?: Json | null
+          responded_at?: string | null
+          selected_milestones?: Json | null
           sent_at?: string | null
           status?: string
+          timeframe?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "proposal_requests_expert_id_fkey"
+            columns: ["expert_id"]
+            isOneToOne: false
+            referencedRelation: "experts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scraped_tools: {
         Row: {
