@@ -472,6 +472,8 @@ export function ExpertProfilePage() {
           </Button>
         </div>
       </Card>
+      </>
+      )}
     </div>
   );
 }
