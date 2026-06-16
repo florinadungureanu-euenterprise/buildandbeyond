@@ -178,7 +178,7 @@ export function ExpertRequestsPage() {
             )}
 
             <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground">
-              {row.timeframe && <div><span className="font-semibold text-foreground">Timeframe:</span> {row.timeframe}</div>}
+              {row.timeframe && <div><span className="font-semibold text-foreground">Timeframe:</span> {formatTimeframe(row.timeframe)}</div>}
               {row.budget_hint && <div><span className="font-semibold text-foreground">Budget:</span> {row.budget_hint}</div>}
             </div>
 
