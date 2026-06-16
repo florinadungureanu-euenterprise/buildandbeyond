@@ -124,7 +124,7 @@ export function RequestExpertPage() {
 
     setSubmitting(false);
     toast.success('Request sent. We will email you when the expert responds.');
-    navigate('/my-proposals');
+    navigate('/my-proposals', { state: { justSubmitted: true, expertName: expert?.name } });
   };
 
   if (authLoading || loadingExpert) {
