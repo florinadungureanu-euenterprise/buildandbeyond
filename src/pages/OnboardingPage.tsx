@@ -2,43 +2,31 @@ import { useState } from 'react';
 import { ChatOnboarding } from '@/components/onboarding/ChatOnboarding';
 import { OnboardingPathSelector } from '@/components/onboarding/OnboardingPathSelector';
 import { FounderIntakeForm } from '@/components/onboarding/FounderIntakeForm';
-import { IntegrationsPanel } from '@/components/onboarding/IntegrationsPanel';
+import { DocumentUploadOnboarding } from '@/components/onboarding/DocumentUploadOnboarding';
 import { ScreenTour } from '@/components/tours/ScreenTour';
-import { Card } from '@/components/ui/card';
 import { MessageCircle } from 'lucide-react';
 
 type OnboardingPath = 'chat' | 'form' | 'upload' | null;
-type OnboardingStep = 'path' | 'integrations' | 'main';
 
 export function OnboardingPage() {
   const [selectedPath, setSelectedPath] = useState<OnboardingPath>(null);
-  const [step, setStep] = useState<OnboardingStep>('path');
 
   const handlePathSelect = (path: OnboardingPath) => {
     setSelectedPath(path);
-    setStep('integrations');
   };
 
-  const handleIntegrationsComplete = () => {
-    setStep('main');
-  };
+  const handleBack = () => setSelectedPath(null);
 
-  if (step === 'path' || !selectedPath) {
+  if (!selectedPath) {
     return <OnboardingPathSelector onSelect={handlePathSelect} />;
   }
 
-  if (step === 'integrations') {
-    return (
-      <div className="min-h-screen bg-muted/30 flex items-center justify-center p-6">
-        <Card className="w-full max-w-3xl p-8">
-          <IntegrationsPanel onComplete={handleIntegrationsComplete} />
-        </Card>
-      </div>
-    );
+  if (selectedPath === 'form') {
+    return <FounderIntakeForm onBack={handleBack} />;
   }
 
-  if (selectedPath === 'form') {
-    return <FounderIntakeForm onBack={() => setStep('path')} />;
+  if (selectedPath === 'upload') {
+    return <DocumentUploadOnboarding onBack={handleBack} />;
   }
 
   return (

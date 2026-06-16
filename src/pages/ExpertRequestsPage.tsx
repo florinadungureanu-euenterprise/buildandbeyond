@@ -31,6 +31,21 @@ const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
   declined: { label: 'Declined', cls: 'bg-slate-200 text-slate-700' },
 };
 
+export const TIMEFRAME_LABELS: Record<string, string> = {
+  asap: 'As soon as possible',
+  this_week: 'This week',
+  next_week: 'Next week',
+  this_month: 'This month',
+  next_month: 'Next month',
+  this_quarter: 'This quarter',
+  flexible: 'Flexible',
+};
+
+const formatTimeframe = (value: string | null) => {
+  if (!value) return null;
+  return TIMEFRAME_LABELS[value] || value.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+};
+
 export function ExpertRequestsPage() {
   const { user } = useAuth();
   const [rows, setRows] = useState<RequestRow[]>([]);
@@ -163,7 +178,7 @@ export function ExpertRequestsPage() {
             )}
 
             <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground">
-              {row.timeframe && <div><span className="font-semibold text-foreground">Timeframe:</span> {row.timeframe}</div>}
+              {row.timeframe && <div><span className="font-semibold text-foreground">Timeframe:</span> {formatTimeframe(row.timeframe)}</div>}
               {row.budget_hint && <div><span className="font-semibold text-foreground">Budget:</span> {row.budget_hint}</div>}
             </div>
 

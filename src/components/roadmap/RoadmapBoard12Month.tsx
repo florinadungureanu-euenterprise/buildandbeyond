@@ -33,19 +33,25 @@ export function RoadmapBoard12Month() {
   const completedCount = milestones.filter((m) => m.completed).length;
   const completionPercentage = (completedCount / milestones.length) * 100;
 
-  // Group milestones by quarter
-  const getQuarter = (dateString: string) => {
-    const month = new Date(dateString).getMonth() + 1;
-    if (month <= 3) return 'Q1 2025';
-    if (month <= 6) return 'Q2 2025';
-    if (month <= 9) return 'Q3 2025';
-    return 'Q4 2025';
+  // Group milestones by quarter across a rolling 12-month horizon
+  const getQuarterLabel = (dateString: string) => {
+    const d = new Date(dateString);
+    const q = Math.floor(d.getMonth() / 3) + 1;
+    return `Q${q} ${d.getFullYear()}`;
   };
 
-  const quarters = ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'];
-  const milestonesByQuarter = quarters.map((quarter) => ({
+  // Build the ordered list of quarters present in the milestones (chronological)
+  const uniqueQuarters = Array.from(
+    new Set(
+      [...milestones]
+        .sort((a, b) => new Date(a.targetDate).getTime() - new Date(b.targetDate).getTime())
+        .map((m) => getQuarterLabel(m.targetDate))
+    )
+  );
+
+  const milestonesByQuarter = uniqueQuarters.map((quarter) => ({
     quarter,
-    milestones: milestones.filter((m) => getQuarter(m.targetDate) === quarter)
+    milestones: milestones.filter((m) => getQuarterLabel(m.targetDate) === quarter)
   }));
 
   return (

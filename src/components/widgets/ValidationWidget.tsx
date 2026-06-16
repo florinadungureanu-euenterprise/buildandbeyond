@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatPercent } from '@/lib/utils';
 import { CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function ValidationWidget() {
   const validation = useStore((state) => state.validation);
@@ -55,9 +56,12 @@ export function ValidationWidget() {
       )}
 
       <div className="mt-6 pt-4 border-t border-gray-100">
-        <button type="button" className="w-full py-2 text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors">
+        <Link
+          to="/passport"
+          className="block w-full py-2 text-center text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors"
+        >
           View Full Assessment
-        </button>
+        </Link>
       </div>
     </Card>
   );
