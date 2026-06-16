@@ -125,17 +125,7 @@ const FALLBACK_EXPERTS: Expert[] = [
   },
 ];
 
-const BUCKET_COLORS: Record<string, string> = {
-  'Navigate Ready': 'bg-blue-50 text-blue-700 border-blue-100',
-  'Expansion Ready': 'bg-teal-50 text-teal-700 border-teal-100',
-  'Product Ready': 'bg-violet-50 text-violet-700 border-violet-100',
-  'Raise Ready': 'bg-green-50 text-green-700 border-green-100',
-  'Finance Ready': 'bg-emerald-50 text-emerald-700 border-emerald-100',
-  'Sales Ready': 'bg-orange-50 text-orange-700 border-orange-100',
-  'Brand Ready': 'bg-pink-50 text-pink-700 border-pink-100',
-  'Enterprise Ready': 'bg-purple-50 text-purple-700 border-purple-100',
-  'Scale Ready': 'bg-indigo-50 text-indigo-700 border-indigo-100',
-};
+const BUCKET_TAG_CLASS = 'bg-blue-50 text-blue-700 border-blue-100';
 
 const ICP_FILTERS: { key: string; label: string; buckets: string[] | null }[] = [
   { key: 'all', label: 'All Experts', buckets: null },
@@ -193,10 +183,9 @@ function mapExpertRow(e: any): Expert {
 }
 
 export function BucketTag({ bucket }: { bucket: string }) {
-  const cls = BUCKET_COLORS[bucket] || 'bg-gray-50 text-gray-700 border-gray-200';
   const label = bucket.replace(/\s*Ready$/i, '').trim();
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${cls}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${BUCKET_TAG_CLASS}`}>
       {label}
     </span>
   );
