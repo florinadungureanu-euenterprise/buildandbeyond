@@ -31,6 +31,21 @@ const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
   declined: { label: 'Declined', cls: 'bg-slate-200 text-slate-700' },
 };
 
+export const TIMEFRAME_LABELS: Record<string, string> = {
+  asap: 'As soon as possible',
+  this_week: 'This week',
+  next_week: 'Next week',
+  this_month: 'This month',
+  next_month: 'Next month',
+  this_quarter: 'This quarter',
+  flexible: 'Flexible',
+};
+
+const formatTimeframe = (value: string | null) => {
+  if (!value) return null;
+  return TIMEFRAME_LABELS[value] || value.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+};
+
 export function ExpertRequestsPage() {
   const { user } = useAuth();
   const [rows, setRows] = useState<RequestRow[]>([]);
