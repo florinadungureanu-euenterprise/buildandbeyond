@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatPercent } from '@/lib/utils';
 import { CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function ValidationWidget() {
   const validation = useStore((state) => state.validation);
