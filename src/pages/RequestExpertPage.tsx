@@ -6,6 +6,7 @@ import { useStore } from '@/store';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -219,12 +220,11 @@ export function RequestExpertPage() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="budget">Budget hint (optional)</Label>
-            <input
+            <Input
               id="budget"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
               placeholder="e.g. €2k pilot, retainer, equity-only"
-              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
             />
           </div>
         </div>
