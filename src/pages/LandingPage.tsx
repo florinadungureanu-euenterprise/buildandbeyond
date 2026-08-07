@@ -449,67 +449,75 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Meet the Team preview */}
+      {/* Build & Beyond expert collective */}
       <section className="py-24 px-6 bg-[#FAFAFA] border-t border-border">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
               <Users className="w-3.5 h-3.5 mr-1.5" />
-              Meet the Team
+              The expert collective
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Senior operators, matched to your moment
+              Independent experts for founders and innovation teams
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              No generalist advice. Just the right expert at the right stage.
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              A collective of operators from inside innovation firms, ecosystem hubs and international accelerators. We have scaled founders, powered the programmes that back them and helped corporates find the next big thing.
             </p>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
+            {EXPERT_SERVICES.map((s) => (
+              <Card key={s.tag} className="p-5 bg-white border-border">
+                <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3">
+                  <s.icon className="w-4.5 h-4.5" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1">{s.tag}</h3>
+                <p className="text-sm text-muted-foreground">{s.desc}</p>
+              </Card>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            {[
-              { name: 'Florina Ungureanu', title: 'Ecosystem Builder & EU Funding Lead', buckets: ['Navigate Ready', 'Expansion Ready'] },
-              { name: 'Giulia Falcone', title: 'Venture Capital & Innovation Specialist', buckets: ['Product Ready', 'Raise Ready', 'Finance Ready'] },
-              { name: 'Sabina Basariyeva', title: 'Venture Coach & Startup Matchmaker', buckets: ['Sales Ready', 'Brand Ready'] },
-              { name: 'Ruperto Calatrava', title: 'Open Innovation & Corporate Partnership Advisor', buckets: ['Enterprise Ready', 'Scale Ready'] },
-            ].map((p) => {
-              const colors: Record<string, string> = {
-                'Navigate Ready': 'bg-blue-50 text-blue-700 border-blue-200',
-                'Expansion Ready': 'bg-teal-50 text-teal-700 border-teal-200',
-                'Product Ready': 'bg-violet-50 text-violet-700 border-violet-200',
-                'Raise Ready': 'bg-green-50 text-green-700 border-green-200',
-                'Finance Ready': 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                'Sales Ready': 'bg-orange-50 text-orange-700 border-orange-200',
-                'Brand Ready': 'bg-pink-50 text-pink-700 border-pink-200',
-                'Enterprise Ready': 'bg-indigo-50 text-indigo-700 border-indigo-200',
-                'Scale Ready': 'bg-amber-50 text-amber-700 border-amber-200',
-              };
+            {EXPERTS.map((p) => {
               const init = p.name.split(' ').map((x) => x[0]).slice(0, 2).join('');
               return (
-                <Card key={p.name} className="p-5 bg-white border-border flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
-                    {init}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{p.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-2">{p.title}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {p.buckets.map((b) => (
-                        <span key={b} className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${colors[b]}`}>
-                          {b}
-                        </span>
-                      ))}
+                <Card key={p.name} className="p-6 bg-white border-border">
+                  <div className="flex items-start gap-4 mb-3">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
+                      {init}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-foreground">{p.name}</h3>
+                      <p className="text-sm text-muted-foreground">{p.title}</p>
                     </div>
                   </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{p.description}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {p.numbers.map((n) => (
+                      <span key={n} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border border-primary/20 bg-primary/5 text-primary">
+                        {n}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <span className="font-medium text-foreground/70">Proven at: </span>
+                    {p.companies.join(', ')}
+                  </p>
                 </Card>
               );
             })}
           </div>
 
-          <div className="text-center">
-            <Link to="/experts" className="inline-flex items-center text-primary font-medium hover:underline">
-              Meet the full team
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Link>
+          <div className="text-center space-y-3">
+            <Button asChild size="lg" variant="outline">
+              <a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer">
+                Explore the full expert collective
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </a>
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              Opens scale-it.co, where you can see every service package and book a call directly.
+            </p>
           </div>
         </div>
       </section>
