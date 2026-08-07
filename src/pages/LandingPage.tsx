@@ -407,112 +407,21 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Pricing */}
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+        {/* Waiting list */}
+        <div id="waitlist" className="max-w-3xl mx-auto scroll-mt-24">
+          <div className="text-center mb-10">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
+              <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+              Early access
+            </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Simple, founder-friendly pricing
+              Join the waiting list
             </h2>
             <p className="text-lg text-muted-foreground">
-              Start free. Upgrade when you're ready to scale.
+              We are opening Build&nbsp;&amp;&nbsp;Beyond gradually so every founder gets real support. Leave your details and we will get in touch when your spot is ready.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Free */}
-            <Card className="p-8 border-border">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-foreground">Free</h3>
-                <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">€0</span>
-                  <span className="text-muted-foreground ml-1">/month</span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">Perfect for exploring your idea</p>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'AI Entrepreneur Whisperer',
-                  'Startup Passport',
-                  'Founder Intake Form',
-                  'Document Upload',
-                  'Basic Dashboard',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Button variant="outline" className="w-full" onClick={() => navigate('/signup')}>
-                Get started
-              </Button>
-            </Card>
-
-            {/* Pro */}
-            <Card className="p-8 border-primary border-2 relative shadow-lg shadow-primary/10">
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3">
-                Most Popular
-              </Badge>
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-foreground">Pro</h3>
-                <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">€11</span>
-                  <span className="text-muted-foreground ml-1">/month</span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">For founders ready to build &amp; raise</p>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Everything in Free',
-                  'AI Market Signals (live)',
-                  '12-Month Roadmap',
-                  'Tool Recommendations',
-                  'Grants & Programs Matching',
-                  'Fundraising Hub',
-                  'Passport PDF Export',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Button className="w-full" onClick={() => navigate('/signup')}>
-                Try it free
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Card>
-
-            {/* Enterprise */}
-            <Card className="p-8 border-border bg-muted/30">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-foreground">Enterprise</h3>
-                <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">Custom</span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">Tailored to your organization's needs</p>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Everything in Pro',
-                  'Custom integrations',
-                  'Dedicated account manager',
-                  'Custom reporting & analytics',
-                  'Team onboarding & training',
-                  'Priority support',
-                  'White-label options',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Button variant="outline" className="w-full" onClick={() => window.location.href = 'mailto:hello@buildandbeyond.eu?subject=Enterprise Demo Request'}>
-                Request a demo
-              </Button>
-            </Card>
-          </div>
+          <WaitlistForm />
         </div>
       </section>
 
