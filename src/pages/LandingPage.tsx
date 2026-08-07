@@ -81,8 +81,8 @@ export default function LandingPage() {
             <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
               Log in
             </Button>
-            <Button size="sm" onClick={() => navigate('/signup')}>
-              Try it free
+            <Button size="sm" onClick={scrollToWaitlist}>
+              Join the waiting list
             </Button>
           </div>
         </div>
