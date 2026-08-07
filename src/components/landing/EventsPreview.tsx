@@ -33,18 +33,21 @@ export function EventsPreview() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {previewEvents.map((event, idx) => (
-            <Card key={idx} className={`p-5 hover:shadow-md transition-shadow ${event.featured ? 'border-primary/30' : 'border-border'}`}>
-              <Badge className={`${typeColors[event.type] || 'bg-muted text-muted-foreground'} capitalize text-xs mb-3`}>
-                {event.type}
-              </Badge>
-              <h3 className="font-semibold text-foreground mb-2 text-sm">{event.title}</h3>
-              <div className="space-y-1 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1"><Calendar className="w-3 h-3" />{event.date}</div>
-                <div className="flex items-center gap-1"><MapPin className="w-3 h-3" />{event.location}</div>
-              </div>
-            </Card>
+            <a key={idx} href={event.url} target="_blank" rel="noopener noreferrer" className="block">
+              <Card className={`p-5 h-full hover:shadow-md transition-shadow ${event.featured ? 'border-primary/30' : 'border-border'}`}>
+                <Badge className={`${typeColors[event.type] || 'bg-muted text-muted-foreground'} capitalize text-xs mb-3`}>
+                  {event.type}
+                </Badge>
+                <h3 className="font-semibold text-foreground mb-2 text-sm">{event.title}</h3>
+                <div className="space-y-1 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1"><Calendar className="w-3 h-3" />{event.date}</div>
+                  <div className="flex items-center gap-1"><MapPin className="w-3 h-3" />{event.location}</div>
+                </div>
+              </Card>
+            </a>
           ))}
         </div>
+
 
         <div className="text-center mt-8">
           <Button variant="outline" size="lg" onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}>
