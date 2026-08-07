@@ -17,7 +17,7 @@ const typeColors: Record<string, string> = {
 };
 
 export function EventsPreview() {
-  const navigate = useNavigate();
+
 
   return (
     <section className="py-24 px-6 bg-muted/30">
