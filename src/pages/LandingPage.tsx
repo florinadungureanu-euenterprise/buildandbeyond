@@ -12,6 +12,55 @@ import {
 } from 'lucide-react';
 import { PartnerForm } from '@/components/landing/PartnerForm';
 import { EventsPreview } from '@/components/landing/EventsPreview';
+import { WaitlistForm } from '@/components/landing/WaitlistForm';
+
+const scrollToWaitlist = () => {
+  document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+};
+
+const EXPERTS = [
+  {
+    name: 'Florina Daniela Ungureanu',
+    title: 'Growth & Ecosystem Strategist',
+    description:
+      'Founder, operator, and ecosystem strategist who builds startup programmes, innovation pipelines, commercial foundations, consortia and partnerships across Europe. Expert in both dilutive and non-dilutive fundraising.',
+    numbers: ['150+ startups supported', '3.2M fundraised', 'NPS 9.8'],
+    companies: ['Tulip', 'EU Enterprise', 'AI4ALL', 'AMS Institute', 'The Flywheel'],
+  },
+  {
+    name: 'Giulia Falcone',
+    title: 'Venture Capital & Innovation Specialist',
+    description:
+      '7+ years across private equity, venture capital, and corporate innovation. Supported 300+ startups at Startupbootcamp and ran scouting and market intelligence projects for Shell, JTI and Kraft Heinz.',
+    numbers: ['300+ startups supported', '3M+ raised', '10+ intelligence reports'],
+    companies: ['KPMG', 'MPD Partners', 'Windshape', 'Startupbootcamp'],
+  },
+  {
+    name: 'Ruperto Calatrava',
+    title: 'Open Innovation Consultant & Ecosystem Builder',
+    description:
+      'Engineer, entrepreneur, and consultant with 10+ years building international startup ecosystems. Has run large-scale open innovation programmes for Heineken, Shell, and Schiphol.',
+    numbers: ['300+ startups coached', '30+ corporates advised', "100+ PoCs & pilots"],
+    companies: ['Startupbootcamp', 'TNW', 'nlmtd', 'uGlobally'],
+  },
+  {
+    name: 'Sabina Basariyeva',
+    title: 'Venture Coach & Startup Matchmaker',
+    description:
+      'Entrepreneur since 17, with 8+ years across business development, VC, and global innovation ecosystems. Mentored 300+ ventures and built startup programmes at scale across Europe and beyond.',
+    numbers: ['250+ hours on stage', '300+ ventures supported', '100+ events per year'],
+    companies: ['Startupbootcamp', 'Dealroom', 'GrowthMentor', 'Metasouls'],
+  },
+];
+
+const EXPERT_SERVICES = [
+  { icon: Target, tag: 'Product & GTM', desc: 'ICP definition, positioning, pricing and a 90-day channel plan.' },
+  { icon: TrendingUp, tag: 'Sales & Revenue', desc: 'Funnel audit, outreach sequences, CRM setup and a repeatable playbook.' },
+  { icon: DollarSign, tag: 'Fundraising', desc: 'Narrative, investor targeting by thesis, financial model and mock pitches.' },
+  { icon: Megaphone, tag: 'Pitch & Visibility', desc: 'Deck coaching, demo day prep, founder positioning and content strategy.' },
+  { icon: Globe, tag: 'European Expansion', desc: 'Market sequencing, EU grants map, stakeholder mapping and market entry.' },
+  { icon: Building2, tag: 'Corporate Partnerships', desc: 'Target landscape, PoC frameworks and how corporates really buy.' },
+];
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -32,8 +81,8 @@ export default function LandingPage() {
             <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
               Log in
             </Button>
-            <Button size="sm" onClick={() => navigate('/signup')}>
-              Try it free
+            <Button size="sm" onClick={scrollToWaitlist}>
+              Join the waiting list
             </Button>
           </div>
         </div>
@@ -70,12 +119,12 @@ export default function LandingPage() {
             <Button 
               size="lg" 
               className="text-lg px-8 py-6 rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
-              onClick={() => navigate('/signup')}
+              onClick={scrollToWaitlist}
             >
-              Try it free
+              Join the waiting list
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-            <p className="text-sm text-muted-foreground">No credit card required</p>
+            <p className="text-sm text-muted-foreground">We onboard founders in small batches</p>
           </div>
         </div>
       </section>
@@ -358,112 +407,21 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Pricing */}
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+        {/* Waiting list */}
+        <div id="waitlist" className="max-w-3xl mx-auto scroll-mt-24">
+          <div className="text-center mb-10">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
+              <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+              Early access
+            </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Simple, founder-friendly pricing
+              Join the waiting list
             </h2>
             <p className="text-lg text-muted-foreground">
-              Start free. Upgrade when you're ready to scale.
+              We are opening Build&nbsp;&amp;&nbsp;Beyond gradually so every founder gets real support. Leave your details and we will get in touch when your spot is ready.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Free */}
-            <Card className="p-8 border-border">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-foreground">Free</h3>
-                <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">€0</span>
-                  <span className="text-muted-foreground ml-1">/month</span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">Perfect for exploring your idea</p>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'AI Entrepreneur Whisperer',
-                  'Startup Passport',
-                  'Founder Intake Form',
-                  'Document Upload',
-                  'Basic Dashboard',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Button variant="outline" className="w-full" onClick={() => navigate('/signup')}>
-                Get started
-              </Button>
-            </Card>
-
-            {/* Pro */}
-            <Card className="p-8 border-primary border-2 relative shadow-lg shadow-primary/10">
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3">
-                Most Popular
-              </Badge>
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-foreground">Pro</h3>
-                <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">€11</span>
-                  <span className="text-muted-foreground ml-1">/month</span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">For founders ready to build &amp; raise</p>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Everything in Free',
-                  'AI Market Signals (live)',
-                  '12-Month Roadmap',
-                  'Tool Recommendations',
-                  'Grants & Programs Matching',
-                  'Fundraising Hub',
-                  'Passport PDF Export',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Button className="w-full" onClick={() => navigate('/signup')}>
-                Try it free
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Card>
-
-            {/* Enterprise */}
-            <Card className="p-8 border-border bg-muted/30">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-foreground">Enterprise</h3>
-                <div className="mt-2">
-                  <span className="text-4xl font-extrabold text-foreground">Custom</span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">Tailored to your organization's needs</p>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Everything in Pro',
-                  'Custom integrations',
-                  'Dedicated account manager',
-                  'Custom reporting & analytics',
-                  'Team onboarding & training',
-                  'Priority support',
-                  'White-label options',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Button variant="outline" className="w-full" onClick={() => window.location.href = 'mailto:hello@buildandbeyond.eu?subject=Enterprise Demo Request'}>
-                Request a demo
-              </Button>
-            </Card>
-          </div>
+          <WaitlistForm />
         </div>
       </section>
 
@@ -491,67 +449,75 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Meet the Team preview */}
+      {/* Build & Beyond expert collective */}
       <section className="py-24 px-6 bg-[#FAFAFA] border-t border-border">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
               <Users className="w-3.5 h-3.5 mr-1.5" />
-              Meet the Team
+              The expert collective
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Senior operators, matched to your moment
+              Independent experts for founders and innovation teams
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              No generalist advice. Just the right expert at the right stage.
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              A collective of operators from inside innovation firms, ecosystem hubs and international accelerators. We have scaled founders, powered the programmes that back them and helped corporates find the next big thing.
             </p>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
+            {EXPERT_SERVICES.map((s) => (
+              <Card key={s.tag} className="p-5 bg-white border-border">
+                <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3">
+                  <s.icon className="w-4.5 h-4.5" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1">{s.tag}</h3>
+                <p className="text-sm text-muted-foreground">{s.desc}</p>
+              </Card>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            {[
-              { name: 'Florina Ungureanu', title: 'Ecosystem Builder & EU Funding Lead', buckets: ['Navigate Ready', 'Expansion Ready'] },
-              { name: 'Giulia Falcone', title: 'Venture Capital & Innovation Specialist', buckets: ['Product Ready', 'Raise Ready', 'Finance Ready'] },
-              { name: 'Sabina Basariyeva', title: 'Venture Coach & Startup Matchmaker', buckets: ['Sales Ready', 'Brand Ready'] },
-              { name: 'Ruperto Calatrava', title: 'Open Innovation & Corporate Partnership Advisor', buckets: ['Enterprise Ready', 'Scale Ready'] },
-            ].map((p) => {
-              const colors: Record<string, string> = {
-                'Navigate Ready': 'bg-blue-50 text-blue-700 border-blue-200',
-                'Expansion Ready': 'bg-teal-50 text-teal-700 border-teal-200',
-                'Product Ready': 'bg-violet-50 text-violet-700 border-violet-200',
-                'Raise Ready': 'bg-green-50 text-green-700 border-green-200',
-                'Finance Ready': 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                'Sales Ready': 'bg-orange-50 text-orange-700 border-orange-200',
-                'Brand Ready': 'bg-pink-50 text-pink-700 border-pink-200',
-                'Enterprise Ready': 'bg-indigo-50 text-indigo-700 border-indigo-200',
-                'Scale Ready': 'bg-amber-50 text-amber-700 border-amber-200',
-              };
+            {EXPERTS.map((p) => {
               const init = p.name.split(' ').map((x) => x[0]).slice(0, 2).join('');
               return (
-                <Card key={p.name} className="p-5 bg-white border-border flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
-                    {init}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{p.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-2">{p.title}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {p.buckets.map((b) => (
-                        <span key={b} className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${colors[b]}`}>
-                          {b}
-                        </span>
-                      ))}
+                <Card key={p.name} className="p-6 bg-white border-border">
+                  <div className="flex items-start gap-4 mb-3">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
+                      {init}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-foreground">{p.name}</h3>
+                      <p className="text-sm text-muted-foreground">{p.title}</p>
                     </div>
                   </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{p.description}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {p.numbers.map((n) => (
+                      <span key={n} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border border-primary/20 bg-primary/5 text-primary">
+                        {n}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <span className="font-medium text-foreground/70">Proven at: </span>
+                    {p.companies.join(', ')}
+                  </p>
                 </Card>
               );
             })}
           </div>
 
-          <div className="text-center">
-            <Link to="/experts" className="inline-flex items-center text-primary font-medium hover:underline">
-              Meet the full team
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Link>
+          <div className="text-center space-y-3">
+            <Button asChild size="lg" variant="outline">
+              <a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer">
+                Explore the full expert collective
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </a>
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              Opens scale-it.co, where you can see every service package and book a call directly.
+            </p>
           </div>
         </div>
       </section>
@@ -569,9 +535,9 @@ export default function LandingPage() {
             <Button 
               size="lg" 
               className="text-lg px-8 py-6 rounded-xl shadow-lg shadow-primary/25"
-              onClick={() => navigate('/signup')}
+              onClick={scrollToWaitlist}
             >
-              Start for free
+              Join the waiting list
               <Rocket className="w-5 h-5 ml-2" />
             </Button>
             <Button 

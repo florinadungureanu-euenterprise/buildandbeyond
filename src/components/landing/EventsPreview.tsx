@@ -2,7 +2,6 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const previewEvents = [
   { title: 'Web Summit 2026', date: 'Nov 3, 2026', location: 'Lisbon', type: 'conference', featured: true },
@@ -17,7 +16,7 @@ const typeColors: Record<string, string> = {
 };
 
 export function EventsPreview() {
-  const navigate = useNavigate();
+
 
   return (
     <section className="py-24 px-6 bg-muted/30">
@@ -47,8 +46,8 @@ export function EventsPreview() {
         </div>
 
         <div className="text-center mt-8">
-          <Button variant="outline" size="lg" onClick={() => navigate('/signup')}>
-            See all events <ArrowRight className="w-4 h-4 ml-2" />
+          <Button variant="outline" size="lg" onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}>
+            Join the waiting list for full access <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
       </div>
