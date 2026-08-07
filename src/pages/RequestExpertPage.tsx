@@ -141,7 +141,7 @@ export function RequestExpertPage() {
       <div className="p-12 max-w-2xl mx-auto">
         <Card className="p-8 text-center space-y-3">
           <p className="text-muted-foreground">We couldn't find that expert.</p>
-          <Button asChild variant="outline"><Link to="/team">Back to experts</Link></Button>
+          <Button asChild variant="outline"><a href="https://scale-it.co/">Back to experts</a></Button>
         </Card>
       </div>
     );
@@ -152,7 +152,7 @@ export function RequestExpertPage() {
   return (
     <div className="p-6 md:p-10 max-w-3xl mx-auto space-y-6">
       <Button asChild variant="ghost" size="sm" className="-ml-2">
-        <Link to="/team"><ArrowLeft className="w-4 h-4 mr-1" /> Back to experts</Link>
+        <a href="https://scale-it.co/"><ArrowLeft className="w-4 h-4 mr-1" /> Back to experts</a>
       </Button>
 
       <Card className="p-6 md:p-8 space-y-6">
@@ -230,7 +230,7 @@ export function RequestExpertPage() {
         </div>
 
         <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
-          <Button variant="ghost" asChild><Link to="/team">Cancel</Link></Button>
+          <Button variant="ghost" asChild><a href="https://scale-it.co/">Cancel</a></Button>
           <Button onClick={handleSubmit} disabled={!canSubmit}>
             {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
             Send request
