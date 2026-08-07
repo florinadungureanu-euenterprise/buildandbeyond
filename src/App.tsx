@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
 import { SidebarNav } from '@/components/SidebarNav';
 import { TopTabs } from '@/components/TopTabs';
@@ -29,7 +30,9 @@ import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
-import ExpertsPage from '@/pages/ExpertsPage';
+
+
+
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -99,11 +102,11 @@ const router = createBrowserRouter(
         { path: '/engagements', element: <EngagementsPage /> },
         { path: '/engagements/:id', element: <EngagementWorkspacePage /> },
         { path: '/integrations', element: <IntegrationsPage /> },
-        { path: '/team', element: <ExpertsPage embedded /> },
+        { path: '/team', element: <ExternalRedirect url="https://scale-it.co/" /> },
       ]
     },
     { path: '/', element: <LandingPage /> },
-    { path: '/experts', element: <ExpertsPage /> },
+    { path: '/experts', element: <ExternalRedirect url="https://scale-it.co/" /> },
     { path: '/login', element: <PublicRoute><LoginPage /></PublicRoute> },
     { path: '/signup', element: <PublicRoute><SignupPage /></PublicRoute> },
     { path: '/forgot-password', element: <ForgotPasswordPage /> },
