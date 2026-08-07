@@ -36,46 +36,37 @@ const typeColors: Record<string, string> = {
 
 const defaultEvents: Event[] = [
   {
-    id: '1', title: 'Web Summit 2026', description: 'Europe\'s largest tech conference bringing together startups, investors, and industry leaders.',
-    date: '2026-11-03', location: 'Lisbon, Portugal', type: 'conference', url: 'https://websummit.com',
+    id: '1', title: 'Web Summit 2026', description: 'Europe\'s largest tech conference bringing together startups, investors, and industry leaders. Nov 9-12, 2026.',
+    date: '2026-11-09', location: 'Lisbon, Portugal', type: 'conference', url: 'https://websummit.com',
     organizer: 'Web Summit', tags: ['Tech', 'Networking', 'Investors'], featured: true,
   },
   {
-    id: '2', title: 'Build Weekend by Young Creators & n8n', description: 'Weekend hackathon focused on building automation-powered MVPs with n8n.',
-    date: '2026-07-20', location: 'Online + Berlin', type: 'hackathon', url: 'https://buildweekend.com',
-    organizer: 'Young Creators & n8n', tags: ['Automation', 'MVP', 'Hackathon'], featured: true,
+    id: '2', title: 'Slush 2026', description: 'The most founder-focused event on the planet: 5,800 startups and 3,300 investors in Helsinki. Nov 18-19, 2026.',
+    date: '2026-11-18', location: 'Helsinki, Finland', type: 'conference', url: 'https://slush.org',
+    organizer: 'Slush', tags: ['Startup', 'Investors', 'Nordic'], featured: true,
   },
   {
-    id: '3', title: 'Slush 2026', description: 'The world\'s leading startup event, connecting founders with investors in Helsinki.',
-    date: '2026-11-19', location: 'Helsinki, Finland', type: 'conference', url: 'https://slush.org',
-    organizer: 'Slush', tags: ['Startup', 'Investors', 'Nordic'],
+    id: '3', title: 'Bits & Pretzels 2026', description: 'Curated founders festival in Munich with 1,500+ VC firms, ending at Oktoberfest. Sep 28-30, 2026.',
+    date: '2026-09-28', location: 'Munich, Germany', type: 'conference', url: 'https://www.bitsandpretzels.com',
+    organizer: 'Bits & Pretzels', tags: ['Founders', 'VC', 'Networking'],
   },
   {
-    id: '4', title: 'EU Startups Summit', description: 'Bringing together 2,000+ founders, investors, and media in the heart of Europe.',
-    date: '2026-05-14', location: 'Malta', type: 'conference', url: 'https://eustartups.com',
-    organizer: 'EU-Startups', tags: ['EU', 'Funding', 'Scaleup'],
+    id: '4', title: '4YFN Barcelona 2027', description: 'Startup arm of MWC connecting founders, investors, and corporates with structured matchmaking and a pitch competition.',
+    date: '2027-03-01', location: 'Barcelona, Spain', type: 'conference', url: 'https://www.4yfn.com',
+    organizer: 'GSMA', tags: ['Matchmaking', 'Corporates', 'Pitch'],
   },
   {
-    id: '5', title: 'Startup Grind Europe', description: 'Regional meetup for founders with fireside chats and networking.',
-    date: '2026-06-10', location: 'Amsterdam, Netherlands', type: 'meetup',
-    organizer: 'Startup Grind', tags: ['Networking', 'Community'],
+    id: '5', title: 'MWC Barcelona 2027', description: 'The world\'s largest connectivity event covering mobile, 5G, AI devices, and digital transformation. Mar 1-4, 2027.',
+    date: '2027-03-01', location: 'Barcelona, Spain', type: 'conference', url: 'https://www.mwcbarcelona.com',
+    organizer: 'GSMA', tags: ['Deep Tech', 'AI', 'Enterprise'],
   },
   {
-    id: '6', title: 'EIC Summit 2026', description: 'European Innovation Council annual gathering for deep-tech founders and innovators.',
-    date: '2026-10-15', location: 'Brussels, Belgium', type: 'conference', url: 'https://eic.ec.europa.eu',
-    organizer: 'European Commission', tags: ['Deep Tech', 'EU Grants', 'Innovation'],
-  },
-  {
-    id: '7', title: 'How to Fundraise in Europe — Webinar', description: 'Live session covering EU funding landscape, grant strategies, and investor expectations.',
-    date: '2026-04-25', location: 'Online', type: 'webinar',
-    organizer: 'Build & Beyond', tags: ['Fundraising', 'Grants', 'Strategy'],
-  },
-  {
-    id: '8', title: 'Product-Market Fit Workshop', description: 'Hands-on workshop for early-stage founders to validate problem-solution fit.',
-    date: '2026-05-08', location: 'Online', type: 'workshop',
-    organizer: 'Build & Beyond', tags: ['Validation', 'PMF', 'Early Stage'],
+    id: '6', title: 'VivaTech 2027', description: 'Europe\'s largest startup and technology event at Paris Expo Porte de Versailles. Jun 16-19, 2027.',
+    date: '2027-06-16', location: 'Paris, France', type: 'conference', url: 'https://vivatech.com',
+    organizer: 'VivaTech', tags: ['Startup', 'Innovation', 'Corporates'],
   },
 ];
+
 
 export function EventsPage() {
   const [filterType, setFilterType] = useState<string>('all');

@@ -4,11 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 
 const previewEvents = [
-  { title: 'Web Summit 2026', date: 'Nov 3, 2026', location: 'Lisbon', type: 'conference', featured: true },
-  { title: 'Build Weekend', date: 'Jul 20, 2026', location: 'Online + Berlin', type: 'hackathon', featured: true },
-  { title: 'EU Startups Summit', date: 'May 14, 2026', location: 'Malta', type: 'conference' },
-  { title: 'EIC Summit 2026', date: 'Oct 15, 2026', location: 'Brussels', type: 'conference' },
+  { title: 'Bits & Pretzels 2026', date: 'Sep 28-30, 2026', location: 'Munich', type: 'conference', url: 'https://www.bitsandpretzels.com', featured: true },
+  { title: 'Web Summit 2026', date: 'Nov 9-12, 2026', location: 'Lisbon', type: 'conference', url: 'https://websummit.com', featured: true },
+  { title: 'Slush 2026', date: 'Nov 18-19, 2026', location: 'Helsinki', type: 'conference', url: 'https://slush.org' },
+  { title: '4YFN Barcelona 2027', date: 'Mar 1-4, 2027', location: 'Barcelona', type: 'conference', url: 'https://www.4yfn.com' },
 ];
+
 
 const typeColors: Record<string, string> = {
   conference: 'bg-blue-100 text-blue-700',
