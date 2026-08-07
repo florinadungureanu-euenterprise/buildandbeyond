@@ -257,7 +257,7 @@ export default function ExpertsPage({ embedded = false }: { embedded?: boolean }
               <span className="text-lg font-bold text-foreground">Build&nbsp;&amp;&nbsp;Beyond</span>
             </Link>
             <div className="flex items-center gap-3">
-              <Link to="/experts" className="text-sm font-medium text-foreground">Experts</Link>
+              <a href="https://scale-it.co/" className="text-sm font-medium text-foreground">Experts</a>
               <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
               <Button size="sm" asChild><Link to="/signup">Try it free</Link></Button>
             </div>

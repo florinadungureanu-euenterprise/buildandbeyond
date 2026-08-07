@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
 import { SidebarNav } from '@/components/SidebarNav';
 import { TopTabs } from '@/components/TopTabs';
@@ -21,15 +22,12 @@ import { EngagementsPage } from '@/pages/EngagementsPage';
 import { EngagementWorkspacePage } from '@/pages/EngagementWorkspacePage';
 import { IntegrationsPage } from '@/pages/IntegrationsPage';
 
-
-
 import { FundraisingPage } from '@/pages/FundraisingPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
-import ExpertsPage from '@/pages/ExpertsPage';
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -37,7 +35,6 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   if (user) return <Navigate to="/dashboard" replace />;
   return <>{children}</>;
 }
-
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -55,6 +52,17 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   return <>{children}</>;
+}
+
+function ExternalRedirect({ url }: { url: string }) {
+  useEffect(() => {
+    window.location.href = url;
+  }, [url]);
+  return (
+    <div className="flex h-screen items-center justify-center text-muted-foreground">
+      Redirecting to {url}...
+    </div>
+  );
 }
 
 function Layout() {
@@ -99,11 +107,11 @@ const router = createBrowserRouter(
         { path: '/engagements', element: <EngagementsPage /> },
         { path: '/engagements/:id', element: <EngagementWorkspacePage /> },
         { path: '/integrations', element: <IntegrationsPage /> },
-        { path: '/team', element: <ExpertsPage embedded /> },
+        { path: '/team', element: <ExternalRedirect url="https://scale-it.co/" /> },
       ]
     },
     { path: '/', element: <LandingPage /> },
-    { path: '/experts', element: <ExpertsPage /> },
+    { path: '/experts', element: <ExternalRedirect url="https://scale-it.co/" /> },
     { path: '/login', element: <PublicRoute><LoginPage /></PublicRoute> },
     { path: '/signup', element: <PublicRoute><SignupPage /></PublicRoute> },
     { path: '/forgot-password', element: <ForgotPasswordPage /> },

@@ -174,7 +174,7 @@ export function MyProposalsPage() {
         <Card className="p-12 text-center">
           <Sparkles className="w-10 h-10 mx-auto mb-3 text-muted-foreground" />
           <p className="text-muted-foreground">
-            No requests yet. Pick an expert from the Experts page to send your first request.
+            No requests yet. Pick an expert from scale-it.co to send your first request.
           </p>
         </Card>
       ) : (
