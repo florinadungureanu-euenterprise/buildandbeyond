@@ -51,7 +51,7 @@ const navGroups: NavGroup[] = [
   {
     label: 'Network',
     items: [
-      { path: '/team', label: 'Experts', icon: Users },
+      { path: 'https://scale-it.co/', label: 'Experts', icon: Users },
       { path: '/community', label: 'Community', icon: UserCheck },
       { path: '/events', label: 'Events', icon: Calendar },
       { path: '/integrations', label: 'Integrations', icon: Plug },
@@ -109,18 +109,31 @@ export function SidebarNav() {
               {group.items.map((item) => {
                 const Icon = item.icon;
                 const active = isActivePath(item.path);
-                return (
+                const isExternal = item.path.startsWith('http');
+                const linkClassName = cn(
+                  'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                  active
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'text-gray-700 hover:bg-gray-50',
+                );
+                const iconClassName = cn('w-4 h-4 shrink-0', active ? 'text-blue-600' : 'text-gray-400');
+
+                return isExternal ? (
+                  <a
+                    key={item.path}
+                    href={item.path}
+                    className={linkClassName}
+                  >
+                    <Icon className={iconClassName} />
+                    <span className="truncate">{item.label}</span>
+                  </a>
+                ) : (
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={cn(
-                      'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                      active
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-gray-700 hover:bg-gray-50',
-                    )}
+                    className={linkClassName}
                   >
-                    <Icon className={cn('w-4 h-4 shrink-0', active ? 'text-blue-600' : 'text-gray-400')} />
+                    <Icon className={iconClassName} />
                     <span className="truncate">{item.label}</span>
                   </Link>
                 );

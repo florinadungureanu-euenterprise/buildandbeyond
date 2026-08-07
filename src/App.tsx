@@ -22,8 +22,6 @@ import { EngagementsPage } from '@/pages/EngagementsPage';
 import { EngagementWorkspacePage } from '@/pages/EngagementWorkspacePage';
 import { IntegrationsPage } from '@/pages/IntegrationsPage';
 
-
-
 import { FundraisingPage } from '@/pages/FundraisingPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -31,16 +29,12 @@ import SignupPage from '@/pages/SignupPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 
-
-
-
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex h-screen items-center justify-center bg-muted/30"><div className="text-muted-foreground">Loading...</div></div>;
   if (user) return <Navigate to="/dashboard" replace />;
-  return <>{children}</>;
+  return <>{children};
 }
-
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -57,7 +51,18 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
+  return <>{children};
+}
+
+function ExternalRedirect({ url }: { url: string }) {
+  useEffect(() => {
+    window.location.href = url;
+  }, [url]);
+  return (
+    <div className="flex h-screen items-center justify-center text-muted-foreground">
+      Redirecting to {url}...
+    </div>
+  );
 }
 
 function Layout() {
