@@ -47,8 +47,8 @@ export function EventsPreview() {
         </div>
 
         <div className="text-center mt-8">
-          <Button variant="outline" size="lg" onClick={() => navigate('/signup')}>
-            See all events <ArrowRight className="w-4 h-4 ml-2" />
+          <Button variant="outline" size="lg" onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}>
+            Join the waiting list for full access <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
       </div>
