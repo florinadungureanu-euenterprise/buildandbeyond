@@ -119,12 +119,12 @@ export default function LandingPage() {
             <Button 
               size="lg" 
               className="text-lg px-8 py-6 rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
-              onClick={() => navigate('/signup')}
+              onClick={scrollToWaitlist}
             >
-              Try it free
+              Join the waiting list
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-            <p className="text-sm text-muted-foreground">No credit card required</p>
+            <p className="text-sm text-muted-foreground">We onboard founders in small batches</p>
           </div>
         </div>
       </section>
