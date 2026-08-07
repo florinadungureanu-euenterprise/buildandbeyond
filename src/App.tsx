@@ -33,7 +33,7 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex h-screen items-center justify-center bg-muted/30"><div className="text-muted-foreground">Loading...</div></div>;
   if (user) return <Navigate to="/dashboard" replace />;
-  return <>{children};
+  return <>{children}</>;
 }
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -51,7 +51,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children};
+  return <>{children}</>;
 }
 
 function ExternalRedirect({ url }: { url: string }) {
