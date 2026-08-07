@@ -535,9 +535,9 @@ export default function LandingPage() {
             <Button 
               size="lg" 
               className="text-lg px-8 py-6 rounded-xl shadow-lg shadow-primary/25"
-              onClick={() => navigate('/signup')}
+              onClick={scrollToWaitlist}
             >
-              Start for free
+              Join the waiting list
               <Rocket className="w-5 h-5 ml-2" />
             </Button>
             <Button 
