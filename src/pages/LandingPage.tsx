@@ -12,6 +12,55 @@ import {
 } from 'lucide-react';
 import { PartnerForm } from '@/components/landing/PartnerForm';
 import { EventsPreview } from '@/components/landing/EventsPreview';
+import { WaitlistForm } from '@/components/landing/WaitlistForm';
+
+const scrollToWaitlist = () => {
+  document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+};
+
+const EXPERTS = [
+  {
+    name: 'Florina Daniela Ungureanu',
+    title: 'Growth & Ecosystem Strategist',
+    description:
+      'Founder, operator, and ecosystem strategist who builds startup programmes, innovation pipelines, commercial foundations, consortia and partnerships across Europe. Expert in both dilutive and non-dilutive fundraising.',
+    numbers: ['150+ startups supported', '3.2M fundraised', 'NPS 9.8'],
+    companies: ['Tulip', 'EU Enterprise', 'AI4ALL', 'AMS Institute', 'The Flywheel'],
+  },
+  {
+    name: 'Giulia Falcone',
+    title: 'Venture Capital & Innovation Specialist',
+    description:
+      '7+ years across private equity, venture capital, and corporate innovation. Supported 300+ startups at Startupbootcamp and ran scouting and market intelligence projects for Shell, JTI and Kraft Heinz.',
+    numbers: ['300+ startups supported', '3M+ raised', '10+ intelligence reports'],
+    companies: ['KPMG', 'MPD Partners', 'Windshape', 'Startupbootcamp'],
+  },
+  {
+    name: 'Ruperto Calatrava',
+    title: 'Open Innovation Consultant & Ecosystem Builder',
+    description:
+      'Engineer, entrepreneur, and consultant with 10+ years building international startup ecosystems. Has run large-scale open innovation programmes for Heineken, Shell, and Schiphol.',
+    numbers: ['300+ startups coached', '30+ corporates advised', "100+ PoCs & pilots"],
+    companies: ['Startupbootcamp', 'TNW', 'nlmtd', 'uGlobally'],
+  },
+  {
+    name: 'Sabina Basariyeva',
+    title: 'Venture Coach & Startup Matchmaker',
+    description:
+      'Entrepreneur since 17, with 8+ years across business development, VC, and global innovation ecosystems. Mentored 300+ ventures and built startup programmes at scale across Europe and beyond.',
+    numbers: ['250+ hours on stage', '300+ ventures supported', '100+ events per year'],
+    companies: ['Startupbootcamp', 'Dealroom', 'GrowthMentor', 'Metasouls'],
+  },
+];
+
+const EXPERT_SERVICES = [
+  { icon: Target, tag: 'Product & GTM', desc: 'ICP definition, positioning, pricing and a 90-day channel plan.' },
+  { icon: TrendingUp, tag: 'Sales & Revenue', desc: 'Funnel audit, outreach sequences, CRM setup and a repeatable playbook.' },
+  { icon: DollarSign, tag: 'Fundraising', desc: 'Narrative, investor targeting by thesis, financial model and mock pitches.' },
+  { icon: Megaphone, tag: 'Pitch & Visibility', desc: 'Deck coaching, demo day prep, founder positioning and content strategy.' },
+  { icon: Globe, tag: 'European Expansion', desc: 'Market sequencing, EU grants map, stakeholder mapping and market entry.' },
+  { icon: Building2, tag: 'Corporate Partnerships', desc: 'Target landscape, PoC frameworks and how corporates really buy.' },
+];
 
 export default function LandingPage() {
   const navigate = useNavigate();
