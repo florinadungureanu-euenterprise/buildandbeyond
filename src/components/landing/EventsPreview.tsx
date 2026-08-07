@@ -2,7 +2,6 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const previewEvents = [
   { title: 'Web Summit 2026', date: 'Nov 3, 2026', location: 'Lisbon', type: 'conference', featured: true },
