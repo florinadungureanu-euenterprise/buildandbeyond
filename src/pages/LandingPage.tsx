@@ -20,7 +20,7 @@ const outcomes = [
   { icon: FileText, label: 'Startup Passport', copy: 'One living, shareable view of your venture and its readiness.' },
   { icon: Target, label: 'Personal roadmap', copy: 'The next milestones that matter for your stage and ambitions.' },
   { icon: Globe2, label: 'European intelligence', copy: 'Relevant funding, programmes, partners, and market signals.' },
-  { icon: Network, label: 'Trusted network', copy: 'A direct path to proven operators through the Scale-it collective.' },
+  { icon: Network, label: 'Trusted network', copy: 'A direct path to proven operators through Build Beyond, the EU Enterprise expert collective.' },
 ];
 
 const questions = [
@@ -171,8 +171,8 @@ export default function LandingPage() {
               <img src={lightwave} alt="Connected European innovation network" loading="lazy" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover object-right" />
               <div className="absolute inset-0 bg-image-panel" />
               <div className="absolute inset-x-0 bottom-0 p-7 md:p-10">
-                <div className="section-label">Powered by people who have done it</div>
-                <p className="mt-4 max-w-lg font-heading text-2xl font-semibold md:text-3xl">Strategy meets hands-on execution through the Scale-it expert collective.</p>
+                <div className="section-label">Build Beyond · the expert arm of EU Enterprise</div>
+                <p className="mt-4 max-w-lg font-heading text-2xl font-semibold md:text-3xl">Strategy meets hands-on execution through the Build Beyond expert collective.</p>
               </div>
             </div>
             <div className="lg:pl-12">
