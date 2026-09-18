@@ -1,624 +1,226 @@
-import { useNavigate, Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Rocket, Zap, Globe, Shield, Map, BarChart3, 
-  FileText, Users, CheckCircle2, ArrowRight, Sparkles,
-  Building2, Briefcase, TrendingUp, DollarSign, Target,
-  Search, LineChart, Lightbulb, Megaphone, Scale,
-  Landmark, Banknote, PiggyBank, HandCoins, CircleDollarSign,
-  Star
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  ArrowRight, Building2, CalendarDays, Check, ChevronRight, FileText,
+  Globe2, Menu, Network, Route, Search, Sparkles, Target, Users, X, Zap,
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { PartnerForm } from '@/components/landing/PartnerForm';
 import { EventsPreview } from '@/components/landing/EventsPreview';
 import { WaitlistForm } from '@/components/landing/WaitlistForm';
+import lightwave from '@/assets/eu-enterprise-lightwave.jpg';
 
-const scrollToWaitlist = () => {
-  document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
-};
-
-const EXPERTS = [
-  {
-    name: 'Florina Daniela Ungureanu',
-    title: 'Growth & Ecosystem Strategist',
-    description:
-      'Founder, operator, and ecosystem strategist who builds startup programmes, innovation pipelines, commercial foundations, consortia and partnerships across Europe. Expert in both dilutive and non-dilutive fundraising.',
-    numbers: ['150+ startups supported', '3.2M fundraised', 'NPS 9.8'],
-    companies: ['Tulip', 'EU Enterprise', 'AI4ALL', 'AMS Institute', 'The Flywheel'],
-  },
-  {
-    name: 'Giulia Falcone',
-    title: 'Venture Capital & Innovation Specialist',
-    description:
-      '7+ years across private equity, venture capital, and corporate innovation. Supported 300+ startups at Startupbootcamp and ran scouting and market intelligence projects for Shell, JTI and Kraft Heinz.',
-    numbers: ['300+ startups supported', '3M+ raised', '10+ intelligence reports'],
-    companies: ['KPMG', 'MPD Partners', 'Windshape', 'Startupbootcamp'],
-  },
-  {
-    name: 'Ruperto Calatrava',
-    title: 'Open Innovation Consultant & Ecosystem Builder',
-    description:
-      'Engineer, entrepreneur, and consultant with 10+ years building international startup ecosystems. Has run large-scale open innovation programmes for Heineken, Shell, and Schiphol.',
-    numbers: ['300+ startups coached', '30+ corporates advised', "100+ PoCs & pilots"],
-    companies: ['Startupbootcamp', 'TNW', 'nlmtd', 'uGlobally'],
-  },
-  {
-    name: 'Sabina Basariyeva',
-    title: 'Venture Coach & Startup Matchmaker',
-    description:
-      'Entrepreneur since 17, with 8+ years across business development, VC, and global innovation ecosystems. Mentored 300+ ventures and built startup programmes at scale across Europe and beyond.',
-    numbers: ['250+ hours on stage', '300+ ventures supported', '100+ events per year'],
-    companies: ['Startupbootcamp', 'Dealroom', 'GrowthMentor', 'Metasouls'],
-  },
+const journey = [
+  { step: '01', title: 'Validate', icon: Search, copy: 'Turn an early idea into a clear venture profile, with market signals and honest evidence.' },
+  { step: '02', title: 'Build', icon: Route, copy: 'Move from uncertainty to a focused 12-month roadmap, matched tools, and the right support.' },
+  { step: '03', title: 'Grow', icon: Zap, copy: 'Navigate funding, partnerships, European expansion, and opportunities in one place.' },
 ];
 
-const EXPERT_SERVICES = [
-  { icon: Target, tag: 'Product & GTM', desc: 'ICP definition, positioning, pricing and a 90-day channel plan.' },
-  { icon: TrendingUp, tag: 'Sales & Revenue', desc: 'Funnel audit, outreach sequences, CRM setup and a repeatable playbook.' },
-  { icon: DollarSign, tag: 'Fundraising', desc: 'Narrative, investor targeting by thesis, financial model and mock pitches.' },
-  { icon: Megaphone, tag: 'Pitch & Visibility', desc: 'Deck coaching, demo day prep, founder positioning and content strategy.' },
-  { icon: Globe, tag: 'European Expansion', desc: 'Market sequencing, EU grants map, stakeholder mapping and market entry.' },
-  { icon: Building2, tag: 'Corporate Partnerships', desc: 'Target landscape, PoC frameworks and how corporates really buy.' },
+const outcomes = [
+  { icon: FileText, label: 'Startup Passport', copy: 'One living, shareable view of your venture and its readiness.' },
+  { icon: Target, label: 'Personal roadmap', copy: 'The next milestones that matter for your stage and ambitions.' },
+  { icon: Globe2, label: 'European intelligence', copy: 'Relevant funding, programmes, partners, and market signals.' },
+  { icon: Network, label: 'Trusted network', copy: 'A direct path to proven operators through the Scale-it collective.' },
 ];
+
+const questions = [
+  'Which funding routes fit my startup now?',
+  'Where should I expand first?',
+  'Which partners can help me move faster?',
+  'What deserves my focus this quarter?',
+];
+
+function BrandMark() {
+  return (
+    <span className="flex items-center gap-3">
+      <span className="brand-mark" aria-hidden="true"><ChevronRight /><ChevronRight /></span>
+      <span className="font-heading text-sm font-semibold">EU Enterprise</span>
+    </span>
+  );
+}
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const scrollTo = (id: string) => {
+    setMenuOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Nav */}
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Rocket className="w-6 h-6 text-primary" />
-            <span className="text-lg font-bold text-foreground">Build&nbsp;&amp;&nbsp;Beyond</span>
+    <div className="landing-shell min-h-screen bg-background text-foreground">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
+          <a href="#top" aria-label="EU Enterprise home"><BrandMark /></a>
+          <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
+            <button onClick={() => scrollTo('platform')} className="nav-link">For founders</button>
+            <button onClick={() => scrollTo('partners')} className="nav-link">For the ecosystem</button>
+            <a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer" className="nav-link">Experts</a>
+          </nav>
+          <div className="hidden items-center gap-3 md:flex">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>Log in</Button>
+            <Button size="sm" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="https://scale-it.co/" className="text-sm font-medium text-foreground/80 hover:text-foreground">
-              Experts
-            </a>
-            <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
-              Log in
-            </Button>
-            <Button size="sm" onClick={scrollToWaitlist}>
-              Join the waiting list
-            </Button>
-          </div>
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>
+            {menuOpen ? <X /> : <Menu />}
+          </Button>
         </div>
-      </nav>
-
-      {/* Hero */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-20 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute top-40 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        </div>
-        
-        <div className="max-w-4xl mx-auto text-center">
-          <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium">
-            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-            Your Trusted European Innovation Intelligence
-          </Badge>
-          
-          <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight leading-[1.1] mb-6">
-            Scale and expand across{' '}
-            <span className="text-primary">Europe</span>
-            {' '}faster than ever
-          </h1>
-          
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
-            With initiatives like EU&nbsp;Inc accelerating cross-border innovation, entering and scaling in the European market is becoming more accessible, but navigating funding, partners, and opportunities is still fragmented.
-          </p>
-          
-          <p className="text-base md:text-lg text-foreground/80 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-            Build&nbsp;&amp;&nbsp;Beyond helps founders, funders, and innovators discover the right tools, talent, funding, and opportunities in the European innovation ecosystem, all in one place.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button 
-              size="lg" 
-              className="text-lg px-8 py-6 rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
-              onClick={scrollToWaitlist}
-            >
-              Join the waiting list
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <p className="text-sm text-muted-foreground">We onboard founders in small batches</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Breaking Barriers Context */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-center">
-            Breaking barriers to scaling in Europe
-          </h2>
-          <p className="text-muted-foreground text-center mb-6 max-w-3xl mx-auto">
-            Europe is one of the world's largest and most diverse markets, offering access to EU funding programmes, grants, accelerators, venture capital, and cross-border partnerships. But for most founders, the challenge isn't opportunity, it's visibility, access, and investing in the right resources based on their industry and stage.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-            {[
-              'Which EU grants or investors are relevant to my startup?',
-              'Which accelerators or venture builders should I apply to?',
-              'Who are the right partners in each country?',
-              'Which AI tools are relevant for my current stage?',
-              'How do I get not just to my next round but all the way to exit?',
-            ].map((q, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                <Search className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>{q}</span>
-              </div>
-            ))}
-          </div>
-          <p className="text-sm text-muted-foreground text-center mt-6 max-w-2xl mx-auto">
-            By using proprietary and open-source data, Build&nbsp;&amp;&nbsp;Beyond simplifies this by giving you personalized access to the European innovation ecosystem, so you can focus on building, not searching.
-          </p>
-        </div>
-      </section>
-
-      {/* Social proof bar */}
-      <section className="py-8 border-y border-border bg-muted/30">
-        <div className="max-w-5xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
-          <span className="flex items-center gap-2"><Globe className="w-4 h-4" /> EU Regulation-Ready</span>
-          <span className="flex items-center gap-2"><Shield className="w-4 h-4" /> GDPR Ready</span>
-          <span className="flex items-center gap-2"><Zap className="w-4 h-4" /> AI-Powered Research</span>
-          <span className="flex items-center gap-2"><Users className="w-4 h-4" /> Built for European Founders</span>
-        </div>
-      </section>
-
-      {/* === VALIDATE === */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-4">
-            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
-              <Target className="w-3.5 h-3.5 mr-1.5" />
-              Phase 1
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Validate</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              You have an idea but no clarity on whether it can work. You need honest answers before you invest your time and money.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <Card className="p-6 hover:shadow-lg transition-shadow border-border group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"I don't know how to structure my idea"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">AI Entrepreneur Whisperer</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Guided Q&A that maps your raw idea into a structured venture profile, even if you're starting from scratch.</p>
-            </Card>
-
-            <Card className="p-6 hover:shadow-lg transition-shadow border-border group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
-                <Search className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"Is anyone else doing this already?"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Market Signals</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Real-time competitor moves, funding trends, and regulatory changes researched by AI and delivered to your dashboard.</p>
-            </Card>
-
-            <Card className="p-6 hover:shadow-lg transition-shadow border-border group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
-                <FileText className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"I need a single place that shows my startup's status"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Startup Passport</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">A living, shareable profile: summary, validation, competitors, market data, compliance status, always up to date.</p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* === BUILD === */}
-      <section className="py-24 px-6 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-4">
-            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
-              <Map className="w-3.5 h-3.5 mr-1.5" />
-              Phase 2
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Build</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              You know the idea works, but you're overwhelmed by what to do next. You need a clear path and the right tools to execute.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <Card className="p-6 hover:shadow-lg transition-shadow border-border group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
-                <Map className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"I don't know what to focus on this quarter"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">12-Month Roadmap</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Auto-generated milestones matched to your stage, goals, and market, with tool recommendations at every step.</p>
-            </Card>
-
-            <Card className="p-6 hover:shadow-lg transition-shadow border-border group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
-                <Zap className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"Which tools should I actually be using?"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Tool Recommendations</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Curated tools matched to your roadmap stage, from dev platforms to payments to automation.</p>
-            </Card>
-
-            <Card className="p-6 hover:shadow-lg transition-shadow border-border group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:bg-primary/20 transition-colors">
-                <Rocket className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">"How do I find the right resource to scale?"</p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Venture Building Support</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Discover accelerators, competitions, venture builders, and experts scored by fit to your startup profile.</p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* === GROW / FUNDRAISING === */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-4">
-            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
-              <DollarSign className="w-3.5 h-3.5 mr-1.5" />
-              Phase 3
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Grow</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              You're ready to scale but funding feels like a maze. You need to find the right capital, build the right metrics, and pitch with confidence.
-            </p>
-          </div>
-
-          <div className="mt-12">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-foreground mb-2">Fundraising done right</h3>
-              <p className="text-muted-foreground">Your personalized path from first euro to growth capital</p>
+        {menuOpen && (
+          <div className="border-t border-border bg-background px-5 py-5 md:hidden">
+            <div className="flex flex-col gap-1">
+              <Button variant="ghost" className="justify-start" onClick={() => scrollTo('platform')}>For founders</Button>
+              <Button variant="ghost" className="justify-start" onClick={() => scrollTo('partners')}>For the ecosystem</Button>
+              <Button asChild variant="ghost" className="justify-start"><a href="https://scale-it.co/">Experts</a></Button>
+              <Button variant="ghost" className="justify-start" onClick={() => navigate('/login')}>Log in</Button>
+              <Button className="mt-3" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
             </div>
+          </div>
+        )}
+      </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-              <Card className="p-6 border-border text-center group hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-4 text-green-700">
-                  <Search className="w-6 h-6" />
-                </div>
-                <h4 className="font-semibold text-foreground mb-2">Identify your smart money</h4>
-                <p className="text-sm text-muted-foreground">We analyze your stage, sector, and geography to match you with the funding sources that actually fit.</p>
-              </Card>
-
-              <Card className="p-6 border-border text-center group hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mx-auto mb-4 text-purple-700">
-                  <Map className="w-6 h-6" />
-                </div>
-                <h4 className="font-semibold text-foreground mb-2">Personalized funding route</h4>
-                <p className="text-sm text-muted-foreground">Subsidies, grants, angel investment, venture capital, corporate VC, bank loans, and more, mapped to your timeline.</p>
-              </Card>
-
-              <Card className="p-6 border-border text-center group hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4 text-blue-700">
-                  <BarChart3 className="w-6 h-6" />
-                </div>
-                <h4 className="font-semibold text-foreground mb-2">Funding metrics & readiness</h4>
-                <p className="text-sm text-muted-foreground">Track burn rate, runway, MRR, and investor readiness. Know exactly when and how much to raise.</p>
-              </Card>
-
-              <Card className="p-6 border-border text-center group hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 text-amber-700">
-                  <TrendingUp className="w-6 h-6" />
-                </div>
-                <h4 className="font-semibold text-foreground mb-2">Raise with confidence</h4>
-                <p className="text-sm text-muted-foreground">Pipeline tracking, investor matching, funding goals, and progress dashboards all in one place.</p>
-              </Card>
+      <main>
+        <section id="top" className="relative min-h-[92svh] overflow-hidden border-b border-border pt-16">
+          <img src={lightwave} alt="" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-hero-overlay" />
+          <div className="absolute inset-0 tech-grid opacity-30" />
+          <div className="relative mx-auto flex min-h-[calc(92svh-4rem)] max-w-7xl items-center px-5 py-16 lg:px-8">
+            <div className="max-w-4xl">
+              <div className="section-label mb-7"><span className="status-dot" /> The trusted co-pilot for European founders</div>
+              <h1 className="font-heading text-[clamp(3.2rem,8vw,7.4rem)] font-semibold leading-[0.95]">
+                Build with clarity.<br /><span className="gradient-text">Scale across Europe.</span>
+              </h1>
+              <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground md:text-xl md:leading-8">
+                EU Enterprise brings your roadmap, market intelligence, funding routes, tools, and trusted support into one focused place.
+              </p>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <Button size="lg" className="h-13 px-7" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
+                <Button size="lg" variant="outline" className="h-13 px-7" onClick={() => scrollTo('platform')}>Explore the platform</Button>
+              </div>
+              <p className="mt-5 text-xs text-muted-foreground">Founders are onboarded in small batches. No payment required.</p>
             </div>
-
-            {/* Funding types */}
-            <div className="flex flex-wrap justify-center gap-3">
-              {['Subsidies', 'EU Grants', 'National Grants', 'Angel Investment', 'Venture Capital', 'Corporate VC', 'Bank Loans', 'Revenue-Based Financing', 'Crowdfunding'].map(type => (
-                <Badge key={type} variant="outline" className="px-3 py-1.5 text-sm">
-                  {type}
-                </Badge>
+          </div>
+          <div className="relative border-t border-border/60 bg-background/50 backdrop-blur-md">
+            <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-border/60 px-5 md:grid-cols-4 lg:px-8">
+              {['Regulation-Ready', 'Founder-led', 'AI-powered research', 'Built for Europe'].map((item) => (
+                <div key={item} className="flex items-center gap-2 py-4 pr-3 text-[11px] text-muted-foreground md:justify-center md:text-xs"><Check className="text-primary" /> {item}</div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Supply Side / Partners */}
-      <section id="partners" className="py-24 px-6 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm">
-              <Building2 className="w-3.5 h-3.5 mr-1.5" />
-              For the Ecosystem
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Reach Europe's most promising innovations
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Whether you're a programme, investor, service provider, venue, or institution, connect with startups matched to your focus, stage, and geography.
-            </p>
-          </div>
-
-          {/* Benefits for partners */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <Card className="p-6 text-center border-border">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
-                <TrendingUp className="w-6 h-6" />
+        <section id="platform" className="section-band">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
+              <div>
+                <div className="section-label">A clearer path forward</div>
+                <h2 className="section-title mt-6">From one question to your next move.</h2>
+                <p className="mt-6 max-w-xl text-muted-foreground leading-7">Europe is full of opportunity. Finding what is relevant to your startup should not take weeks of fragmented searching.</p>
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Qualified Deal Flow & Due Diligence Support</h3>
-              <p className="text-sm text-muted-foreground">Access pre-validated startups with comprehensive passport profiles, readiness scores, and due diligence data.</p>
-            </Card>
-            <Card className="p-6 text-center border-border">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
-                <Lightbulb className="w-6 h-6" />
-              </div>
-              <h3 className="font-semibold text-foreground mb-2">Personalized Innovation Pipeline</h3>
-              <p className="text-sm text-muted-foreground">Corporate open innovation, M&A scouting, R&D partnerships, and portfolio management powered by AI matching.</p>
-            </Card>
-            <Card className="p-6 text-center border-border">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
-                <Users className="w-6 h-6" />
-              </div>
-              <h3 className="font-semibold text-foreground mb-2">Targeted Matching</h3>
-              <p className="text-sm text-muted-foreground">Get matched with founders and partners based on industry, stage, geography, and needs. No noise, only relevant connections.</p>
-            </Card>
-            <Card className="p-6 text-center border-border">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
-                <Megaphone className="w-6 h-6" />
-              </div>
-              <h3 className="font-semibold text-foreground mb-2">Platform Visibility</h3>
-              <p className="text-sm text-muted-foreground">Feature your programme, fund, or service directly in founder dashboards, recommendations, and the trusted-by section.</p>
-            </Card>
-          </div>
-
-          {/* CTA before form */}
-          <div className="text-center mb-10">
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ready to join? Select your organization type below and complete the intake form. Our team will review your application and get you onboarded so you can start benefiting from the platform right away.
-            </p>
-          </div>
-
-          {/* Partner Form */}
-          <PartnerForm />
-        </div>
-      </section>
-
-      {/* How it works + Pricing */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-            Up and running in 3 steps
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { step: '1', title: 'Choose your path', desc: 'Guided chat, intake form, or document upload. Pick what fits your stage.' },
-              { step: '2', title: 'AI does the research', desc: 'Market analysis, competitor mapping, and opportunity matching happen automatically.' },
-              { step: '3', title: 'Get your roadmap', desc: 'Dashboard, passport, and signals populate with personalized, actionable insights.' },
-            ].map((item) => (
-              <div key={item.step} className="flex flex-col items-center">
-                <div className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold mb-4">
-                  {item.step}
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Waiting list */}
-        <div id="waitlist" className="max-w-3xl mx-auto scroll-mt-24">
-          <div className="text-center mb-10">
-            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
-              <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-              Early access
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Join the waiting list
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              We are opening Build&nbsp;&amp;&nbsp;Beyond gradually so every founder gets real support. Leave your details and we will get in touch when your spot is ready.
-            </p>
-          </div>
-          <WaitlistForm />
-        </div>
-      </section>
-
-      {/* Events */}
-      <EventsPreview />
-
-      {/* Trusted By */}
-      <section className="py-20 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Trusted by</h2>
-          <p className="text-muted-foreground mb-10">
-            Founders, programmes, and service providers building the future of European innovation
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
-            {['Your organization here', 'Partner name', 'Early adopter', 'Innovation hub'].map((name, idx) => (
-              <div key={idx} className="flex items-center gap-2 px-6 py-3 border border-border rounded-lg text-muted-foreground text-sm font-medium">
-                <Star className="w-4 h-4" />
-                {name}
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground mt-6">
-            Want early brand visibility? <a href="#partners" className="text-primary underline">Join as a partner</a> and get featured here.
-          </p>
-        </div>
-      </section>
-
-      {/* Build & Beyond expert collective */}
-      <section className="py-24 px-6 bg-[#FAFAFA] border-t border-border">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
-              <Users className="w-3.5 h-3.5 mr-1.5" />
-              The expert collective
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Independent experts for founders and innovation teams
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              A collective of operators from inside innovation firms, ecosystem hubs and international accelerators. We have scaled founders, powered the programmes that back them and helped corporates find the next big thing.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
-            {EXPERT_SERVICES.map((s) => (
-              <Card key={s.tag} className="p-5 bg-white border-border">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3">
-                  <s.icon className="w-4.5 h-4.5" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-1">{s.tag}</h3>
-                <p className="text-sm text-muted-foreground">{s.desc}</p>
-              </Card>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            {EXPERTS.map((p) => {
-              const init = p.name.split(' ').map((x) => x[0]).slice(0, 2).join('');
-              return (
-                <Card key={p.name} className="p-6 bg-white border-border">
-                  <div className="flex items-start gap-4 mb-3">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
-                      {init}
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-semibold text-foreground">{p.name}</h3>
-                      <p className="text-sm text-muted-foreground">{p.title}</p>
-                    </div>
+              <div className="divide-y divide-border border-y border-border">
+                {questions.map((question, index) => (
+                  <div key={question} className="group flex items-center gap-5 py-6">
+                    <span className="font-heading text-xs text-primary">0{index + 1}</span>
+                    <p className="font-heading text-lg text-foreground md:text-xl">{question}</p>
+                    <ArrowRight className="ml-auto text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{p.description}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    {p.numbers.map((n) => (
-                      <span key={n} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border border-primary/20 bg-primary/5 text-primary">
-                        {n}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    <span className="font-medium text-foreground/70">Proven at: </span>
-                    {p.companies.join(', ')}
-                  </p>
-                </Card>
-              );
-            })}
-          </div>
+                ))}
+              </div>
+            </div>
 
-          <div className="text-center space-y-3">
-            <Button asChild size="lg" variant="outline">
-              <a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer">
-                Explore the full expert collective
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </a>
-            </Button>
-            <p className="text-xs text-muted-foreground">
-              Opens scale-it.co, where you can see every service package and book a call directly.
-            </p>
+            <div className="mt-24 border border-border bg-card/60">
+              <div className="grid md:grid-cols-3">
+                {journey.map((item, index) => (
+                  <article key={item.title} className={`p-7 md:p-9 ${index < journey.length - 1 ? 'border-b border-border md:border-b-0 md:border-r' : ''}`}>
+                    <div className="mb-12 flex items-center justify-between">
+                      <item.icon className="text-primary" />
+                      <span className="font-heading text-xs text-muted-foreground">{item.step}</span>
+                    </div>
+                    <h3 className="font-heading text-2xl font-semibold">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground">{item.copy}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Final CTA */}
-      <section className="py-24 px-6 bg-primary/5">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Ready to shape what's next?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Whether you're building the next big thing or enabling those who do, Build&nbsp;&amp;&nbsp;Beyond is your launchpad.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button 
-              size="lg" 
-              className="text-lg px-8 py-6 rounded-xl shadow-lg shadow-primary/25"
-              onClick={scrollToWaitlist}
-            >
-              Join the waiting list
-              <Rocket className="w-5 h-5 ml-2" />
-            </Button>
-            <Button 
-              variant="outline"
-              size="lg" 
-              className="text-lg px-8 py-6 rounded-xl"
-              onClick={() => {
-                document.getElementById('partners')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Become a partner
-              <Building2 className="w-5 h-5 ml-2" />
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="text-lg px-8 py-6 rounded-xl"
-            >
-              <Link to="/expert-profile">
-                Apply as a Scaleit expert
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
-            </Button>
+        <section className="border-y border-border bg-secondary/40">
+          <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+            <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+              <div>
+                <div className="section-label">One connected workspace</div>
+                <h2 className="section-title mt-6 max-w-3xl">Less noise. More momentum.</h2>
+              </div>
+              <p className="max-w-xl text-muted-foreground leading-7">Every recommendation connects back to your venture profile and roadmap, so the platform grows more relevant as you progress.</p>
+            </div>
+            <div className="mt-14 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+              {outcomes.map((item) => (
+                <article key={item.label} className="bg-background p-6 md:min-h-56">
+                  <item.icon className="mb-10 text-accent" />
+                  <h3 className="font-heading text-lg font-semibold">{item.label}</h3>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{item.copy}</p>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Newsletter CTA */}
-      <section className="py-20 px-6 border-t border-border">
-        <div className="max-w-2xl mx-auto text-center">
-          <Globe className="w-10 h-10 text-primary mx-auto mb-4" />
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-            Stay ahead of Europe's innovation opportunities
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Get curated access to the latest EU funding calls, startup programmes, ecosystem insights, and partnership opportunities, directly in your inbox. Join founders, innovators, and ecosystem builders who are already navigating Europe smarter.
-          </p>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const input = (e.target as HTMLFormElement).elements.namedItem('newsletter_email') as HTMLInputElement;
-              if (input?.value) {
-                // TODO: wire to backend
-                input.value = '';
-                alert('Thanks for subscribing! 🎉');
-              }
-            }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto"
-          >
-            <input
-              name="newsletter_email"
-              type="email"
-              required
-              placeholder="you@startup.com"
-              className="flex-1 w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
-            <Button type="submit" size="lg" className="whitespace-nowrap">
-              Join the newsletter
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </form>
-          <p className="text-xs text-muted-foreground mt-3">No spam. Unsubscribe anytime.</p>
-        </div>
-      </section>
+        <section className="section-band">
+          <div className="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-2 lg:items-center lg:px-8">
+            <div className="relative min-h-[390px] overflow-hidden border border-border bg-card md:min-h-[520px]">
+              <img src={lightwave} alt="Connected European innovation network" loading="lazy" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover object-right" />
+              <div className="absolute inset-0 bg-image-panel" />
+              <div className="absolute inset-x-0 bottom-0 p-7 md:p-10">
+                <div className="section-label">Powered by people who have done it</div>
+                <p className="mt-4 max-w-lg font-heading text-2xl font-semibold md:text-3xl">Strategy meets hands-on execution through the Scale-it expert collective.</p>
+              </div>
+            </div>
+            <div className="lg:pl-12">
+              <div className="section-label">Expert support</div>
+              <h2 className="section-title mt-6">Bring in the right operator at the right moment.</h2>
+              <p className="mt-6 text-muted-foreground leading-7">Get support across go-to-market, fundraising, European expansion, corporate partnerships, and venture building.</p>
+              <Button asChild variant="outline" size="lg" className="mt-8"><a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer">Meet the experts <ArrowRight /></a></Button>
+            </div>
+          </div>
+        </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-border">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Rocket className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-foreground">Build&nbsp;&amp;&nbsp;Beyond</span>
+        <EventsPreview />
+
+        <section id="partners" className="section-band border-t border-border bg-secondary/35">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="mx-auto mb-14 max-w-3xl text-center">
+              <div className="section-label justify-center"><Building2 /> For the ecosystem</div>
+              <h2 className="section-title mt-6">Put your opportunity in front of the right founders.</h2>
+              <p className="mt-5 text-muted-foreground leading-7">Join as a programme, investor, service provider, community, corporate, institution, or innovation hub.</p>
+            </div>
+            <div className="partner-form-shell"><PartnerForm /></div>
           </div>
-          <div className="flex items-center gap-6">
-            <Link to="/expert-profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Apply to be a Scaleit expert
-            </Link>
+        </section>
+
+        <section id="waitlist" className="relative scroll-mt-16 overflow-hidden border-t border-border py-20 md:py-28">
+          <img src={lightwave} alt="" loading="lazy" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover opacity-25" />
+          <div className="absolute inset-0 bg-waitlist-overlay" />
+          <div className="relative mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-8">
+            <div>
+              <div className="section-label"><Sparkles /> Early access</div>
+              <h2 className="section-title mt-6">Ready to move through Europe with clarity?</h2>
+              <p className="mt-5 max-w-lg text-muted-foreground leading-7">Tell us what you are building and what you want to gain from EU Enterprise. We will reach out when your place is ready.</p>
+            </div>
+            <WaitlistForm />
           </div>
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Build & Beyond. European Startup Intelligence.
-          </p>
+        </section>
+      </main>
+
+      <footer className="border-t border-border bg-background">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-10 md:flex-row md:items-center md:justify-between lg:px-8">
+          <div><BrandMark /><p className="mt-3 text-xs text-muted-foreground">The trusted co-pilot for European founders.</p></div>
+          <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-muted-foreground">
+            <button onClick={() => scrollTo('platform')}>For founders</button>
+            <button onClick={() => scrollTo('partners')}>Partners</button>
+            <a href="https://scale-it.co/">Experts</a>
+            <Link to="/login">Log in</Link>
+          </div>
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} EU Enterprise</p>
         </div>
       </footer>
     </div>
