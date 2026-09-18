@@ -452,7 +452,7 @@ export function AdminPage() {
                       <TableRow>
                         <TableHead>Name</TableHead>
                         <TableHead>Title</TableHead>
-                        <TableHead>Scaleit Buckets</TableHead>
+                        <TableHead>Build Beyond Buckets</TableHead>
                         <TableHead>Booking URL</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Actions</TableHead>
