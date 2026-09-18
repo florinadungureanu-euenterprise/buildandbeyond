@@ -516,7 +516,7 @@ export function useOnboardingChat() {
       const welcomeMessage: OnboardingMessage = {
         id: Date.now().toString(),
         role: 'system',
-        content: `Hey there! 👋 Welcome to Build & Beyond - the consulting collective that takes you from where you are to where you need to be.\n\nBefore anything else: **who are you?**\n\n1. ${STAKEHOLDER_OPTIONS[0]}\n2. ${STAKEHOLDER_OPTIONS[1]}\n3. ${STAKEHOLDER_OPTIONS[2]}\n\nJust reply with the number or describe yourself in your own words.`,
+        content: `Hey there! 👋 Welcome to EU Enterprise - the consulting collective that takes you from where you are to where you need to be.\n\nBefore anything else: **who are you?**\n\n1. ${STAKEHOLDER_OPTIONS[0]}\n2. ${STAKEHOLDER_OPTIONS[1]}\n3. ${STAKEHOLDER_OPTIONS[2]}\n\nJust reply with the number or describe yourself in your own words.`,
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);

@@ -70,7 +70,7 @@ export default function SignupPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Create your account</CardTitle>
-          <CardDescription>Get started with Build & Beyond</CardDescription>
+          <CardDescription>Get started with EU Enterprise</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Button variant="outline" className="w-full" onClick={handleGoogleSignup}>
