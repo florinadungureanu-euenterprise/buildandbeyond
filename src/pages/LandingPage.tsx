@@ -85,7 +85,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 tech-grid opacity-30" />
           <div className="relative mx-auto flex min-h-[calc(92svh-4rem)] max-w-7xl items-center px-5 py-16 lg:px-8">
             <div className="max-w-4xl">
-              <div className="section-label mb-7"><span className="status-dot" /> The trusted co-pilot for European founders</div>
+              <div className="section-label mb-7"><span className="status-dot" /> THE TRUSTED PARTNER FOR EUROPEAN INNOVATION</div>
               <h1 className="font-heading text-[clamp(3.2rem,8vw,7.4rem)] font-semibold leading-[0.95]">
                 Build with clarity.<br /><span className="gradient-text">Scale across Europe.</span>
               </h1>
