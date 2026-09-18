@@ -183,7 +183,7 @@ export function ExpertProfilePage() {
     <div className="p-8 max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-bold">
-          {expert ? 'Your Expert Profile' : 'Apply to join the Scaleit team'}
+          {expert ? 'Your Expert Profile' : 'Apply as a Build Beyond expert'}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
           {expert
@@ -272,7 +272,7 @@ export function ExpertProfilePage() {
       ) : (
       <>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        As a Scaleit expert, your profile helps founders discover you based on the areas you advise on.
+        As a Build Beyond expert, your profile helps founders discover you based on the areas you advise on.
         Once approved, you will be able to review client needs, craft proposals, track delivery progress,
         and suggest additional support — all within your dedicated engagement workspace.
       </p>
@@ -403,7 +403,7 @@ export function ExpertProfilePage() {
         </div>
 
         <div className="space-y-2">
-          <Label>Scaleit buckets</Label>
+          <Label>Build Beyond buckets</Label>
           <p className="text-xs text-muted-foreground">Pick the areas you advise on. You can also add your own.</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {Array.from(new Set([...SCALEIT_BUCKETS, ...buckets])).map((b) => (

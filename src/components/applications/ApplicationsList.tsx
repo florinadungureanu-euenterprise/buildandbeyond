@@ -30,7 +30,7 @@ const expertTitleMap: Record<string, string> = {
 
 function getExpertTitle(name: string) {
   const first = (name || '').split(' ')[0];
-  return expertTitleMap[first] || 'Scaleit Expert';
+  return expertTitleMap[first] || 'Build Beyond Expert';
 }
 
 function getInitials(name: string) {

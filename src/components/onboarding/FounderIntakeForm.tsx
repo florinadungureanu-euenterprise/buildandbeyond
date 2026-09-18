@@ -276,7 +276,7 @@ export function FounderIntakeForm({ onBack }: { onBack: () => void }) {
                 body: JSON.stringify({
                   type: 'expert_recommendations',
                   title: 'New expert recommendations',
-                  description: 'Your Scaleit expert matches are ready',
+                  description: 'Your Build Beyond expert matches are ready',
                   bucket: 'expert_routing',
                   created_at: new Date().toISOString(),
                 }),
