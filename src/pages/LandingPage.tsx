@@ -213,7 +213,7 @@ export default function LandingPage() {
 
       <footer className="border-t border-border bg-background">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-10 md:flex-row md:items-center md:justify-between lg:px-8">
-          <div><BrandMark /><p className="mt-3 text-xs text-muted-foreground">The trusted co-pilot for European founders.</p></div>
+          <div><BrandMark /><p className="mt-3 text-xs text-muted-foreground">The trusted partner for European innovation.</p></div>
           <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-muted-foreground">
             <button onClick={() => scrollTo('platform')}>For founders</button>
             <button onClick={() => scrollTo('partners')}>Partners</button>
