@@ -75,7 +75,7 @@ const integrations: Integration[] = [
   {
     id: 'zapier',
     name: 'Zapier / n8n',
-    description: 'Connect Build & Beyond to 5,000+ apps via automation workflows',
+    description: 'Connect EU Enterprise to 5,000+ apps via automation workflows',
     icon: '⚡',
     status: 'coming_soon',
     category: 'development',

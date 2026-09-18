@@ -35,7 +35,7 @@ export function WelcomeTour() {
   };
 
   const tourContent = {
-    title: "Welcome to Build & Beyond 🚀",
+    title: "Welcome to EU Enterprise 🚀",
     description: "Your workspace for turning ideas, projects, or organizations into momentum.\n\nWe'll show you example data during this tour so you can see what the platform looks like in action. After the tour, sections will reset and get populated with your real data as you go through onboarding.\n\nLet's take a quick look at each section.",
     icon: <Sparkles className="w-12 h-12 text-primary" />,
     action: "Start Tour"

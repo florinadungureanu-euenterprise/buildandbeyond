@@ -58,7 +58,7 @@ export function OnboardingPathSelector({ onSelect }: OnboardingPathSelectorProps
       <div className="max-w-4xl w-full">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-foreground mb-3">
-            Welcome to Build & Beyond 🚀
+            Welcome to EU Enterprise 🚀
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Choose how you'd like to get started. Each path populates your platform with

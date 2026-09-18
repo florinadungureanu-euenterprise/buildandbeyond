@@ -96,7 +96,7 @@ export function PartnerForm() {
       <Card className="p-12 text-center max-w-lg mx-auto">
         <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-4" />
         <h3 className="text-2xl font-bold text-foreground mb-2">Application Received!</h3>
-        <p className="text-muted-foreground mb-2">Thank you for your interest in joining Build & Beyond.</p>
+        <p className="text-muted-foreground mb-2">Thank you for your interest in joining EU Enterprise.</p>
         <p className="text-sm text-muted-foreground">Here's what happens next:</p>
         <ol className="text-sm text-muted-foreground mt-3 space-y-1 text-left max-w-xs mx-auto">
           <li>1. You'll receive a confirmation email shortly</li>
@@ -205,7 +205,7 @@ export function PartnerForm() {
           </div>
 
           <div>
-            <Label>What do you want to gain from Build & Beyond?</Label>
+            <Label>What do you want to gain from EU Enterprise?</Label>
             <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Tell us what outcomes you're looking for and how we can help you achieve them..." rows={4} />
           </div>
 
