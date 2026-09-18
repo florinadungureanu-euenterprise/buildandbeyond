@@ -218,7 +218,7 @@ export default function LandingPage() {
             <button onClick={() => scrollTo('platform')}>For founders</button>
             <button onClick={() => scrollTo('partners')}>Partners</button>
             <a href="https://scale-it.co/">Experts</a>
-            <Link to="/login">Log in</Link>
+            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a>
           </div>
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} EU Enterprise</p>
         </div>
