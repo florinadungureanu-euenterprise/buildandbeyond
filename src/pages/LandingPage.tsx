@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Building2, CalendarDays, Check, ChevronRight, FileText,
   Globe2, Menu, Network, Route, Search, Sparkles, Target, Users, X, Zap,
@@ -30,6 +29,8 @@ const questions = [
   'What deserves my focus this quarter?',
 ];
 
+const CALENDLY_URL = 'https://calendly.com/florina-d-ungureanu-euenterprise';
+
 function BrandMark() {
   return (
     <span className="flex items-center gap-3">
@@ -40,7 +41,6 @@ function BrandMark() {
 }
 
 export default function LandingPage() {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollTo = (id: string) => {
     setMenuOpen(false);
@@ -58,7 +58,7 @@ export default function LandingPage() {
             <a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer" className="nav-link">Experts</a>
           </nav>
           <div className="hidden items-center gap-3 md:flex">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>Log in</Button>
+            <Button asChild variant="ghost" size="sm"><a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a></Button>
             <Button size="sm" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
           </div>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>
@@ -71,7 +71,7 @@ export default function LandingPage() {
               <Button variant="ghost" className="justify-start" onClick={() => scrollTo('platform')}>For founders</Button>
               <Button variant="ghost" className="justify-start" onClick={() => scrollTo('partners')}>For the ecosystem</Button>
               <Button asChild variant="ghost" className="justify-start"><a href="https://scale-it.co/">Experts</a></Button>
-              <Button variant="ghost" className="justify-start" onClick={() => navigate('/login')}>Log in</Button>
+              <Button asChild variant="ghost" className="justify-start"><a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a></Button>
               <Button className="mt-3" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function LandingPage() {
             <button onClick={() => scrollTo('platform')}>For founders</button>
             <button onClick={() => scrollTo('partners')}>Partners</button>
             <a href="https://scale-it.co/">Experts</a>
-            <Link to="/login">Log in</Link>
+            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a>
           </div>
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} EU Enterprise</p>
         </div>
