@@ -41,7 +41,6 @@ function BrandMark() {
 }
 
 export default function LandingPage() {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollTo = (id: string) => {
     setMenuOpen(false);
