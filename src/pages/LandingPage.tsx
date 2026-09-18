@@ -96,7 +96,7 @@ export default function LandingPage() {
                 <Button size="lg" className="h-13 px-7" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
                 <Button size="lg" variant="outline" className="h-13 px-7" onClick={() => scrollTo('platform')}>Explore the platform</Button>
               </div>
-              <p className="mt-5 text-xs text-muted-foreground">Founders are onboarded in small batches. No payment required.</p>
+              <p className="mt-5 text-xs text-muted-foreground">{"\n"}</p>
             </div>
           </div>
           <div className="relative border-t border-border/60 bg-background/50 backdrop-blur-md">
