@@ -58,7 +58,7 @@ export default function LandingPage() {
             <a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer" className="nav-link">Experts</a>
           </nav>
           <div className="hidden items-center gap-3 md:flex">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>Log in</Button>
+            <Button asChild variant="ghost" size="sm"><a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a></Button>
             <Button size="sm" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
           </div>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>
