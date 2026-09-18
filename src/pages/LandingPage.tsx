@@ -176,9 +176,9 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="lg:pl-12">
-              <div className="section-label">Expert support</div>
+              <div className="section-label">Build Beyond · expert support</div>
               <h2 className="section-title mt-6">Bring in the right operator at the right moment.</h2>
-              <p className="mt-6 text-muted-foreground leading-7">Get support across go-to-market, fundraising, European expansion, corporate partnerships, and venture building.</p>
+              <p className="mt-6 text-muted-foreground leading-7">EU Enterprise pairs its AI layer with Build Beyond, our expert collective. Get hands-on support across go-to-market, fundraising, European expansion, corporate partnerships, and venture building.</p>
               <Button asChild variant="outline" size="lg" className="mt-8"><a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer">Meet the experts <ArrowRight /></a></Button>
             </div>
           </div>
