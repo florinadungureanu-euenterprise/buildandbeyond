@@ -30,6 +30,8 @@ const questions = [
   'What deserves my focus this quarter?',
 ];
 
+const CALENDLY_URL = 'https://calendly.com/florina-d-ungureanu-euenterprise';
+
 function BrandMark() {
   return (
     <span className="flex items-center gap-3">
