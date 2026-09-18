@@ -220,7 +220,7 @@ export default function LandingPage() {
             <a href="https://scale-it.co/">Experts</a>
             <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a>
           </div>
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} EU Enterprise</p>
+          <p className="text-xs text-muted-foreground">© 2024 EU Enterprise</p>
         </div>
       </footer>
     </div>
