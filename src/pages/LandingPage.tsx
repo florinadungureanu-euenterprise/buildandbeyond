@@ -71,7 +71,7 @@ export default function LandingPage() {
               <Button variant="ghost" className="justify-start" onClick={() => scrollTo('platform')}>For founders</Button>
               <Button variant="ghost" className="justify-start" onClick={() => scrollTo('partners')}>For the ecosystem</Button>
               <Button asChild variant="ghost" className="justify-start"><a href="https://scale-it.co/">Experts</a></Button>
-              <Button variant="ghost" className="justify-start" onClick={() => navigate('/login')}>Log in</Button>
+              <Button asChild variant="ghost" className="justify-start"><a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a></Button>
               <Button className="mt-3" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
             </div>
           </div>
