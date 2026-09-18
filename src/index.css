@@ -82,3 +82,55 @@
     background: #94a3b8;
   }
 }
+
+.landing-shell {
+  --background: 240 60% 9%;
+  --foreground: 150 22% 96%;
+  --card: 239 43% 16%;
+  --card-foreground: 150 22% 96%;
+  --popover: 239 43% 16%;
+  --popover-foreground: 150 22% 96%;
+  --primary: 148 64% 64%;
+  --primary-foreground: 240 60% 9%;
+  --secondary: 239 43% 16%;
+  --secondary-foreground: 150 22% 96%;
+  --muted: 239 28% 20%;
+  --muted-foreground: 226 14% 67%;
+  --accent: 249 100% 77%;
+  --accent-foreground: 240 60% 9%;
+  --border: 238 25% 25%;
+  --input: 238 25% 29%;
+  --ring: 148 64% 64%;
+  --radius: 0.5rem;
+  font-family: 'Manrope', sans-serif;
+}
+
+.landing-shell .font-heading { font-family: 'Sora', sans-serif; letter-spacing: 0; }
+.landing-shell h1, .landing-shell h2, .landing-shell h3 { letter-spacing: 0; }
+.landing-shell svg { width: 1rem; height: 1rem; }
+.landing-shell .nav-link { color: hsl(var(--muted-foreground)); font-size: 0.78rem; transition: color 180ms ease; }
+.landing-shell .nav-link:hover { color: hsl(var(--foreground)); }
+.landing-shell .brand-mark { display: inline-flex; width: 2rem; height: 1.55rem; align-items: center; justify-content: center; border-radius: 0.4rem; background: linear-gradient(110deg, hsl(var(--primary)), hsl(var(--accent))); color: hsl(var(--primary-foreground)); }
+.landing-shell .brand-mark svg { width: 0.65rem; margin: -0.22rem; stroke-width: 2.5; }
+.landing-shell .section-band { padding: 6rem 0; }
+.landing-shell .section-label { display: flex; align-items: center; gap: 0.55rem; color: hsl(var(--accent)); font-family: 'Sora', sans-serif; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; }
+.landing-shell .section-title { max-width: 52rem; font-family: 'Sora', sans-serif; font-size: clamp(2.25rem, 5vw, 4.5rem); font-weight: 600; line-height: 1.06; letter-spacing: 0; }
+.landing-shell .status-dot { width: 0.45rem; height: 0.45rem; border-radius: 999px; background: hsl(var(--primary)); box-shadow: 0 0 0.9rem hsl(var(--primary) / 0.75); }
+.landing-shell .gradient-text { color: hsl(var(--primary)); background: linear-gradient(100deg, hsl(var(--primary)), hsl(var(--accent))); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.landing-shell .tech-grid { background-image: linear-gradient(hsl(var(--border) / .22) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / .22) 1px, transparent 1px); background-size: 54px 54px; mask-image: linear-gradient(to right, black, transparent 75%); }
+.landing-shell .bg-hero-overlay { background: linear-gradient(90deg, hsl(var(--background)) 4%, hsl(var(--background) / .94) 40%, hsl(var(--background) / .25) 78%, hsl(var(--background) / .55)); }
+.landing-shell .bg-image-panel { background: linear-gradient(to top, hsl(var(--background)) 2%, hsl(var(--background) / .2) 70%); }
+.landing-shell .bg-waitlist-overlay { background: linear-gradient(90deg, hsl(var(--background) / .98), hsl(var(--background) / .8)); }
+.landing-shell .partner-form-shell > form { max-width: 68rem; }
+.landing-shell .partner-form-shell .grid > [class*="Card"], .landing-shell .partner-form-shell form > div:first-child > div { border-color: hsl(var(--border)); }
+
+@media (max-width: 767px) {
+  .landing-shell .section-band { padding: 4.5rem 0; }
+  .landing-shell .bg-hero-overlay { background: linear-gradient(to bottom, hsl(var(--background) / .82), hsl(var(--background) / .96) 72%); }
+  .landing-shell .tech-grid { background-size: 38px 38px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing-shell .gradient-text { background-size: 170% auto; animation: landing-shimmer 7s ease-in-out infinite alternate; }
+  @keyframes landing-shimmer { from { background-position: 0% center; } to { background-position: 100% center; } }
+}
