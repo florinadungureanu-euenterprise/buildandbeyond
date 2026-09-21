@@ -82,7 +82,7 @@ export function WaitlistForm() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="wl-interest">What do you want to gain from Build &amp; Beyond?</Label>
+          <Label htmlFor="wl-interest">What do you want to gain from EU Enterprise?</Label>
           <Textarea id="wl-interest" value={form.interest} onChange={set('interest')} placeholder="Funding, market entry, partners, tools..." rows={3} maxLength={1000} />
         </div>
         <Button type="submit" className="w-full" size="lg" disabled={submitting}>
