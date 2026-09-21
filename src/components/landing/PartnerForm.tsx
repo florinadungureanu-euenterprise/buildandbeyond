@@ -53,7 +53,7 @@ export function PartnerForm() {
     }
     setSubmitting(true);
     try {
-      await supabase.from('partner_submissions' as any).insert({
+      const { error: insertError } = await supabase.from('partner_submissions' as any).insert({
         type: form.type,
         company_name: form.company_name,
         contact_name: form.contact_name,
@@ -67,6 +67,12 @@ export function PartnerForm() {
         description: form.description,
         status: 'new',
       } as any);
+
+      if (insertError) {
+        console.error('Partner submission failed:', insertError);
+        toast({ title: 'Something went wrong', description: 'We could not save your application. Please try again.', variant: 'destructive' });
+        return;
+      }
 
       try {
         await supabase.functions.invoke('partner-welcome', {
@@ -84,8 +90,8 @@ export function PartnerForm() {
       setSubmitted(true);
       toast({ title: 'Application submitted! 🎉', description: 'We\'ll review your application and get back to you shortly.' });
     } catch (err) {
-      setSubmitted(true);
-      toast({ title: 'Application received!', description: 'Our team will be in touch soon.' });
+      console.error('Partner submission error:', err);
+      toast({ title: 'Something went wrong', description: 'We could not save your application. Please try again.', variant: 'destructive' });
     } finally {
       setSubmitting(false);
     }
