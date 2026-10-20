@@ -1,0 +1,10 @@
+import type { DirectoryEvent } from './events';
+
+export const eventCatalog: DirectoryEvent[] = [
+  { id: 'web-summit-2026', title: 'Web Summit 2026', description: 'Technology, startups and investment in Lisbon.', startDate: '2026-11-09', endDate: '2026-11-12', country: 'Portugal', location: 'Lisbon, Portugal', format: 'In-person', topics: ['Technology', 'Startups', 'Investment'], url: 'https://websummit.com', popular: true },
+  { id: 'slush-2026', title: 'Slush 2026', description: 'Founders and investors meet in Helsinki.', startDate: '2026-11-18', endDate: '2026-11-19', country: 'Finland', location: 'Helsinki, Finland', format: 'In-person', topics: ['Startups', 'Investment'], url: 'https://slush.org', popular: true },
+  { id: 'bits-pretzels-2026', title: 'Bits & Pretzels 2026', description: 'Munich’s founders festival for the startup and venture capital community.', startDate: '2026-09-28', endDate: '2026-09-30', country: 'Germany', location: 'Munich, Germany', format: 'In-person', topics: ['Startups', 'Investment'], url: 'https://www.bitsandpretzels.com', popular: true },
+  { id: '4yfn-2027', title: '4YFN Barcelona 2027', description: 'Startups, investors and corporate innovators at MWC.', startDate: '2027-03-01', endDate: '2027-03-04', country: 'Spain', location: 'Barcelona, Spain', format: 'In-person', topics: ['Startups', 'Technology'], url: 'https://www.4yfn.com', popular: true },
+  { id: 'mwc-2027', title: 'MWC Barcelona 2027', description: 'Connectivity, mobile technology and digital transformation.', startDate: '2027-03-01', endDate: '2027-03-04', country: 'Spain', location: 'Barcelona, Spain', format: 'In-person', topics: ['Telecommunications', 'AI', 'Technology'], url: 'https://www.mwcbarcelona.com', popular: true },
+  { id: 'vivatech-2027', title: 'VivaTech 2027', description: 'Startup and technology innovation in Paris.', startDate: '2027-06-16', endDate: '2027-06-19', country: 'France', location: 'Paris, France', format: 'In-person', topics: ['Technology', 'Startups'], url: 'https://vivatech.com', popular: true },
+];
