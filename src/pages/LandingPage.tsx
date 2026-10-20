@@ -143,6 +143,11 @@ export default function LandingPage() {
                 ))}
               </div>
             </div>
+
+            <div className="mt-8 flex items-start gap-4 border border-border bg-card/40 p-6">
+              <Target className="mt-0.5 shrink-0 text-primary" />
+              <p className="text-sm leading-6 text-muted-foreground">Your roadmap is aligned with the EU Inc mission: Europe acting as one market, so what you build in one country can scale across all of them.</p>
+            </div>
           </div>
         </section>
 
