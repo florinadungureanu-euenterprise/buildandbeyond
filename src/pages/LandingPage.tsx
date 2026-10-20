@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  ArrowRight, Building2, CalendarDays, Check, ChevronRight, FileText,
+  ArrowRight, Building2, CalendarDays, ChevronRight, FileText,
   Globe2, Menu, Network, Route, Search, Sparkles, Target, Users, X, Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -99,13 +99,6 @@ export default function LandingPage() {
                 <Button size="lg" variant="outline" className="h-13 px-7" onClick={() => scrollTo('platform')}>Explore the platform</Button>
               </div>
               <p className="mt-5 text-xs text-muted-foreground">{"\n"}</p>
-            </div>
-          </div>
-          <div className="relative border-t border-border/60 bg-background/50 backdrop-blur-md">
-            <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-border/60 px-5 md:grid-cols-4 lg:px-8">
-              {['Regulation-Ready', 'Founder-led', 'AI-powered research', 'Built for Europe'].map((item) => (
-                <div key={item} className="flex items-center gap-2 py-4 pr-3 text-[11px] text-muted-foreground md:justify-center md:text-xs"><Check className="text-primary" /> {item}</div>
-              ))}
             </div>
           </div>
         </section>
