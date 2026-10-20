@@ -228,7 +228,7 @@ export default function LandingPage() {
             <button onClick={() => scrollTo('events')}>Events</button>
             <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a>
           </div>
-          <p className="text-xs text-muted-foreground">© 2024 EU Enterprise</p>
+          <p className="text-xs text-muted-foreground">© 2026 EU Enterprise</p>
         </div>
       </footer>
     </div>
