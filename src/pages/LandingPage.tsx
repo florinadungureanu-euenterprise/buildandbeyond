@@ -169,6 +169,11 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
+
+            <div className="mt-8 flex items-start gap-4 border border-border bg-card/40 p-6">
+              <Sparkles className="mt-0.5 shrink-0 text-accent" />
+              <p className="text-sm leading-6 text-muted-foreground">Your personal roadmap and European intelligence are built on two layers: proprietary insight into what has worked, and what has not, for ventures like yours at the same stage, industry, and market, combined with constantly updated intelligence gathered from across the web.</p>
+            </div>
           </div>
         </section>
 
