@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  ArrowRight, Building2, CalendarDays, Check, ChevronRight, FileText,
+  ArrowRight, Building2, CalendarDays, ChevronRight, FileText,
   Globe2, Menu, Network, Route, Search, Sparkles, Target, Users, X, Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
