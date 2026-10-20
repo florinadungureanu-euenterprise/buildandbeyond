@@ -101,13 +101,6 @@ export default function LandingPage() {
               <p className="mt-5 text-xs text-muted-foreground">{"\n"}</p>
             </div>
           </div>
-          <div className="relative border-t border-border/60 bg-background/50 backdrop-blur-md">
-            <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-border/60 px-5 md:grid-cols-4 lg:px-8">
-              {['Regulation-Ready', 'Founder-led', 'AI-powered research', 'Built for Europe'].map((item) => (
-                <div key={item} className="flex items-center gap-2 py-4 pr-3 text-[11px] text-muted-foreground md:justify-center md:text-xs"><Check className="text-primary" /> {item}</div>
-              ))}
-            </div>
-          </div>
         </section>
 
         <section id="platform" className="section-band scroll-mt-16">
