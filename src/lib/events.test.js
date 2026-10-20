@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { filterEvents, isPastEvent } from './events';
+import { filterEvents, formatEventDate, isPastEvent } from './events';
 import { eventCatalog } from './event-catalog';
 
 const bits = { id: 'bits', title: 'Bits & Pretzels 2026', description: '', startDate: '2026-09-28', endDate: '2026-09-30', country: 'Germany', location: 'Munich', format: 'In-person', topics: ['Startups'], url: 'https://www.bitsandpretzels.com', popular: true };
@@ -8,6 +8,31 @@ const now = new Date('2026-10-20T20:17:00Z');
 const defaults = { view: 'Upcoming', country: 'all', format: 'all', topic: 'all' };
 
 describe('event browsing rules', () => {
+  test('the spreadsheet MSPO dates classify it as Past despite its old Upcoming label', () => {
+    const event = eventCatalog.find(e => e.title === 'MSPO Kielce');
+    expect([event?.startDate, event?.endDate]).toEqual(['2026-09-08', '2026-09-11']);
+    expect(filterEvents(eventCatalog, { ...defaults, view: 'Past' }, now)).toContainEqual(event);
+  });
+  test('the spreadsheet ADIC dates stay in 2027', () => {
+    const event = eventCatalog.find(e => e.title.startsWith('ADIC 2027'));
+    expect([event?.startDate, event?.endDate]).toEqual(['2027-01-26', '2027-01-28']);
+  });
+  test('Slush and Deep Tech Summit imports do not create duplicate websites', () => {
+    for (const domain of ['slush.org', 'deeptechsummit.eu']) {
+      expect(eventCatalog.filter(e => new URL(e.url).hostname === domain)).toHaveLength(1);
+    }
+  });
+  test('postponed events do not invent dates or classify as Past', () => {
+    const event = eventCatalog.find(e => e.title.startsWith('Defense Tech Valley'));
+    expect(event?.startDate).toBeUndefined();
+    expect(event?.dateLabel).toContain('POSTPONED');
+    expect(filterEvents(eventCatalog, { ...defaults, view: 'Past' }, now)).not.toContainEqual(event);
+  });
+  test('undated calendars remain visible after dated upcoming events', () => {
+    const calendar = { ...quantum, id: 'calendar', startDate: undefined, endDate: undefined, dateLabel: 'Rolling, 20+/yr' };
+    expect(filterEvents([calendar, quantum], defaults, now).map(e => e.id)).toEqual(['quantum', 'calendar']);
+    expect(formatEventDate(calendar)).toBe('Rolling, 20+/yr');
+  });
   test('ERDERA retains the requested October 21 date and 17:30 CEST ending', () => {
     const event = eventCatalog.find(e => e.id === 'erdera-2026');
     expect([event?.startDate, event?.endsAt]).toEqual(['2026-10-21', '2026-10-21T17:30:00+02:00']);
