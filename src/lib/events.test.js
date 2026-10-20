@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'bun:test';
-import { filterEvents, isPastEvent, type DirectoryEvent } from './events';
+import { filterEvents, isPastEvent } from './events';
 
-const bits: DirectoryEvent = { id: 'bits', title: 'Bits & Pretzels 2026', description: '', startDate: '2026-09-28', endDate: '2026-09-30', country: 'Germany', location: 'Munich', format: 'In-person', topics: ['Startups'], url: 'https://www.bitsandpretzels.com', popular: true };
-const quantum: DirectoryEvent = { id: 'quantum', title: 'Quantum Foundations Conference', description: '', startDate: '2026-11-24', endDate: '2026-11-27', country: 'Austria', location: 'Vienna', format: 'In-person', topics: ['Quantum'], url: 'https://www.oeaw.ac.at' };
+const bits = { id: 'bits', title: 'Bits & Pretzels 2026', description: '', startDate: '2026-09-28', endDate: '2026-09-30', country: 'Germany', location: 'Munich', format: 'In-person', topics: ['Startups'], url: 'https://www.bitsandpretzels.com', popular: true };
+const quantum = { id: 'quantum', title: 'Quantum Foundations Conference', description: '', startDate: '2026-11-24', endDate: '2026-11-27', country: 'Austria', location: 'Vienna', format: 'In-person', topics: ['Quantum'], url: 'https://www.oeaw.ac.at' };
 const now = new Date('2026-10-20T20:17:00Z');
-const defaults = { view: 'Upcoming' as const, country: 'all', format: 'all', topic: 'all' };
+const defaults = { view: 'Upcoming', country: 'all', format: 'all', topic: 'all' };
 
 describe('event browsing rules', () => {
   test('Bits & Pretzels belongs in Past on October 20, 2026', () => {
@@ -25,7 +25,7 @@ describe('event browsing rules', () => {
     expect(filterEvents([quantum], { ...defaults, country: 'Austria' }, now)).toHaveLength(1);
   });
   test('Types filter matches In-person, Online and Hybrid', () => {
-    const events = [quantum, { ...quantum, id: 'online', format: 'Online' as const }, { ...quantum, id: 'hybrid', format: 'Hybrid' as const }];
+    const events = [quantum, { ...quantum, id: 'online', format: 'Online' }, { ...quantum, id: 'hybrid', format: 'Hybrid' }];
     for (const format of ['In-person', 'Online', 'Hybrid']) {
       expect(filterEvents(events, { ...defaults, format }, now).map(e => e.format)).toEqual([format]);
     }
