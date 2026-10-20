@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { filterEvents, isPastEvent } from './events';
+import { eventCatalog } from './event-catalog';
 
 const bits = { id: 'bits', title: 'Bits & Pretzels 2026', description: '', startDate: '2026-09-28', endDate: '2026-09-30', country: 'Germany', location: 'Munich', format: 'In-person', topics: ['Startups'], url: 'https://www.bitsandpretzels.com', popular: true };
 const quantum = { id: 'quantum', title: 'Quantum Foundations Conference', description: '', startDate: '2026-11-24', endDate: '2026-11-27', country: 'Austria', location: 'Vienna', format: 'In-person', topics: ['Quantum'], url: 'https://www.oeaw.ac.at' };
@@ -7,6 +8,25 @@ const now = new Date('2026-10-20T20:17:00Z');
 const defaults = { view: 'Upcoming', country: 'all', format: 'all', topic: 'all' };
 
 describe('event browsing rules', () => {
+  test('ERDERA retains the requested October 21 date and 17:30 CEST ending', () => {
+    const event = eventCatalog.find(e => e.id === 'erdera-2026');
+    expect([event?.startDate, event?.endsAt]).toEqual(['2026-10-21', '2026-10-21T17:30:00+02:00']);
+  });
+  test('TEDAI retains the requested October 28–30 dates', () => {
+    const event = eventCatalog.find(e => e.id === 'tedai-2026');
+    expect([event?.startDate, event?.endDate]).toEqual(['2026-10-28', '2026-10-30']);
+  });
+  test('invest.austria retains the requested November 4 date', () => {
+    expect(eventCatalog.find(e => e.id === 'invest-austria-2026')?.startDate).toBe('2026-11-04');
+  });
+  test('Quantum Foundations retains the requested November 24–27 dates', () => {
+    const event = eventCatalog.find(e => e.id === 'quantum-foundations-2026');
+    expect([event?.startDate, event?.endDate]).toEqual(['2026-11-24', '2026-11-27']);
+  });
+  test('Quantum Ideation Days retains the requested November 25–26 dates', () => {
+    const event = eventCatalog.find(e => e.id === 'quantum-ideation-2026');
+    expect([event?.startDate, event?.endDate]).toEqual(['2026-11-25', '2026-11-26']);
+  });
   test('Bits & Pretzels belongs in Past on October 20, 2026', () => {
     expect(filterEvents([bits, quantum], { ...defaults, view: 'Past' }, now).map(e => e.id)).toEqual(['bits']);
   });
