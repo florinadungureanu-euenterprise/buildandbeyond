@@ -4,7 +4,7 @@ import { EventDirectory } from '@/components/events/EventDirectory';
 
 export function EventsPreview() {
   return (
-    <section className="section-band border-t border-border">
+    <section id="events" className="section-band border-t border-border scroll-mt-16">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
