@@ -56,6 +56,7 @@ export default function LandingPage() {
             <button onClick={() => scrollTo('platform')} className="nav-link">For founders</button>
             <button onClick={() => scrollTo('partners')} className="nav-link">For the ecosystem</button>
             <a href="https://scale-it.co/" target="_blank" rel="noopener noreferrer" className="nav-link">Experts</a>
+            <button onClick={() => scrollTo('events')} className="nav-link">Events</button>
           </nav>
           <div className="hidden items-center gap-3 md:flex">
             <Button asChild variant="ghost" size="sm"><a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a></Button>
@@ -71,6 +72,7 @@ export default function LandingPage() {
               <Button variant="ghost" className="justify-start" onClick={() => scrollTo('platform')}>For founders</Button>
               <Button variant="ghost" className="justify-start" onClick={() => scrollTo('partners')}>For the ecosystem</Button>
               <Button asChild variant="ghost" className="justify-start"><a href="https://scale-it.co/">Experts</a></Button>
+              <Button variant="ghost" className="justify-start" onClick={() => scrollTo('events')}>Events</Button>
               <Button asChild variant="ghost" className="justify-start"><a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a></Button>
               <Button className="mt-3" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
             </div>
@@ -108,7 +110,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="platform" className="section-band">
+        <section id="platform" className="section-band scroll-mt-16">
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
               <div>
@@ -165,7 +167,18 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="section-band">
+        <section id="partners" className="section-band border-t border-border bg-secondary/35 scroll-mt-16">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="mx-auto mb-14 max-w-3xl text-center">
+              <div className="section-label justify-center"><Building2 /> For the ecosystem</div>
+              <h2 className="section-title mt-6">Put your opportunity in front of the right founders.</h2>
+              <p className="mt-5 text-muted-foreground leading-7">Join as a programme, investor, service provider, community, corporate, institution, or innovation hub.</p>
+            </div>
+            <div className="partner-form-shell"><PartnerForm /></div>
+          </div>
+        </section>
+
+        <section id="experts" className="section-band scroll-mt-16">
           <div className="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-2 lg:items-center lg:px-8">
             <div className="relative min-h-[390px] overflow-hidden border border-border bg-card md:min-h-[520px]">
               <img src={lightwave} alt="Connected European innovation network" loading="lazy" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover object-right" />
@@ -185,17 +198,6 @@ export default function LandingPage() {
         </section>
 
         <EventsPreview />
-
-        <section id="partners" className="section-band border-t border-border bg-secondary/35">
-          <div className="mx-auto max-w-7xl px-5 lg:px-8">
-            <div className="mx-auto mb-14 max-w-3xl text-center">
-              <div className="section-label justify-center"><Building2 /> For the ecosystem</div>
-              <h2 className="section-title mt-6">Put your opportunity in front of the right founders.</h2>
-              <p className="mt-5 text-muted-foreground leading-7">Join as a programme, investor, service provider, community, corporate, institution, or innovation hub.</p>
-            </div>
-            <div className="partner-form-shell"><PartnerForm /></div>
-          </div>
-        </section>
 
         <section id="waitlist" className="relative scroll-mt-16 overflow-hidden border-t border-border py-20 md:py-28">
           <img src={lightwave} alt="" loading="lazy" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover opacity-25" />
@@ -218,9 +220,10 @@ export default function LandingPage() {
             <button onClick={() => scrollTo('platform')}>For founders</button>
             <button onClick={() => scrollTo('partners')}>Partners</button>
             <a href="https://scale-it.co/">Experts</a>
+            <button onClick={() => scrollTo('events')}>Events</button>
             <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a demo</a>
           </div>
-          <p className="text-xs text-muted-foreground">© 2024 EU Enterprise</p>
+          <p className="text-xs text-muted-foreground">© 2024 EU Enterprise</p>
         </div>
       </footer>
     </div>
