@@ -15,6 +15,7 @@ export function RoadmapPage() {
         <h1 className="text-3xl font-bold text-gray-900">12-Month Roadmap</h1>
         <p className="mt-2 text-gray-600">Track your milestones and progress over the next year</p>
         <p className="mt-3 max-w-2xl text-sm text-gray-500">Aligned with the EU Inc mission: Europe acting as one market, so what you build in one country can scale across all of them.</p>
+        <p className="mt-2 max-w-2xl text-sm text-gray-500">Built on proprietary insight into what has worked, and what has not, for ventures at your stage, industry, and market, combined with constantly updated data from across the web.</p>
       </div>
       <RoadmapBoard12Month />
     </div>
