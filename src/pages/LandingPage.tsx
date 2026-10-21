@@ -8,6 +8,7 @@ import { PartnerForm } from '@/components/landing/PartnerForm';
 import { EventsPreview } from '@/components/landing/EventsPreview';
 import { WaitlistForm } from '@/components/landing/WaitlistForm';
 import lightwave from '@/assets/eu-enterprise-lightwave.jpg';
+import buildBeyondLogo from '@/assets/build-beyond-lockup.svg.asset.json';
 
 const journey = [
   { step: '01', title: 'Validate', icon: Search, copy: 'Turn an early idea into a clear venture profile, with market signals and honest evidence.' },
