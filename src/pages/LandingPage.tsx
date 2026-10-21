@@ -30,7 +30,7 @@ const ecosystemValue = [
 ];
 
 const partnerSteps = [
-  { step: '01', title: 'Choose your organisation type', copy: 'Pick the one that fits you best from the list below.' },
+  { step: '01', title: 'Pick your organisation type', copy: 'Choose the one that fits you from the list below.' },
   { step: '02', title: 'Tell us what you want to gain', copy: 'A short application, no more than a few minutes.' },
   { step: '03', title: 'We will be in touch', copy: 'We reply personally and show you where you fit.' },
 ];
@@ -184,7 +184,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="partners" className="section-band border-t border-border bg-secondary/35 scroll-mt-16">
+        <section id="partners" className="section-band border-t border-border bg-secondary/35 scroll-mt-24">
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <div className="mx-auto mb-14 max-w-3xl text-center">
               <div className="section-label justify-center"><Building2 /> For the ecosystem</div>
@@ -200,12 +200,12 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-            <div className="mx-auto mb-8 grid max-w-4xl gap-px border border-border bg-border sm:grid-cols-3">
+            <div className="mx-auto mb-8 grid max-w-5xl gap-px border border-border bg-border sm:grid-cols-3">
               {partnerSteps.map((item) => (
                 <div key={item.step} className="flex items-start gap-4 bg-background p-5">
                   <span className="font-heading text-sm font-semibold text-primary">{item.step}</span>
                   <span>
-                    <span className="block font-heading text-sm font-semibold">{item.title}</span>
+                    <span className="block text-balance font-heading text-sm font-semibold">{item.title}</span>
                     <span className="mt-1 block text-sm leading-6 text-muted-foreground">{item.copy}</span>
                   </span>
                 </div>
