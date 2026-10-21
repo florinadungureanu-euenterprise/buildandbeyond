@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   ArrowRight, Building2, CalendarDays, ChevronRight, FileText,
-  Globe2, Menu, Network, Route, Search, Sparkles, Target, Users, X, Zap,
+  Globe2, Menu, Network, Route, Search, Sparkles, Target, TrendingUp, Users, X, Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PartnerForm } from '@/components/landing/PartnerForm';
@@ -20,6 +20,13 @@ const outcomes = [
   { icon: Target, label: 'Personal roadmap', copy: 'The next milestones that matter for your stage and ambitions.' },
   { icon: Globe2, label: 'European intelligence', copy: 'Relevant funding, programmes, partners, and market signals.' },
   { icon: Network, label: 'Trusted network', copy: 'A direct path to proven operators through Build Beyond, the EU Enterprise expert collective.' },
+];
+
+const ecosystemValue = [
+  { icon: Users, label: 'Matched demand', copy: 'Reach ventures that already fit your criteria, instead of filtering a cold applicant list.' },
+  { icon: Globe2, label: 'Live European intelligence', copy: 'Funding routes, policy shifts, and market signals across Europe, updated continuously rather than gathered by hand.' },
+  { icon: Network, label: 'A clearer pipeline', copy: 'See which cohorts, regions, and stages need your attention, and where your support actually converts.' },
+  { icon: TrendingUp, label: 'Cross-border reach', copy: 'Appear to founders and partners in markets where you do not yet have a footprint.' },
 ];
 
 const questions = [
@@ -174,9 +181,19 @@ export default function LandingPage() {
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <div className="mx-auto mb-14 max-w-3xl text-center">
               <div className="section-label justify-center"><Building2 /> For the ecosystem</div>
-              <h2 className="section-title mt-6">Put your opportunity in front of the right founders.</h2>
-              <p className="mt-5 text-muted-foreground leading-7">Join as a programme, investor, service provider, community, corporate, institution, or innovation hub.</p>
+              <h2 className="section-title mt-6">Value for founders. And for the organisations behind them.</h2>
+              <p className="mt-5 text-muted-foreground leading-7">EU Enterprise is where programmes, investors, service providers, communities, corporates, institutions, and hubs reach the ventures that fit them. The same intelligence works for your organisation too, not only for the founders it serves.</p>
             </div>
+            <div className="mb-14 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+              {ecosystemValue.map((item) => (
+                <article key={item.label} className="bg-background p-6 md:min-h-52">
+                  <item.icon className="mb-10 text-primary" />
+                  <h3 className="font-heading text-lg font-semibold">{item.label}</h3>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{item.copy}</p>
+                </article>
+              ))}
+            </div>
+            <p className="mx-auto mb-8 max-w-2xl text-center text-sm leading-6 text-muted-foreground">Join as a programme, investor, service provider, community, corporate, institution, or innovation hub. Tell us what you want to gain, and we will show you where it fits.</p>
             <div className="partner-form-shell"><PartnerForm /></div>
           </div>
         </section>
