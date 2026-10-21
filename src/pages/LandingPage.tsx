@@ -197,7 +197,7 @@ export default function LandingPage() {
             <div className="mt-8 flex justify-center">
               <Button size="lg" className="px-7" onClick={() => scrollTo('partner-form')}>Put your opportunity in front of the right organisations <ArrowRight /></Button>
             </div>
-            <div id="partner-form" className="partner-form-shell scroll-mt-16"><PartnerForm /></div>
+            <div id="partner-form" className="partner-form-shell scroll-mt-24"><PartnerForm /></div>
           </div>
         </section>
 
