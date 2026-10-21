@@ -29,6 +29,13 @@ const ecosystemValue = [
   { icon: TrendingUp, label: 'Cross-border reach', copy: 'Appear to founders and partners in markets where you do not yet have a footprint.' },
 ];
 
+const partnerSteps = [
+  { step: '01', title: 'Choose your organisation type', copy: 'Pick the one that fits you best from the list below.' },
+  { step: '02', title: 'Tell us what you want to gain', copy: 'A short application, no more than a few minutes.' },
+  { step: '03', title: 'We will be in touch', copy: 'We reply personally and show you where you fit.' },
+];
+
+
 const questions = [
   'Which funding routes fit my startup now?',
   'Where should I expand first?',
@@ -193,7 +200,17 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-            <p className="mx-auto max-w-2xl text-center text-sm leading-6 text-muted-foreground">Choose the organisation type that fits you, tell us what you want to gain, and send us the short application. We will be in touch.</p>
+            <div className="mx-auto mb-8 grid max-w-4xl gap-px border border-border bg-border sm:grid-cols-3">
+              {partnerSteps.map((item) => (
+                <div key={item.step} className="flex items-start gap-4 bg-background p-5">
+                  <span className="font-heading text-sm font-semibold text-primary">{item.step}</span>
+                  <span>
+                    <span className="block font-heading text-sm font-semibold">{item.title}</span>
+                    <span className="mt-1 block text-sm leading-6 text-muted-foreground">{item.copy}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
             <div id="partner-form" className="scroll-mt-24">
               <div className="partner-form-shell mt-8"><PartnerForm /></div>
             </div>
