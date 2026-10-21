@@ -29,6 +29,13 @@ const ecosystemValue = [
   { icon: TrendingUp, label: 'Cross-border reach', copy: 'Appear to founders and partners in markets where you do not yet have a footprint.' },
 ];
 
+const partnerSteps = [
+  { step: '01', title: 'Pick your organisation type', copy: 'Choose the one that fits you from the list below.' },
+  { step: '02', title: 'Tell us what you want to gain', copy: 'A short application, no more than a few minutes.' },
+  { step: '03', title: 'We will be in touch', copy: 'We reply personally and show you where you fit.' },
+];
+
+
 const questions = [
   'Which funding routes fit my startup now?',
   'Where should I expand first?',
@@ -177,7 +184,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="partners" className="section-band border-t border-border bg-secondary/35 scroll-mt-16">
+        <section id="partners" className="section-band border-t border-border bg-secondary/35 scroll-mt-24">
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <div className="mx-auto mb-14 max-w-3xl text-center">
               <div className="section-label justify-center"><Building2 /> For the ecosystem</div>
@@ -193,7 +200,18 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-            <p className="mx-auto max-w-2xl text-center text-sm leading-6 text-muted-foreground">Choose the organisation type that fits you, tell us what you want to gain, and send us the short application. We will be in touch.</p>
+            <div className="mb-5 flex justify-center font-heading text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary">How it works</div>
+            <div className="mx-auto mb-8 grid max-w-5xl gap-px overflow-hidden rounded-xl border border-primary/50 bg-primary/45 sm:grid-cols-3">
+              {partnerSteps.map((item) => (
+                <div key={item.step} className="flex items-start gap-4 bg-card p-6">
+                  <span className="font-heading text-base font-semibold text-primary">{item.step}</span>
+                  <span>
+                    <span className="block text-balance font-heading text-base font-semibold">{item.title}</span>
+                    <span className="mt-1.5 block text-sm leading-6 text-foreground/85">{item.copy}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
             <div id="partner-form" className="scroll-mt-24">
               <div className="partner-form-shell mt-8"><PartnerForm /></div>
             </div>
