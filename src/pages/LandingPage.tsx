@@ -200,14 +200,14 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-            <div className="section-label justify-center mb-5">How it works</div>
-            <div className="mx-auto mb-8 grid max-w-5xl gap-px border border-primary/30 bg-primary/15 sm:grid-cols-3">
+            <div className="mb-5 flex justify-center font-heading text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary">How it works</div>
+            <div className="mx-auto mb-8 grid max-w-5xl gap-px overflow-hidden rounded-xl border border-primary/50 bg-primary/25 sm:grid-cols-3">
               {partnerSteps.map((item) => (
                 <div key={item.step} className="flex items-start gap-4 bg-background p-6">
                   <span className="font-heading text-base font-semibold text-primary">{item.step}</span>
                   <span>
                     <span className="block text-balance font-heading text-base font-semibold">{item.title}</span>
-                    <span className="mt-1.5 block text-sm leading-6 text-muted-foreground">{item.copy}</span>
+                    <span className="mt-1.5 block text-sm leading-6 text-foreground/75">{item.copy}</span>
                   </span>
                 </div>
               ))}
