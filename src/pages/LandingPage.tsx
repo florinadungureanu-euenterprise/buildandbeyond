@@ -224,7 +224,7 @@ export default function LandingPage() {
               <img src={lightwave} alt="Connected European innovation network" loading="lazy" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover object-right" />
               <div className="absolute inset-0 bg-image-panel" />
               <div className="absolute inset-x-0 bottom-0 p-7 md:p-10">
-                <div className="section-label">Build Beyond · the expert arm of EU Enterprise</div>
+                <img src={buildBeyondLogo.url} alt="Build Beyond" width={887} height={168} className="h-7 w-auto md:h-9" />
                 <p className="mt-4 max-w-lg font-heading text-2xl font-semibold md:text-3xl">Strategy meets hands-on execution through the Build Beyond expert collective.</p>
               </div>
             </div>
