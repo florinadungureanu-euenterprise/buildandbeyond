@@ -193,10 +193,10 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-            <div className="mb-14 flex justify-center">
+            <p className="mx-auto max-w-2xl text-center text-sm leading-6 text-muted-foreground">Join as a programme, investor, service provider, community, corporate, institution, or innovation hub. Tell us what you want to gain, and we will show you where it fits.</p>
+            <div className="mt-8 flex justify-center">
               <Button size="lg" className="px-7" onClick={() => scrollTo('partner-form')}>Put your opportunity in front of the right organisations <ArrowRight /></Button>
             </div>
-            <p className="mx-auto mb-8 max-w-2xl text-center text-sm leading-6 text-muted-foreground">Join as a programme, investor, service provider, community, corporate, institution, or innovation hub. Tell us what you want to gain, and we will show you where it fits.</p>
             <div id="partner-form" className="partner-form-shell scroll-mt-16"><PartnerForm /></div>
           </div>
         </section>
