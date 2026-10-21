@@ -8,7 +8,7 @@ import { PartnerForm } from '@/components/landing/PartnerForm';
 import { EventsPreview } from '@/components/landing/EventsPreview';
 import { WaitlistForm } from '@/components/landing/WaitlistForm';
 import lightwave from '@/assets/eu-enterprise-lightwave.jpg';
-import buildBeyondLogo from '@/assets/build-beyond-lockup.svg.asset.json';
+import buildBeyondLogo from '@/assets/build-beyond-lockup.svg';
 
 const journey = [
   { step: '01', title: 'Validate', icon: Search, copy: 'Turn an early idea into a clear venture profile, with market signals and honest evidence.' },
@@ -225,7 +225,7 @@ export default function LandingPage() {
               <img src={lightwave} alt="Connected European innovation network" loading="lazy" width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover object-right" />
               <div className="absolute inset-0 bg-image-panel" />
               <div className="absolute inset-x-0 bottom-0 p-7 md:p-10">
-                <img src={buildBeyondLogo.url} alt="Build Beyond" width={887} height={168} className="h-7 w-auto md:h-9" />
+                <img src={buildBeyondLogo} alt="Build Beyond" width={887} height={168} className="h-7 w-auto md:h-9" />
                 <p className="mt-4 max-w-lg font-heading text-2xl font-semibold md:text-3xl">Strategy meets hands-on execution through the Build Beyond expert collective.</p>
               </div>
             </div>
