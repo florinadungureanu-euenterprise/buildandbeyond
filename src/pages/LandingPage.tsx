@@ -96,10 +96,10 @@ export default function LandingPage() {
             <div className="max-w-4xl">
               <div className="section-label mb-7"><span className="status-dot" /> THE TRUSTED PARTNER FOR EUROPEAN INNOVATION</div>
               <h1 className="font-heading text-[clamp(3.2rem,8vw,7.4rem)] font-semibold leading-[0.95]">
-                Build with clarity.<br /><span className="gradient-text">Scale across Europe.</span>
+                Less friction.<br /><span className="gradient-text">More Europe.</span>
               </h1>
               <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground md:text-xl md:leading-8">
-                EU Enterprise brings your roadmap, market intelligence, funding routes, tools, and trusted support into one focused place.
+                EU Enterprise puts a founder's roadmap, market intelligence, funding routes and trusted support beside the matched demand, live intelligence, and cross-border reach ecosystem organisations need.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <Button size="lg" className="h-13 px-7" onClick={() => scrollTo('waitlist')}>Join the waiting list <ArrowRight /></Button>
