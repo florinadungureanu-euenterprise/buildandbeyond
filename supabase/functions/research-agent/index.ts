@@ -79,11 +79,11 @@ async function apifyLinkedInScrape(linkedinUrl: string): Promise<Record<string, 
   }
   try {
     const runRes = await fetch(
-      'https://api.apify.com/v2/acts/apify~linkedin-profile-scraper/runs?token=' + APIFY_API_KEY,
+      'https://api.apify.com/v2/acts/johnvc~linkedin-profile-api/runs?token=' + APIFY_API_KEY,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ startUrls: [{ url: linkedinUrl }], proxy: { useApifyProxy: true } }),
+        body: JSON.stringify({ profileUrls: [linkedinUrl] }),
       }
     );
     if (!runRes.ok) {
@@ -94,7 +94,7 @@ async function apifyLinkedInScrape(linkedinUrl: string): Promise<Record<string, 
     const runId = runData?.data?.id;
     if (!runId) return {};
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 40; i++) {
       await new Promise((r) => setTimeout(r, 3000));
       const statusRes = await fetch(
         `https://api.apify.com/v2/actor-runs/${runId}?token=${APIFY_API_KEY}`
@@ -111,7 +111,8 @@ async function apifyLinkedInScrape(linkedinUrl: string): Promise<Record<string, 
       `https://api.apify.com/v2/actor-runs/${runId}/dataset/items?token=${APIFY_API_KEY}`
     );
     const items = await datasetRes.json();
-    return (Array.isArray(items) && items[0]) ? items[0] : {};
+    const item = Array.isArray(items) ? items.find((it) => it && !it.error_message) : undefined;
+    return item || {};
   } catch (e) {
     console.error('Apify LinkedIn scrape error', e);
     return {};
